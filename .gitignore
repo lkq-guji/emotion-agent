@@ -1,0 +1,33 @@
+# Python and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Credentials and editor state
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+.idea/
+.vscode/
+
+# Local datasets, models, caches and generated results
+.runtime/
+.cache/
+data/raw/
+data/processed/
+models/
+weights/
+checkpoints/
+runs/
+outputs/
+*.safetensors
+*.pt
+*.pth
+*.bin
+*.gguf
+*.zip
+*.tar
+*.tar.gz

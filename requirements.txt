@@ -1,0 +1,2 @@
+# 基础联调只使用 Python 3.10+ 标准库，无需安装依赖。
+# 模型训练依赖由队员 A 在独立环境验证后写入 training/requirements.txt。

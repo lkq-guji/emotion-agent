@@ -1,0 +1,2 @@
+{"id":"demo_001","history":[{"role":"user","content":"这是虚构联调样例：明天要考试，我有点紧张。"}]}
+{"id":"demo_002","history":[{"role":"user","content":"这是虚构联调样例：我完成了今天的学习计划。"},{"role":"assistant","content":"完成计划后感觉怎么样？"},{"role":"user","content":"很开心，也想休息一会儿。"}]}

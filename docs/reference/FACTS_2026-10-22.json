@@ -1,0 +1,107 @@
+{
+  "official_root": "E:\\agent比赛\\数字人综合情感陪伴对话模型",
+  "datasets": {
+    "train": {
+      "conversations": 8338,
+      "turns": 117902,
+      "prediction_points": 18657,
+      "duplicate_conversation_ids": 0,
+      "emotion_counts": {
+        "anxiety": 6340,
+        "relaxed": 2819,
+        "helplessness": 1575,
+        "fear": 1388,
+        "sadness": 1085,
+        "mixed": 945,
+        "loneliness": 876,
+        "anger": 855,
+        "shame": 752,
+        "gratitude": 695,
+        "neutral": 654,
+        "pride": 234,
+        "joy": 171,
+        "disgust": 125,
+        "care": 79,
+        "surprise": 64
+      },
+      "sha256": "184a47471f8d6f70fa21b9265b0a4d4e51c3748ba25af39a801884a2da35341a"
+    },
+    "val": {
+      "conversations": 900,
+      "turns": 11732,
+      "prediction_points": 2354,
+      "duplicate_conversation_ids": 0,
+      "emotion_counts": {
+        "anxiety": 751,
+        "relaxed": 409,
+        "mixed": 177,
+        "helplessness": 142,
+        "sadness": 131,
+        "fear": 124,
+        "gratitude": 118,
+        "shame": 118,
+        "loneliness": 115,
+        "anger": 115,
+        "neutral": 53,
+        "pride": 40,
+        "disgust": 21,
+        "joy": 20,
+        "care": 11,
+        "surprise": 9
+      },
+      "sha256": "097c0639ef7370a18a54670ec3c8390ce5dc87c1ed95f436cef07b68dfed7668"
+    }
+  },
+  "official_files": {
+    "README.md": {
+      "bytes": 1404,
+      "sha256": "1169b39704fed500e966f71389aa6df9f3a638126d95e2b446ea226bebaf5785"
+    },
+    "participant/README.md": {
+      "bytes": 4279,
+      "sha256": "d0dd0df7e8cceb990aae2a79e3de94994c09c117a21709a99442e9c792a202c7"
+    },
+    "participant/run_inference.py": {
+      "bytes": 19467,
+      "sha256": "8d91ecffd58f7c9cd1c46696a74f73db648c88019ad30cd003d4b686d33dfaf9"
+    },
+    "participant/start.sh": {
+      "bytes": 4488,
+      "sha256": "f8ed932171974a8e99214efe5144982938475163a363fb421f2a84f2640e5ff4"
+    },
+    "participant/configs/inference_config.json": {
+      "bytes": 478,
+      "sha256": "bfc8fdc4f14d717c2ca06ecf4f84aa61405edc546237c2dead45a89be51b248a"
+    },
+    "participant/templates/submission_schema.json": {
+      "bytes": 1590,
+      "sha256": "91c42d56ae433212aab7905eabdbb96cf8463c2f887dc46b3f31647ab3a5d591"
+    }
+  },
+  "train_val_conversation_id_overlap": 0,
+  "smoke_samples": 3,
+  "smoke_ids": [
+    "test1_000001_t5",
+    "test1_000001_t7",
+    "test1_000002_t5"
+  ],
+  "recorded_date": "2026-10-22",
+  "scope": "Read-only file/count audit; no model inference or training.",
+  "remote_observation": {
+    "repository": "lkq-guji/emotion-agent",
+    "root_files": [
+      "README.md"
+    ],
+    "readme_bytes": 15,
+    "starter_pushed_by_this_session": false
+  },
+  "environment_snapshot": {
+    "source": "Previously executed read-only checks in this conversation; recheck on handoff.",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "vram_mib": 8188,
+    "driver": "581.80",
+    "python": "3.11.9",
+    "torch": "2.11.0+cpu",
+    "cuda_available": false
+  }
+}
