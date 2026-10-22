@@ -6,6 +6,15 @@
 
 最近的验证结果和下一步任务见 [项目状态](docs/STATUS.md)。
 
+## 分支怎么用
+
+| 分支 | 用途 |
+|---|---|
+| `main` | 正式版本，保留为仓库默认分支，接收已验收的阶段成果。 |
+| `develop` | 日常开发集成和测试，三个人从这里开始工作。 |
+
+协作流程：`feat/个人任务 → develop → 测试验收 → main`。日常 Pull Request 的目标分支选择 `develop`，阶段发布时再从 `develop` 向 `main` 提 Pull Request。具体命令见 [三人协作约定](TEAM.md)。
+
 ## 交给 AI 接手
 
 1. 先读 [AI 启动指令](docs/AI_START_HERE.md)，复制总控或 A/B/C 的提示词。

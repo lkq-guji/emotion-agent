@@ -6,7 +6,7 @@
 
 1. 把基础代码与 docs 上传或放进团队实际工作目录；上传情况以仓库当前状态为准。
 2. 给 AI 提供项目需求手册及当前仓库。把下面的“总控启动指令”作为真正的用户消息发送，不能只让 AI“阅读附件”。
-3. 三个人各自使用 AI 时，再分别复制 A、B、C 的任务指令。各 AI 在自己的分支或隔离工作目录开发，避免同时覆盖共享文件。
+3. 三个人各自使用 AI 时，再分别复制 A、B、C 的任务指令。各 AI 从最新 `develop` 创建自己的功能分支或隔离工作目录，日常 Pull Request 合入 `develop`，验收后的阶段版本再由 `develop` 合入 `main`。
 4. 真实官方数据通过允许的本地目录或平台挂载提供，避免公开上传原始大数据、密钥和模型文件。
 5. 每次换 AI 或上下文中断，提供最新 docs/STATUS.md 和相关实验记录，让 AI 续接。
 
@@ -16,6 +16,11 @@
 你负责实施 emotion-agent 情感陪伴比赛项目。
 
 仓库：https://github.com/lkq-guji/emotion-agent
+
+分支：main 是正式版本与默认分支，develop 用于集成测试。
+新任务从最新 develop 创建功能分支，日常 PR 目标为 develop；
+完成阶段测试验收后，再从 develop 向 main 提发布 PR。
+保留已有功能分支及其未提交修改，具体协作按 TEAM.md 执行。
 
 请先读取：
 1. docs/PROJECT_REQUIREMENTS.md；
@@ -62,6 +67,7 @@
 ~~~text
 你是 emotion-agent 的 A：模型与训练实施 AI。
 先读 PROJECT_REQUIREMENTS、STATUS、接口说明和最新代码，再开始开发。
+新任务从 develop 创建 feat/model 或更具体的功能分支，日常 PR 合入 develop。
 
 负责：
 - 独立 CUDA 环境与真实 GPU 运算检查；
@@ -88,6 +94,7 @@ checkpoint 可重载，且正式导出能由比赛路径加载。
 ~~~text
 你是 emotion-agent 的 B：数据与评测实施 AI。
 先读 PROJECT_REQUIREMENTS、STATUS、官方实际文件和最新共享接口。
+新任务从 develop 创建 feat/data-eval 或更具体的功能分支，日常 PR 合入 develop。
 
 负责：
 - 数据规模、枚举、预测点有效性与文件摘要；
@@ -115,6 +122,7 @@ A 尚未给真实模型时，可用 MOCK 验证接口，但不能生成模型成
 ~~~text
 你是 emotion-agent 的 C：集成与交付实施 AI。
 先读 PROJECT_REQUIREMENTS、STATUS、实际官方入口和当前代码。
+新任务从 develop 创建 feat/demo 或更具体的功能分支，日常 PR 合入 develop。
 
 优先负责：
 - 基础包整合、README、CI、依赖和三人接口协作；
@@ -142,6 +150,7 @@ A 尚未给真实模型时，可用 MOCK 验证接口，但不能生成模型成
 请续接 emotion-agent 项目，不要重新初始化。
 先读 docs/PROJECT_REQUIREMENTS.md、docs/STATUS.md、最近实验记录，
 再检查实际工作目录、分支、未提交修改和结果文件。
+新任务以 develop 为开发基线，已有任务保留原功能分支；main 用于验收后的正式版本。
 只复验与当前变更或具体风险有关的检查，保留已验证成果和队友工作。
 从 STATUS 中下一项尚未完成且前置条件满足的任务开始。
 如果记录与现实不一致，先纠正状态并说明证据。
