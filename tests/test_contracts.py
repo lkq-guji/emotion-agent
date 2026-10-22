@@ -81,7 +81,7 @@ class ContractTests(unittest.TestCase):
             output = Path(folder) / "mock_predictions.jsonl"
             source.write_text(json.dumps(sample(), ensure_ascii=False) + "\n", encoding="utf-8")
             result = subprocess.run(
-                [sys.executable, "-m", "emotion_agent", "mock", "--input", str(source), "--output", str(output)],
+                [sys.executable, "-X", "utf8", "-m", "emotion_agent", "mock", "--input", str(source), "--output", str(output)],
                 capture_output=True,
             )
             self.assertEqual(result.returncode, 0, result.stderr)
@@ -97,7 +97,7 @@ class ContractTests(unittest.TestCase):
             for output in [source, Path(folder) / "mock.jsonl"]:
                 with self.subTest(output=output):
                     result = subprocess.run(
-                        [sys.executable, "-m", "emotion_agent", "mock", "--input", str(source), "--output", str(output)],
+                        [sys.executable, "-X", "utf8", "-m", "emotion_agent", "mock", "--input", str(source), "--output", str(output)],
                         capture_output=True,
                     )
                     self.assertEqual(result.returncode, 1)
