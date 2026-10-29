@@ -1,0 +1,16 @@
+.xinyu-app{--xy-warm:#d6a473;--xy-card-spark:var(--xy-accent);-webkit-font-smoothing:antialiased}
+/* Muted plum and lamplit cream: night has depth without black, muddy surfaces. */
+.xinyu-app[data-theme=night]{--xy-page:#343040;--xy-sidebar:#3d354b;--xy-header:#42394f;--xy-panel:#494052;--xy-ink:#fff3e5;--xy-secondary:#e1d0de;--xy-border:#75677e;--xy-accent:#ddbcf2;--xy-pink:#efadbf;--xy-selected:#665371;--xy-warm:#f4c88d;--xy-card-spark:#e7bfdc}
+.xinyu-app[data-theme=night] .xy-workspace{background:radial-gradient(ellipse at 82% 2%,#b07a4e12,transparent 65%),var(--xy-page)}
+.xinyu-app[data-theme=night] :is(input,textarea,select){background:#393444}
+.xinyu-app[data-theme=night] :is(input,textarea)::placeholder{color:#c9b7c9}
+.xinyu-app[data-theme=night] :is(.conversation-item.chosen,.xy-banner,.consent-strip,.module-empty){background:color-mix(in srgb,var(--xy-panel) 94%,var(--xy-warm))}
+.xinyu-app[data-theme=night] .xy-btn.primary{background:#d4afd4;color:#382d49;border-color:#e0c3dd}
+.xinyu-app[data-theme=night] :is(.xy-tabs,.filter-tabs) button.chosen{background:#77617f;color:#fff3e5;border-color:#dec2ed}
+.xy-polished-surface{position:relative;isolation:isolate;--bento-light:0}
+.surface-light,.surface-wave-clip{position:absolute;inset:0;border-radius:inherit;pointer-events:none;overflow:hidden;z-index:-1}
+.surface-light{background:radial-gradient(260px circle at var(--bento-x,50%) var(--bento-y,0),color-mix(in srgb,var(--xy-warm) 11%,transparent),transparent 78%);opacity:var(--bento-light);transition:opacity .15s ease-out}
+.surface-light::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:radial-gradient(220px circle at var(--bento-x,50%) var(--bento-y,0),color-mix(in srgb,var(--xy-accent) 70%,transparent),transparent 85%);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude}
+.surface-wave-clip .bento-wave{position:absolute;border:2px solid var(--xy-accent);border-radius:3px;background:color-mix(in srgb,var(--xy-accent) 4%,transparent)}
+.xinyu-app.reduce-motion :is(.surface-light,.surface-wave-clip){display:none}
+@media(prefers-reduced-motion:reduce){.surface-light,.surface-wave-clip{display:none}}

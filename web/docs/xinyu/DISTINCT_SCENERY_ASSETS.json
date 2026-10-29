@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-28",
+  "method": "built-in image_gen, new generation from text only",
+  "prompts": {
+    "forest": "Production pixel-art background for a cozy Chinese desktop companion app. Create a NEW image from scratch, 1536x1024 landscape 3:2. Scene identity: intimate ENCLOSED MOSS FOREST, not an alpine lake. The entire top is a deep jade and emerald leaf canopy and tall layered tree trunks, warm amber shafts through small gaps, at most 8% distant sky. A narrow clear stream winds diagonally from center distance down to lower right between dark mossy stones and ferns. Small white woodland flowers and mushrooms along banks; subtle warm fireflies, one short fallen log over water. Composition is enclosed, close and sheltered, greens with honey light and lavender shadows. Fine deliberate pixel clusters, crisp pixel-art edges, cozy game background with rich depth. No mountains, no broad lake, no cottage, no house, no dock, no village, no UI, text, people, cats or falling rain/snow. Clear stream and stationary natural banks for runtime animation. This must look strongly different from an open blue lake scene.",
+    "lighthouse": "Production pixel-art background for a cozy Chinese desktop companion app. NEW image from scratch, 1536x1024 landscape 3:2. Scene identity: OPEN SEA AND CORAL LIGHTHOUSE. A tall creamy white lighthouse with muted coral red cap stands on a grassy cliff at the FAR LEFT 15-22% of the frame. Broad turquoise and cerulean sea stretches across the middle and right, clean level ocean horizon at 36% height, soft peach-ivory clouds against a pale bright sky. A curved sand beach and sea pink flowers in the lower left, small waves washing along shore, distant low rocky islets only. No high mountains. Bright airy horizontal composition, warm ivory/coral against aquamarine water, delicate violet shadow pixels. Fine crisp cozy pixel-art game environment, rich recognizable clusters, gentle healing mood. No cottage, no alpine lake, no wooden dock, no repeated lakeside house, no UI/text/people/cats, no baked rain or snow. Keep ocean and sky regions clear for runtime waves/clouds.",
+    "mountain": "Production pixel-art background for a cozy Chinese desktop companion app. NEW image from scratch, 1536x1024 landscape 3:2. Scene identity: QUIET SNOW MOUNTAIN LAKE AT ROSY DAWN. Huge jagged snow-covered peaks dominate upper middle, framing a relatively small glacial lake in the lower center. Pale rose and lilac dawn sky only in the top 18%, cool steel blue and lavender mountain shadows, frost-white foreground snow banks, snow-dusted firs framing far left and right. A winding snowy footpath in lower left, one small warm amber lantern on a stone post, no buildings. Lake is deep slate turquoise reflecting snowy peaks, partial thin ice only at the edges, open middle water suitable for gentle ripple animation. Enclosed mountain basin composition, wintry and hushed, distinctly different from a green forest and bright sea coast. Fine deliberate cozy pixel-art game texture, crisp recognizable pixels, soft warm/cool contrast. No cottages, houses, docks, villages, tropical vegetation, UI, lettering, characters, cats, no falling rain or snow baked in."
+  },
+  "files": {
+    "forest": "public/xinyu/generated/forest-v2.png",
+    "lighthouse": "public/xinyu/generated/lighthouse-v2.png",
+    "mountain": "public/xinyu/generated/mountain-v2.png"
+  },
+  "identity": "IDs and favorites preserved; original v1 files retained. No common reference image; distinct geography, composition and palette.",
+  "assets": [
+    {
+      "id": "forest",
+      "file": "public/xinyu/generated/forest-v2.png",
+      "bytes": 3405748,
+      "sha256": "78a1a9ad52bf1dab498ee779f0f085dcf113188df88ffac4640c474b3658795c",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "id": "lighthouse",
+      "file": "public/xinyu/generated/lighthouse-v2.png",
+      "bytes": 2670529,
+      "sha256": "6b9d1d7c5b048932d6d4383369b5eb933f3e13755d90c135c92410256880d64c",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "id": "mountain",
+      "file": "public/xinyu/generated/mountain-v2.png",
+      "bytes": 2699151,
+      "sha256": "7455185df21ab9d8519c16772166d91d040e6d4150d0643c9bd47e1e4c38e95d",
+      "width": 1536,
+      "height": 1024
+    }
+  ]
+}

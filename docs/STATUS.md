@@ -1,47 +1,46 @@
 # 项目状态与接手入口
 
-记录日期：2026-10-22。本文随项目提交维护。
+记录日期：2026-10-29。以本次提交和 Actions 实际结果为准。
 
-## 分支与协作入口
+## 当前版本
 
-- `main`：正式版本，保留为默认分支。
-- `develop`：已从通过基础检查的 `main` 创建，用于开发集成和测试。
-- 新任务从 `develop` 建功能分支，日常 PR 合入 `develop`；阶段验收后再将 `develop` 合入 `main`。初始化的协作说明会在检查通过后同步到两个分支。
-- README、TEAM、PR 模板与 AI 启动指令已采用上述约定；GitHub 强制分支保护规则尚未启用。
-- 基础代码已上传。初始修复提交 `87ac7eafd5148118f3c309f106185e904eee805a` 的 Windows/Linux 检查均通过，见 [运行记录](https://github.com/lkq-guji/emotion-agent/actions/runs/39790343744)。
+- 当前桌面应用位于 web/，启动入口为 [web/README.md](../web/README.md)。无需模型密钥也可运行页面；聊天需各成员自行在 web/.env.local 配置 DeepSeek 或其他兼容服务。
+- 小岛、真实 API 对话、日记/回看、授权记忆、画像、成长、衣橱、动态窗景、本地媒体、天气/日夜/亮度、独立音效与应用锁均已实现。
+- Python emotion_agent/、training/、data_tools/、evaluation/ 和 official/ 保留，**正式模型 engine 仍是 MOCK**。网页当前没有调用这个 Python engine。
+- 本次整理不含私密配置、个人数据、模型权重、运行缓存、构建产物、浏览器记录或历史 QA 截图；保留运行资源、源码许可和必要素材来源。
+- main 为已验收版本，develop 为开发集成入口。下一步从 develop 建功能分支，流程见 [TEAM.md](../TEAM.md)。
 
-具体命令见 [TEAM.md](../TEAM.md)。当前分支和最新提交以实际仓库为准。
+## 下一步按优先级做
 
-## 已完成
+| 优先级 | 任务 | 负责人方向 |
+| --- | --- | --- |
+| P0 | 真实模型和官方结构化输出替换 Python MOCK | A 模型 |
+| P0 | 官方数据转换、输入/标签隔离、真实质量与延迟基线 | B 数据评测 |
+| P0 | 正式模型服务适配网页，响应、情绪、画像与来源对齐 | A + C |
+| P0 | 官方启动入口、导出后重载、平台环境实际验收 | C + 全组 |
+| P1 | 记忆筛选、预算和召回；共情/画像质量与危机场景验证 | A + B |
+| P1（公开多人使用前） | 登录、服务端持久化、用户隔离、配额、删除与备份 | C |
+| 提交前 | 核实最新规则、截止时间和素材授权证据；完成报告与演示 | 全组 |
 
-- 共享输入输出约定、16 类情绪与画像标签校验。
-- 假模型、批量处理、命令行与两条自造联调样例。
-- 三人分工、需求手册、对话总结、AI 启动指令。
-- GitHub Actions 配置，覆盖 Windows 和 Linux 的接口检查。
-- 本地 Windows 实际运行：7 项单元测试通过；两条 MOCK 输出生成及字段、数量、ID 校验通过。
+细化验收见 [web/docs/TEAM_HANDOFF.md](../web/docs/TEAM_HANDOFF.md)。页面工程测试不代表模型质量分数，历史“剩余 18 天”不是本次核实的截止日期。
 
-本地验证命令：
+## 当前交接验证
 
-```bash
-python -X utf8 -m unittest discover -s tests -v
-python -X utf8 -m emotion_agent mock --input examples/smoke_input.jsonl --output .runtime/mock_predictions.jsonl
-python -X utf8 -m emotion_agent validate --input examples/smoke_input.jsonl --predictions .runtime/mock_predictions.jsonl
-```
+验证在独立的干净工作目录进行：不复制旧 node_modules，不放置 .env.local，不调用付费模型。安装依赖可以复用 pnpm 下载缓存。
 
-远端自动检查结果见 [GitHub Actions](https://github.com/lkq-guji/emotion-agent/actions)，按对应提交确认成功状态。
+| 检查 | 本地结果 |
+| --- | --- |
+| Node 24.14.0 / pnpm 10.34.1，冻结锁文件全新安装 | 通过 |
+| 无密钥环境和必要文件检查 | 通过 |
+| Svelte / TypeScript | 0 错误、0 警告 |
+| 心屿单元测试 | 78 通过 |
+| 模型网关测试 | 8 通过 |
+| 桌面 Chromium 完整回归 | 57 通过，约 6.5 分钟 |
+| 静态资源完整性 | 172 项通过 |
+| 生产构建与无密钥启动 | 通过；未配置模型时明确返回 503 |
+| 根目录 Python 共享接口 | 7 通过，仍为 MOCK 联调 |
+| 待提交文件与凭据扫描 | 通过；没有私密配置和运行产物 |
 
-## 当前阶段
+浏览器逐像素读回用例单独使用软件渲染，避免显卡驱动阻塞；所有断言保留。生产构建仍有上游可选依赖、CSS 和包体积提示，后续应做资源与性能优化。首次空存档启动时上游解码器会输出可恢复的可选数据块解析日志，未阻止启动和上述回归；后续可补兼容处理。
 
-这是可运行的协作骨架，模型仍为 MOCK。没有真实模型推理、训练、质量分数或正式平台验收结果。官方原始数据、模型权重、运行缓存和密钥不在本次上传范围。
-
-用户已明确授权将本次基础代码和交接文档上传到 `lkq-guji/emotion-agent`。历史总结和 `reference/FACTS_2026-10-22.json` 中“仅有 README、未推送”的描述保留首次上传前的观察，不能用来判断最新远端状态。
-
-## 接下来三个人分别做什么
-
-| 人员 | 下一项可检查的成果 |
-|---|---|
-| A | 在独立 GPU 环境中加载公开基座，实现真实 `generate(history)`，记录模型许可、显存及生成结果。 |
-| B | 将官方验证数据转换成输入与独立标签，检查目标回复、未来轮次和标签不进入输入。 |
-| C | 核对官方启动入口与平台约束，整理提交目录和依赖说明，运行基础联调。 |
-
-从 [AI_START_HERE.md](AI_START_HERE.md) 复制指令，让 AI 按 [PROJECT_REQUIREMENTS.md](PROJECT_REQUIREMENTS.md) 的 P0 开始。先复查当前环境、精确截止日期和最新代码，再进入真实模型开发。
+远端 Windows/Linux 自动检查见 [GitHub Actions](https://github.com/lkq-guji/emotion-agent/actions) 对应提交，以实际结果为准。此次没有调用付费模型，没有开展新训练或正式比赛评分。

@@ -1,0 +1,71 @@
+{
+  "verifiedAt": "2026-10-28",
+  "license": "MIT + Commons Clause",
+  "licenseUrl": "https://github.com/DavidHDev/react-bits/blob/main/LICENSE.md",
+  "implementation": "Svelte 5 / TypeScript / CSS / Canvas / SVG; original scoped implementation of requested effects, no React or additional dependencies",
+  "references": [
+    {
+      "component": "CurvedLoop",
+      "variant": "JS-CSS",
+      "registry": "https://reactbits.dev/r/CurvedLoop-JS-CSS.json",
+      "attachment": "[local source] 已粘贴的文本.txt",
+      "attachmentSha256": "5b71945c0c58ea539bbe5bf31a59e94ce0d74206b9e1447609c58041192f9495",
+      "files": [
+        {
+          "path": "CurvedLoop.css",
+          "sha256": "5fc512cf43fe668b5e550256aa66554fbd1d762904cb34a0af068c02104bd865",
+          "bytes": 374,
+          "matchesAttachedSource": null
+        },
+        {
+          "path": "CurvedLoop.jsx",
+          "sha256": "fd4163d8737044255b9f05465a1cb921039ecee12d3694da60ad06124890af94",
+          "bytes": 14252,
+          "matchesAttachedSource": true
+        }
+      ]
+    },
+    {
+      "component": "PixelCard",
+      "variant": "JS-CSS",
+      "registry": "https://reactbits.dev/r/PixelCard-JS-CSS.json",
+      "attachment": "[local source] 已粘贴的文本.txt",
+      "attachmentSha256": "afc71254c6148f52ad2b39ac1c081a4746d789ab23c314b6f0cc1d12b6cbd0c7",
+      "files": [
+        {
+          "path": "PixelCard.css",
+          "sha256": "aa76b07b6bf13f74443b28afb18242261e6ad07559f8a7e3110fb2fe794bf5a5",
+          "bytes": 1829,
+          "matchesAttachedSource": null
+        },
+        {
+          "path": "PixelCard.jsx",
+          "sha256": "e442796748a563c792eff90a8bf2b816ea99726877e7c31ba6a086ab7547ee00",
+          "bytes": 20041,
+          "matchesAttachedSource": true
+        }
+      ]
+    },
+    {
+      "component": "MagicBento",
+      "variant": "JS-CSS",
+      "registry": "https://reactbits.dev/r/MagicBento-JS-CSS.json",
+      "attachment": "[local source] 已粘贴的文本.txt",
+      "attachmentSha256": "bd0d6b7f465cf1ecf4e64bdceca4ad7ce4e60fb97364d63cdf333959544bbca9",
+      "files": [
+        {
+          "path": "MagicBento.css",
+          "sha256": "5ccc3d3d1a9eb9899635eef390a524428622a66e190e573e1d212e71fb1d1cb6",
+          "bytes": 23349,
+          "matchesAttachedSource": null
+        },
+        {
+          "path": "MagicBento.jsx",
+          "sha256": "e859218916383eedccc6a049b4aadd6efb1e588c5a73c55c2fc50e6f6490e492",
+          "bytes": 39585,
+          "matchesAttachedSource": true
+        }
+      ]
+    }
+  ]
+}

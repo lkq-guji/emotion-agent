@@ -1,0 +1,11 @@
+Rain on Window Loop — alxl
+https://opengameart.org/content/rain-on-window-loop
+License chosen: CC0 1.0. The author explicitly makes it available under CC0.
+
+AMB Rain Loop 1 — Kresiek The Furry
+https://opengameart.org/content/amb-rain-loop-1
+CC0 1.0
+
+https://creativecommons.org/publicdomain/zero/1.0/
+
+The local Ogg files are edited versions with gentle filtering, gain adjustment and seamless wrap crossfades. See PROVENANCE.json for processing, source URLs and hashes.

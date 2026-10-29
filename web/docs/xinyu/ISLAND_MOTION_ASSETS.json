@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-27",
+  "generator": "OpenAI built-in imagegen, transparent edit",
+  "assets": [
+    {
+      "name": "hoodie",
+      "references": [
+        "assets/xiaoyu-hoodie-atlas-v1.png"
+      ],
+      "prompt": "Edit the provided transparent game sprite atlas to make a SMOOTH EIGHT-FRAME TURN animation of the EXACT SAME Xiaoyu character in the lavender-white hoodie, lavender hair and pleated skirt. Production sprite sheet: exactly 4 columns by 2 rows, eight isolated full-body figures, matching the original 1774×887 2:1 canvas proportions and cell positions. Reading order 1 through 8: front, slight three-quarter front, three-quarter side, side, three-quarter back, mostly back, nearly fully back, fully back. The head, body, eyes, hair and arms must smoothly rotate together as one coherent whole character; eyes remain correctly drawn without double images. Keep the exact same face, hairstyle, clip, clothing details, rendering style, height, scale and feet position as the reference. Feet stand anchored on the SAME bottom line in all eight cells. Each figure has complete anatomy, no extra limbs, no cuts, no detached pieces, no shadows, no ground, no text, no borders. Truly transparent background.",
+      "generated_file": "[local source] exec-249f4770-668e-43c8-b09d-10bc328fe68e.png",
+      "project_file": "public/xinyu/island/assets/xiaoyu-hoodie-turn-v2.png",
+      "generated_sha256": "ca20f80eeaeae4d8248338266c4fa6edae3575bd08d1263e5c3709e82dbafce9",
+      "project_sha256": "ca20f80eeaeae4d8248338266c4fa6edae3575bd08d1263e5c3709e82dbafce9"
+    },
+    {
+      "name": "cardigan",
+      "references": [
+        "assets/xiaoyu-hoodie-turn-v2.png",
+        "assets/xiaoyu-cardigan-atlas-v1.png"
+      ],
+      "prompt": "Edit FIRST image only, a transparent 4-by-2 game sprite turn animation of Xiaoyu. The SECOND image is the exact clothing reference. Preserve all eight full-body turn poses, each position, feet anchor, face, hair, proportions, skirt, resolution, pixel-art detail and transparent background of FIRST image. Replace only her hoodie in all eight frames with the garment from SECOND image. Keep the heads, hands and bodies coherent and do not add limbs, text, outlines or grid. All eight complete characters must wear the same outfit from front, side and back. Garment: ivory cable-knit cardigan, lavender collar, front purple bow and buttons.",
+      "generated_file": "[local source] exec-086074f6-fc7c-4236-8b33-fe1e9c4006fd.png",
+      "project_file": "public/xinyu/island/assets/xiaoyu-cardigan-turn-v2.png",
+      "generated_sha256": "943ae5664dd545dc3c399187b535f394e48b23a08e3b0601783c095a1cbb62b9",
+      "project_sha256": "943ae5664dd545dc3c399187b535f394e48b23a08e3b0601783c095a1cbb62b9"
+    },
+    {
+      "name": "sailor",
+      "references": [
+        "assets/xiaoyu-hoodie-turn-v2.png",
+        "assets/xiaoyu-sailor-atlas-v1.png"
+      ],
+      "prompt": "Edit FIRST image only, a transparent 4-by-2 game sprite turn animation of Xiaoyu. The SECOND image is the exact clothing reference. Preserve all eight full-body turn poses, each position, feet anchor, face, hair, proportions, skirt, resolution, pixel-art detail and transparent background of FIRST image. Replace only her hoodie in all eight frames with the garment from SECOND image. Keep the heads, hands and bodies coherent and do not add limbs, text, outlines or grid. All eight complete characters must wear the same outfit from front, side and back. Garment: cream sailor top with broad lavender collar, front purple bow and a square sailor collar across the back.",
+      "generated_file": "[local source] exec-8c35559e-d750-49ca-9b50-a81ad2b19ac8.png",
+      "project_file": "public/xinyu/island/assets/xiaoyu-sailor-turn-v2.png",
+      "generated_sha256": "d1d1e3e29ad73c9aaac71fa3898c1acbd618732107e1badf429486c9b293348c",
+      "project_sha256": "d1d1e3e29ad73c9aaac71fa3898c1acbd618732107e1badf429486c9b293348c"
+    }
+  ],
+  "video": {
+    "generator": "scripts/xinyu/generate-entry-videos.mjs; FFmpeg minterpolate with transparent VP9",
+    "fps": 60,
+    "sourceFps": 20,
+    "clipCount": 18,
+    "clips": [
+      {
+        "file": "public/xinyu/island/entry-videos/cardigan-cream-lilac.webm",
+        "sha256": "f975cdc316bc5ff40d3e9fbf0ec2badf03db58bb91bd7771b55ec39d368321f2"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/cardigan-cream-rose.webm",
+        "sha256": "97d04b24e916befcfcfc6d1515781e7b52cd9090928e7d937728c63747b7fa52"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/cardigan-lilac-lilac.webm",
+        "sha256": "f71803f72067c433d7b8c9b990f36f71b94fd4f3ad3aa020716c1dbfc64d40de"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/cardigan-lilac-rose.webm",
+        "sha256": "c611496ecec921d27a009bd127237ef87d75c0b67d7b8087bcb9df5beac77a0e"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/cardigan-rose-lilac.webm",
+        "sha256": "9ed29433d5947bf1c81cbe4491bbcb710a412bcb51f6b569579ca0ce1da3692c"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/cardigan-rose-rose.webm",
+        "sha256": "d8761ce900246494eca7c725d0db9771600a34194d16b6a2fae9b4c0d4208660"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/hoodie-cream-lilac.webm",
+        "sha256": "99189e5fb9186a33dba3a627fb6af3651b7af0b42826e4f45549776f978acd36"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/hoodie-cream-rose.webm",
+        "sha256": "0598e1fbe8a4b9bcc08ed7be290b0fe43859c75929548e80d05d9aa3c9c7ef9b"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/hoodie-lilac-lilac.webm",
+        "sha256": "3f8ff5fa5f363fecf9b535f9a98976d9470d0e5334c69f4b3e700d9404fd1ae0"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/hoodie-lilac-rose.webm",
+        "sha256": "164f76954fd81065dddb2bfc3bbdada1ba7b61e31dea54c1f5b3264204de904e"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/hoodie-rose-lilac.webm",
+        "sha256": "0a70427d1938ae138a8834d35b20c60b7903d97d3906d446d1af0c2c36adf867"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/hoodie-rose-rose.webm",
+        "sha256": "1f7f0c7f78f4bf4d414540387418e91ab064c483f24dda96db9af929f64488ff"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/sailor-cream-lilac.webm",
+        "sha256": "a6e87f7a8d2ec2ef7b3bd2920907ab31612902a8a02e611ac678ccb261f6cb23"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/sailor-cream-rose.webm",
+        "sha256": "2db982a09f7159665948b31e35f279dc96e393450b0cf3c1bc51d4720f0d2c6c"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/sailor-lilac-lilac.webm",
+        "sha256": "4de03c0c7f0dbd78aed8cce2b528f92f599b44da9e2cff7faffa25ffedf9609d"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/sailor-lilac-rose.webm",
+        "sha256": "d4d767a7df2dda253e9b8ba4fa5197ad8388d04d9988e97e31bbab1f6a8a092d"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/sailor-rose-lilac.webm",
+        "sha256": "fa0ba85d186b2dd6354bb7d7a3dc2306cd91bc9d2e1c70e324cd67c85ef6d44e"
+      },
+      {
+        "file": "public/xinyu/island/entry-videos/sailor-rose-rose.webm",
+        "sha256": "175ca60e9b59f3c73d5a252c1d8fe9a4a111f3956e10b51b5c3b1f4923725057"
+      }
+    ]
+  },
+  "privacy": "No user conversations were supplied to image generation."
+}

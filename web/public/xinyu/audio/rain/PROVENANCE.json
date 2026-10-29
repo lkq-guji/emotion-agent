@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-28",
+  "license": "CC0 1.0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "note": "The source authors explicitly offer these files under CC0. Locally processed recordings replace the synthetic tonal rain. Attribution is retained voluntarily. No music or third-party player is loaded at runtime.",
+  "files": [
+    {
+      "title": "Rain on Window Loop",
+      "author": "alxl",
+      "sourcePage": "https://opengameart.org/content/rain-on-window-loop",
+      "sourceFile": "https://opengameart.org/sites/default/files/rain_on_window_loop.wav",
+      "sourceSha256": "97b9405025e5ed7ed8a58d24dd7146d06e925519b1f718efda94bb85dcd1a61a",
+      "file": "window-soft-v1.ogg",
+      "sha256": "9aef164d1d615531248671f4bd8240b14800d17e8cc82d154179a90a5c6fbc8c",
+      "bytes": 150414,
+      "processedSeconds": 10.366259,
+      "processing": "44.1 kHz stereo, highpass 110 Hz, lowpass 5200 Hz, EQ 2300 Hz -3 dB Q1.2, gain -5 dB, 0.5 s equal-power wrap crossfade, Vorbis q4"
+    },
+    {
+      "title": "AMB Rain Loop 1",
+      "author": "Kresiek The Furry",
+      "sourcePage": "https://opengameart.org/content/amb-rain-loop-1",
+      "sourceFile": "https://opengameart.org/sites/default/files/amb_rain_loop_1.ogg",
+      "sourceSha256": "ae578791d46218d180a0e3aebefb5d621dbdd3f1627899c25210379f57d480b0",
+      "file": "ambient-soft-v1.ogg",
+      "sha256": "5069bde75055a230fa13457116226e9b9e84aa58b73482cba8d47b3a33a3fb17",
+      "bytes": 519400,
+      "processedSeconds": 39.2,
+      "processing": "40 s selection from 22 s, 44.1 kHz stereo, highpass 120 Hz, lowpass 4300 Hz, gain +1 dB, 0.8 s equal-power wrap crossfade, Vorbis q4; mixed in gently only as rain strengthens"
+    }
+  ],
+  "runtime": "One application player, 1.4 s fade in, 1.05 s fade out. Separate intensity mix, no pitch manipulation or synthetic droplet oscillator. The decoded codec edge is smoothly connected over the final 12 ms without a silence gap. Controls and page changes keep the same sources. Snow keeps the existing quiet original air layer."
+}

@@ -1,0 +1,28 @@
+/* Desktop scene-library continuation of the shared pixel/lavender system. */
+.xinyu-app .xy-workspace{overflow:clip}
+.xinyu-app .shell-brand{gap:6px}.brand-cloud-home{display:grid;place-items:center;flex:none;min-width:44px;min-height:44px;border-radius:8px}
+.xinyu-app .shell-brand .particle-title.brand{width:190px;height:58px;font-size:36px;line-height:1.2}
+.xinyu-app .clock-digits{font-size:30px}.xinyu-app .clock-date{font-size:12px}.xinyu-app .xy-topbar>.pixel-clock{min-width:174px;padding-left:16px}
+.xinyu-app .topbar-place{gap:8px}.xinyu-app .topbar-place>div{gap:1px}.xinyu-app .topbar-place>div>span{font-size:12px}.xinyu-app .place-spark{font-size:19px}
+.xinyu-app .companion-layout .theatre-world .chat-main{width:36%;min-width:400px}
+.xinyu-app .settings-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:stretch;max-width:1480px}
+.xinyu-app .settings-grid>.xy-panel{grid-column:auto!important;grid-row:auto!important;min-width:0;padding:26px}
+.xinyu-app .settings-grid>.about-settings{grid-column:auto!important}.xinyu-app .settings-grid>.data-settings{background:var(--xy-panel)}
+.xinyu-app .settings-grid .data-danger{margin:0;padding-top:12px;border:0}.xinyu-app .settings-grid .data-danger h3{font-size:16px;margin-bottom:8px}.xinyu-app .settings-grid .setting-row p{font-size:13px!important}.xinyu-app .settings-grid h2{font-size:19px}
+.memory-enable-note{padding:14px 16px;margin:0 0 18px;border-left:3px solid var(--xy-accent);border-radius:6px;background:var(--xy-page)}.memory-enable-note strong{font-size:14px}.memory-enable-note p{font-size:13px;color:var(--xy-secondary);line-height:1.8;margin:7px 0 12px}
+.xinyu-app .emotion-journey{max-width:1520px;margin-inline:auto}.xinyu-app .emotion-journey .emotion-grid{grid-template-columns:minmax(350px,400px) minmax(0,1fr);align-items:start;gap:24px}.xinyu-app .emotion-map-column{gap:24px}.xinyu-app .emotion-history{padding:0;min-height:0;background:transparent;border:0;box-shadow:none;grid-column:auto}.xinyu-app .emotion-journey .diary-heading{margin-bottom:12px}.xinyu-app .emotion-journey .diary-heading p{font-size:13px}.xinyu-app .emotion-map-column>.emotion-trend{min-height:0}.xinyu-app .emotion-journey .mood-form{position:static}.xinyu-app .emotion-journey .module-caption{margin-top:0}
+.xinyu-app .scene-preview-button>.scene-art{aspect-ratio:3/2}
+@media(min-width:1900px){.xinyu-app .xy-topbar{gap:28px;padding-inline:34px}}
+/* Reading keeps the same room, softened behind a wider, legible conversation. */
+.xinyu-app .companion-layout .companion-room{transition:filter 220ms ease-out,opacity 220ms ease-out}
+.xinyu-app .companion-layout .companion-room.reading-backdrop{inset:-16px;filter:blur(14px) saturate(.76);opacity:.8;pointer-events:none}
+.xinyu-app .companion-layout .conversation-world.scene-hidden .chat-main{inset:0;top:0;translate:none;width:100%;min-width:0;max-width:none;height:100%;max-height:none;border:0;border-radius:0;background:linear-gradient(90deg,color-mix(in srgb,var(--xy-panel) 72%,transparent),color-mix(in srgb,var(--xy-panel) 51%,transparent) 50%,color-mix(in srgb,var(--xy-panel) 72%,transparent));backdrop-filter:none;box-shadow:none}
+.xinyu-app .companion-layout .scene-hidden .chat-top{background:color-mix(in srgb,var(--xy-panel) 50%,transparent);padding-inline:24px}
+.xinyu-app .companion-layout .scene-hidden :is(.theatre-present,.message-list){position:static;inset:auto;translate:none;width:100%;max-height:none;height:auto;flex:1;min-height:0;padding:22px max(24px,calc((100% - 1120px)/2));background:transparent;backdrop-filter:none}
+.xinyu-app .companion-layout .scene-hidden .message-wrap{max-width:min(88%,80ch)}
+.xinyu-app .companion-layout .scene-hidden :is(.theatre-present,.message-list) .message-row .message-bubble{background:color-mix(in srgb,var(--xy-panel) 81%,transparent)!important;line-height:1.85}
+.xinyu-app .companion-layout .scene-hidden :is(.theatre-present,.message-list) .from-user .message-bubble{background:color-mix(in srgb,var(--xy-selected) 88%,transparent)!important}
+.xinyu-app .companion-layout .scene-hidden .chat-composer{position:static;inset:auto;translate:none;width:100%;height:auto;padding:14px max(24px,calc((100% - 1120px)/2));border:0;border-top:1px solid var(--xy-glass-border);background:color-mix(in srgb,var(--xy-panel) 50%,transparent)}
+.xinyu-app .companion-layout .scene-hidden .chat-composer textarea{height:76px;min-height:60px;background:color-mix(in srgb,var(--xy-panel) 76%,transparent)}
+@media(prefers-reduced-motion:reduce){.xinyu-app .companion-layout .companion-room{transition:none}}
+.xinyu-app.reduce-motion .companion-layout .companion-room{transition:none}

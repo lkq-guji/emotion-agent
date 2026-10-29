@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-28",
+  "method": "built-in image_gen",
+  "prompts": {
+    "forest": "Production game background, 1536x1024 landscape 3:2. A quiet mossy forest brook, small wood footbridge on the right, fern banks and a few pale wildflowers at edges, tall green trees framing an open clearing, small waterfall left-middle, blue sky and soft cream clouds visible in top quarter. Same fine cozy pixel-art world and lavender/cream/green palette as the attached reference landscape. Art only viewed through a companion-room window. Crisp deliberate pixel clusters, clean depth, soft afternoon light, comforting detailed environment. Keep central water readable for later flowing animation, sky distinct from trees for later cloud motion. No people, cats, text, UI, cards, frame, watermark, rain or snow.",
+    "lighthouse": "Production game background, 1536x1024 landscape 3:2. Cozy coastal lighthouse on a grassy headland at right, cream lighthouse with muted violet roof, broad clear turquoise ocean filling lower middle and left, small rocky coves, tiny flowers on foreground grass, distant islands and open blue sky with cream/pink clouds in upper third. Match attached reference's detailed fine pixel-art rendering and gentle lavender/cream palette. Layered, calm and healing, clear water region for animated waves, sunlight on sea. No people, animals, letters, labels, UI, cards, frame, watermark, rain or snow.",
+    "mountain": "Production game background, 1536x1024 landscape 3:2. A calm alpine lake under blue-lavender distant snow-capped mountains, a tiny warm wooden cabin on the far right shore, evergreen trees at the side edges, wildflower meadow in foreground, clear water occupying lower 45%, open soft blue sky and pastel cream clouds at top quarter. Match attached reference fine cozy pixel-art style, lavender shadows and soft warm highlights. Daylight, crisp deliberate pixel clusters and deep scenery. Space for later natural cloud and water animations. No people, cats, words, UI, borders, cards, watermark, falling snow or rain.",
+    "room": "Precise composition edit of this exact lavender pixel-art companion room. Keep the exact wide 2:1 opaque room, the wall decor, trailing plants, warm lamps, lavender chairs, style and palette. No people or animals. Raise the complete desk and the laptop so the straight REAR CONTACT EDGE of the tabletop is at 54% of image height, creating more calm wooden foreground below for a transparent dialogue overlay. Crucially the complete purple heart laptop must sit toward the BACK of the tabletop with the lowest point of its keyboard/base at the SAME 54% height contact line; keep the WHOLE laptop visible above that line, no part cut off. Large rectangular window remains left, shorten its lower edge as needed while preserving matching frame and blank blue-gray sky pane. Clear empty seats at center x55% and x76% for runtime sprites, so their hands/paws can align to that exact desk line. Bottom 46% quiet continuous pale wood tabletop/front, with no new props. Preserve fine pixel clusters. NO text, buttons, UI, speech bubbles, characters, cats, watermark or transparent edges."
+  },
+  "files": {
+    "forest": "public/xinyu/generated/forest-v1.png",
+    "lighthouse": "public/xinyu/generated/lighthouse-v1.png",
+    "mountain": "public/xinyu/generated/mountain-v1.png",
+    "room": "public/xinyu/generated/room-panorama-v2.png"
+  },
+  "references": {
+    "landscape": "public/xinyu/generated/island.png",
+    "room": "public/xinyu/generated/room-panorama-v1.png"
+  },
+  "note": "New pixel landscapes and a revised empty room plate. Characters, weather, water/cloud animation, lamps and dialogue are rendered by the real application.",
+  "metadata": {
+    "forest": {
+      "width": 1536,
+      "height": 1024,
+      "bytes": 3654798,
+      "sha256": "3e268315e13530d08cb893d7a068a26da6f2c63381f1d7d2daee8f8ff2da9b3f"
+    },
+    "lighthouse": {
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2842972,
+      "sha256": "07bf095889389b2ca619b22c54eac5c586e10e85d9f5f5f3ef8b360a7ed68ca1"
+    },
+    "mountain": {
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2990416,
+      "sha256": "06f7c702bd2ecc23ae4dede94e318b161d71d616909166995e46bb680a700c2f"
+    },
+    "room": {
+      "width": 1774,
+      "height": 887,
+      "bytes": 1997451,
+      "sha256": "fcb89e9740a4744eb7e55f7d4a82027276f8413198aae6fd1c242c3e14b84d84"
+    }
+  }
+}

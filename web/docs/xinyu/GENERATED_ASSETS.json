@@ -1,0 +1,51 @@
+{
+  "method": "built-in image_gen",
+  "date": "2026-10-25",
+  "assets": [
+    {
+      "id": "warm_room",
+      "file": "public/xinyu/generated/warm_room.png",
+      "prompt": "Create ONE production landscape background asset for 心屿智伴, a gentle Chinese pixel-art companion app. A luminous blue sky with floating grassy islands and white waterfalls, fluffy ivory clouds, warm sunlight, tiny distant rooftops. View outward from a cozy island home, no window frame. Landscape 3:2 composition, at least 1536 by 1024 resolution. Crisp exquisite hand-placed pixel art, small well defined pixel clusters, high detail readable at desktop size, consistent lavender outlines, pastel cream and soft pink highlights, warm storybook atmosphere, calm visual depth. This is actual art filling the whole canvas, no text, no UI, no cards, no borders, no people, no cats. Avoid blurry painting, smoothing, bloom or haze. Keep sky area available for subtle runtime animation."
+    },
+    {
+      "id": "star_room",
+      "file": "public/xinyu/generated/star_room.png",
+      "prompt": "Create ONE production landscape background asset for 心屿智伴, a gentle Chinese pixel-art companion app. A peaceful indigo night sky above a small lakeside cottage, lavender moonlight, warm amber lit windows, many tiny crisp stars, pine silhouettes, gentle lake reflections. Landscape 3:2 composition, at least 1536 by 1024 resolution. Crisp exquisite hand-placed pixel art, small well defined pixel clusters, high detail readable at desktop size, consistent lavender outlines, pastel cream and soft pink highlights, warm storybook atmosphere, calm visual depth. This is actual art filling the whole canvas, no text, no UI, no cards, no borders, no people, no cats. Avoid blurry painting, smoothing, bloom or haze. Keep sky area available for subtle runtime animation."
+    },
+    {
+      "id": "sakura",
+      "file": "public/xinyu/generated/sakura.png",
+      "prompt": "Create ONE production landscape background asset for 心屿智伴, a gentle Chinese pixel-art companion app. A serene Japanese inspired garden courtyard in full pink cherry blossom, winding pale stone path, small wooden tea pavilion, koi pond, moss, warm lanterns, pale blue sky. Landscape 3:2 composition, at least 1536 by 1024 resolution. Crisp exquisite hand-placed pixel art, small well defined pixel clusters, high detail readable at desktop size, consistent lavender outlines, pastel cream and soft pink highlights, warm storybook atmosphere, calm visual depth. This is actual art filling the whole canvas, no text, no UI, no cards, no borders, no people, no cats. Avoid blurry painting, smoothing, bloom or haze. Keep sky area available for subtle runtime animation."
+    },
+    {
+      "id": "sunset",
+      "file": "public/xinyu/generated/sunset.png",
+      "prompt": "Create ONE production landscape background asset for 心屿智伴, a gentle Chinese pixel-art companion app. A tranquil ocean bay at apricot and rose sunset, sun at horizon, lavender sea, gently curving shore, a cherry blossom branch in upper left, low distant island silhouettes. Landscape 3:2 composition, at least 1536 by 1024 resolution. Crisp exquisite hand-placed pixel art, small well defined pixel clusters, high detail readable at desktop size, consistent lavender outlines, pastel cream and soft pink highlights, warm storybook atmosphere, calm visual depth. This is actual art filling the whole canvas, no text, no UI, no cards, no borders, no people, no cats. Avoid blurry painting, smoothing, bloom or haze. Keep sky area available for subtle runtime animation."
+    },
+    {
+      "id": "city",
+      "file": "public/xinyu/generated/city.png",
+      "prompt": "Create ONE production landscape background asset for 心屿智伴, a gentle Chinese pixel-art companion app. A peaceful riverside city at blue hour, warm lit apartment windows, distant clock tower and bridge, lavender indigo sky and amber reflections, rooftops and a few flowering balconies. Landscape 3:2 composition, at least 1536 by 1024 resolution. Crisp exquisite hand-placed pixel art, small well defined pixel clusters, high detail readable at desktop size, consistent lavender outlines, pastel cream and soft pink highlights, warm storybook atmosphere, calm visual depth. This is actual art filling the whole canvas, no text, no UI, no cards, no borders, no people, no cats. Avoid blurry painting, smoothing, bloom or haze. Keep sky area available for subtle runtime animation."
+    },
+    {
+      "id": "island",
+      "file": "public/xinyu/generated/island.png",
+      "prompt": "Create ONE production landscape background asset for 心屿智伴, a gentle Chinese pixel-art companion app. A small sunny lush green island cottage beside a turquoise lake, distant misty mountains, fluffy clouds, meadow flowers and a wooden jetty, refreshing calm blue and soft green. Landscape 3:2 composition, at least 1536 by 1024 resolution. Crisp exquisite hand-placed pixel art, small well defined pixel clusters, high detail readable at desktop size, consistent lavender outlines, pastel cream and soft pink highlights, warm storybook atmosphere, calm visual depth. This is actual art filling the whole canvas, no text, no UI, no cards, no borders, no people, no cats. Avoid blurry painting, smoothing, bloom or haze. Keep sky area available for subtle runtime animation."
+    },
+    {
+      "id": "room-plate",
+      "file": "public/xinyu/generated/room-plate.png",
+      "prompt": "Edit target is the provided wide 心屿智伴 hero art. Remove the lavender-haired girl AND the white cat completely, filling their areas with the cozy room behind them, chair backs and clean wooden desk. Keep original composition, left half near-white blank area, window position, laptop on the left of the desk, plants on right, cream and lavender room, pixel art style. Remove all characters and animals. Keep no text. Preserve the original 1360:390 wide aspect composition. This is a clean background plate for separately animated characters."
+    },
+    {
+      "id": "girl-atlas",
+      "file": "public/xinyu/generated/girl-atlas.png",
+      "prompt": "Use provided image as character reference ONLY. Create ONE clean production animation spritesheet of the SAME cute small lavender bob-haired chibi girl, purple cross hairpin, natural pale peach skin, lavender cream hoodie, violet eyes, sitting behind a desk (draw character only, no desk, no laptop, no cat, no background). True transparent background. Exactly 4 columns by 2 rows equal cells, each same scale and aligned feet/bottom of torso; each cell square. Waist-up centered character fully within each cell. Row 1 cells left to right: eyes open idle with both hands resting low; eyes half closed; eyes fully closed gentle blink; eyes open soft smile. Row 2 left to right: right hand starting a relaxed wave near shoulder; right hand raised gently with fingers curved; same raised hand tilted slightly outward; right hand lowering. 8 frames total, consistent silhouette/face/palette/position across frames; natural rounded soft hands, no blocky square added glove. Crisp high detail pastel pixel art, tiny controlled pixel clusters and dark lavender outlines. No grid lines, no labels, no text, no opaque checkerboard. Wide spritesheet aspect 2:1 at 2048x1024."
+    },
+    {
+      "id": "cat-atlas",
+      "file": "public/xinyu/generated/cat-atlas.png",
+      "prompt": "Use provided image as character reference ONLY. Create ONE production animation spritesheet of the SAME round fluffy white kitten with pink ears and lavender gray stripe/tail, lying on its belly, front paws visible. True transparent background. Exactly 4 columns by 2 rows of equal square cells. 8 consistent frames, same scale, centered and aligned to same bottom baseline. Row1 left to right: sleepy open eyes; half blink; closed eyes content; open eyes soft smile. Row2 left to right: one paw slightly raised; paw raised toward viewer and ears alert; paw relaxing down; curled up purring with eyes closed. No person, no desk, no scenery, no grid lines, no labels, no text or opaque checkerboard. Crisp adorable detailed pastel pixel art, small clean pixel clusters, dark lavender outlines. Wide spritesheet 2:1, 2048x1024."
+    }
+  ]
+}

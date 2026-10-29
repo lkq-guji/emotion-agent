@@ -1,0 +1,16 @@
+<script lang="ts">
+ import {onMount} from 'svelte';import {prefersReducedMotion} from 'svelte/motion';
+ let {items,selected,onselect,reduced=false}=$props<{items:{id:string;label:string;count:number}[];selected:string;onselect:(id:string)=>void;reduced?:boolean}>();
+ let nav:HTMLElement,frame=0,pointerY:number|undefined;
+ function paint(){frame=0;if(!nav)return;const buttons=[...nav.querySelectorAll<HTMLButtonElement>('button')],values=buttons.map(button=>{const r=button.getBoundingClientRect();return pointerY===undefined?0:Math.max(0,1-Math.abs(pointerY-r.y-r.height/2)/78);});buttons.forEach((button,i)=>button.style.setProperty('--near',String(reduced||prefersReducedMotion.current?0:values[i])));}
+ function move(event:PointerEvent){pointerY=event.clientY;if(!frame)frame=requestAnimationFrame(paint);}
+ function leave(){pointerY=undefined;paint();}
+ function keys(event:KeyboardEvent){if(!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return;const buttons=[...nav.querySelectorAll<HTMLButtonElement>('button')],index=buttons.indexOf(document.activeElement as HTMLButtonElement);event.preventDefault();buttons[event.key==='Home'?0:event.key==='End'?buttons.length-1:(index+(event.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length]?.focus();}
+ onMount(()=>()=>cancelAnimationFrame(frame));
+</script>
+<nav class="profile-categories line-sidebar" aria-label="档案分类" bind:this={nav} onpointermove={move} onpointerleave={leave} class:quiet={reduced||prefersReducedMotion.current}>
+ {#each items as item,index}<button type="button" onkeydown={keys} class:chosen={selected===item.id} aria-pressed={selected===item.id} onclick={()=>onselect(item.id)}><i class="line-mark" aria-hidden="true"></i><span class="line-index" aria-hidden="true">{String(index+1).padStart(2,'0')}</span><span class="line-label">{item.label}</span><small>{item.count}</small></button>{/each}
+</nav>
+<style>
+ .line-sidebar{gap:8px!important;padding-left:0!important}.line-sidebar button{position:relative;display:flex;align-items:center;gap:8px;min-height:42px;padding:8px 8px 8px 24px!important;border-radius:5px!important;border-color:transparent!important;color:var(--xy-secondary);background:transparent!important;--near:0}.line-mark{position:absolute;left:0;top:50%;width:calc(8px + var(--near)*8px);height:2px;translate:0 -50%;background:var(--xy-border);transition:width .14s ease-out,background-color .14s ease-out}.line-index{font:11px/1 ui-monospace,monospace;opacity:.65;font-variant-numeric:tabular-nums}.line-label{flex:1;text-align:left;translate:calc(var(--near)*4px) 0;transition:translate .14s ease-out}.line-sidebar button.chosen{background:color-mix(in srgb,var(--xy-selected) 55%,transparent)!important;color:var(--xy-ink);font-weight:600}.line-sidebar button.chosen .line-mark,.line-sidebar button:focus-visible .line-mark{width:16px;background:var(--xy-accent)}.line-sidebar button:focus-visible{outline:2px solid var(--xy-accent);outline-offset:2px}.line-sidebar button:hover{color:var(--xy-ink)}.line-sidebar button:not(:last-child)::after{content:'';position:absolute;left:0;bottom:-5px;width:4px;height:1px;background:var(--xy-border)}.quiet .line-label{translate:none;transition:none}.quiet .line-mark{transition:none}
+</style>

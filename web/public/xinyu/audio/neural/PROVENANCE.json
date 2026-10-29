@@ -1,0 +1,30 @@
+{
+  "generator": "edge-tts 7.3.1 (build time only)",
+  "source": "https://github.com/rany2/edge-tts",
+  "profiles": {
+    "soft": {
+      "voice": "zh-CN-XiaoyiNeural",
+      "rate": "-12%",
+      "pitch": "+8Hz",
+      "volume": "-4%"
+    },
+    "warm": {
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-16%",
+      "pitch": "+12Hz",
+      "volume": "-4%"
+    }
+  },
+  "phrases": [
+    "我在呢。慢慢说，我会认真听。",
+    "今天也很高兴见到你。来这里，歇一小会儿吧。",
+    "不用着急，我们一起慢慢来，好吗？",
+    "看，云朵在慢慢走。心事也可以轻一点。",
+    "欢迎回到小岛，我一直在这里。",
+    "你来啦，今天想和我说说什么？",
+    "先休息一会儿，什么都不用着急。",
+    "我们一起看看小岛的风景吧。",
+    "无论今天怎么样，都可以慢慢来。"
+  ],
+  "privacy": "Only these authored phrases were synthesized. Playback is local. No voice clone or private chat upload."
+}

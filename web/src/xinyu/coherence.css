@@ -1,0 +1,43 @@
+/* The shared application palette includes a real low-luminance night surface. */
+.xinyu-app{--xy-glass-opacity:72%;--xy-glass-bg:color-mix(in srgb,var(--xy-panel) var(--xy-glass-opacity),transparent);--xy-glass-hover:color-mix(in srgb,var(--xy-panel) 84%,transparent);--xy-glass-border:color-mix(in srgb,var(--xy-panel) 74%,transparent)}
+.xinyu-app[data-theme=night]{--xy-glass-opacity:84%;--xy-glass-hover:color-mix(in srgb,var(--xy-panel) 92%,transparent);--xy-glass-border:color-mix(in srgb,var(--xy-ink) 24%,transparent)}
+.xinyu-app{--xy-feature-pink:#fce9ef;--xy-feature-pink-border:#f0cada}
+.xinyu-app[data-theme=night]{--xy-feature-pink:#443044;--xy-feature-pink-border:#6d4964}
+.xinyu-app[data-theme=night]{--xy-page:#1c1d2c;--xy-sidebar:#252436;--xy-header:#29273b;--xy-panel:#2b293d;--xy-ink:#f1eaf8;--xy-secondary:#c1b8d0;--xy-border:#504760;--xy-accent:#bba0e5;--xy-pink:#d890b3;--xy-selected:#49415f;color-scheme:dark}
+.xinyu-app[data-theme=night] .xy-sidebar{border-right-color:var(--xy-border)}
+.xinyu-app[data-theme=night] .xy-topbar{border-bottom-color:var(--xy-border)}
+.xinyu-app[data-theme=night] .global-search,.xinyu-app[data-theme=night] input,.xinyu-app[data-theme=night] textarea,.xinyu-app[data-theme=night] select{background:var(--xy-page);color:var(--xy-ink);border-color:var(--xy-border)}
+.xinyu-app[data-theme=night] input::placeholder,.xinyu-app[data-theme=night] textarea::placeholder{color:#b0a6c1}
+.xinyu-app[data-theme=night] .xy-hero{background:var(--xy-page);border-color:var(--xy-border)}
+.xinyu-app[data-theme=night] .hero-copy p,.xinyu-app[data-theme=night] .feature>p,.xinyu-app[data-theme=night] .home-bottom p,.xinyu-app[data-theme=night] .home-footnote{color:var(--xy-secondary)}
+.xinyu-app[data-theme=night] .feature.pink{background:#443044;border-color:#6d4964}.xinyu-app[data-theme=night] .feature.blue{background:#293e50;border-color:#415d75}.xinyu-app[data-theme=night] .feature.mint{background:#273e3b;border-color:#486760}.xinyu-app[data-theme=night] .feature.lilac{background:#3c3351;border-color:#615277}
+.xinyu-app[data-theme=night] .room-widget,.xinyu-app[data-theme=night] .resume-widget{background:var(--xy-glass-bg);border-color:var(--xy-glass-border)}
+.xinyu-app[data-theme=night] .room-widget:hover{background:var(--xy-glass-hover)}
+.xinyu-app[data-theme=night] .widget-entry,.xinyu-app[data-theme=night] .widget-label{color:var(--xy-ink)}
+.xinyu-app[data-theme=night] .xy-sidebar nav>a:hover{background:#38314b}.xinyu-app[data-theme=night] .xy-sidebar nav>a.active{background:var(--xy-selected)}
+.xinyu-app[data-theme=night] .avatar-room,.xinyu-app[data-theme=night] .scene-detail-preview{background:var(--xy-page)}
+.xinyu-app[data-theme=night] .avatar-presets>button.chosen{background:var(--xy-selected);border-color:var(--xy-accent)}
+.xinyu-app[data-theme=night] .conversation-list,.xinyu-app[data-theme=night] .chat-main,.xinyu-app[data-theme=night] .chat-context{background:var(--xy-panel);border-color:var(--xy-border)}
+.xinyu-app[data-theme=night] .conversation-list button.chosen,.xinyu-app[data-theme=night] .message-row:not(.from-user) .message-bubble,.xinyu-app[data-theme=night] .recent-summary li button,.xinyu-app[data-theme=night] .xy-banner,.xinyu-app[data-theme=night] .consent-strip,.xinyu-app[data-theme=night] .module-empty,.xinyu-app[data-theme=night] .chat-context>section{background:#343047;color:var(--xy-ink)}
+.xinyu-app[data-theme=night] .from-user .message-bubble{background:#534261;color:var(--xy-ink)}
+.xinyu-app[data-theme=night] .xy-btn:not(.primary):not(.danger),.xinyu-app[data-theme=night] .xy-tabs button,.xinyu-app[data-theme=night] .filter-tabs button{background:var(--xy-panel);color:var(--xy-ink);border-color:var(--xy-border)}
+.xinyu-app[data-theme=night] :is(.filter-tabs,.xy-tabs) button.chosen{background:var(--xy-selected);color:var(--xy-ink);border-color:var(--xy-accent)}
+.xinyu-app[data-theme=night] :is(.filter-tabs,.xy-tabs) button:not(.chosen):hover{background:#393149;color:var(--xy-ink);border-color:var(--xy-border)}
+.xinyu-app[data-theme=night] .xy-status,.xinyu-app[data-theme=night] .chat-composer,.xinyu-app[data-theme=night] .chat-toolbar{background:var(--xy-panel);color:var(--xy-secondary);border-color:var(--xy-border)}
+.xinyu-app[data-theme=night] .xy-toast{background:var(--xy-selected);color:var(--xy-ink);border-color:var(--xy-border)}
+.xinyu-app[data-theme=night] kbd{background:#393149;color:var(--xy-secondary)}
+.feature-art-transparent{position:absolute;right:16px;bottom:12px;width:72px;height:70px;display:grid;place-items:center;pointer-events:none}
+.top-portrait{display:block;width:34px;height:34px;overflow:hidden;flex:none}
+.top-portrait canvas{width:100%;height:100%;max-width:none}
+.top-user .top-portrait{display:block!important}
+.xinyu-app[data-theme=night] .hero-copy h1{color:var(--xy-ink)}
+.xinyu-app[data-theme=night] .day-night-toggle{background:var(--xy-selected);color:var(--xy-ink)}
+.xinyu-app[data-theme=night] .text-button,.xinyu-app[data-theme=night] .text-link,.xinyu-app[data-theme=night] .original-link,.xinyu-app[data-theme=night] .recent-summary h2>a{color:#ddc2f6!important}
+.avatar-room>.pixel-room{inset:0!important}
+.avatar-room{height:auto;aspect-ratio:1.55;background:var(--xy-page)}
+.avatar-preview .avatar-room{height:auto!important;min-height:235px;max-height:380px}
+.selected-mood-day{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin:12px 0;color:var(--xy-secondary);font-size:14px}
+.sidebar-interactive-island{margin-top:auto;flex-shrink:0}
+
+.emotion-trend{min-width:0}
+@media(max-width:720px){.feature-art-transparent{width:62px;height:60px;right:11px;bottom:10px}.avatar-preview .avatar-room{aspect-ratio:1.25;min-height:230px;max-height:340px}.xy-topbar{gap:8px!important}.xy-topbar .top-user{min-width:40px}.xy-tabs button{font-size:14px}.xy-tabs{flex-wrap:wrap}}

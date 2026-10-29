@@ -1,0 +1,13 @@
+<script lang="ts">
+ import {onMount} from 'svelte';
+ import {placeRoomBubble} from '../roomBubble';
+ let {anchor,caption,speaker,text,reduced=false,ondismiss=()=>{}}=$props<{anchor:HTMLElement;caption:string;speaker:string;text:string;reduced?:boolean;ondismiss?:()=>void}>();
+ let bubble:HTMLDivElement,side=$state('below'),position=$state({x:0,y:0,tailX:20,tailY:16});
+ function place(){if(!anchor.isConnected)return;const rect=anchor.getBoundingClientRect(),scope=anchor.closest('.pixel-room,.island-stage');const protectedElements=[...document.querySelectorAll('.weather-sound,.room-voice,.chat-composer,.theatre-present,.chat-top,.hero-copy h1,.hero-copy p,.hero-copy .xy-btn,.room-widget,.xy-topbar,.avatar-preview h2,.avatar-preview>p,.scene-detail h3,.scene-detail>p,.scene-detail>.xy-btn'),...(scope?.querySelectorAll('.character,.cat,.island-character,.island-cat')||[])];const result=placeRoomBubble(rect,bubble.offsetWidth,bubble.offsetHeight,{width:innerWidth,height:innerHeight},protectedElements.map(el=>el.getBoundingClientRect()));position=result;side=result.side;}
+ onMount(()=>{bubble.showPopover();place();const observer=new ResizeObserver(place);observer.observe(bubble);const escape=(event:KeyboardEvent)=>{if(event.key==='Escape')ondismiss();};window.addEventListener('resize',place);document.addEventListener('scroll',place,true);document.addEventListener('keydown',escape);return()=>{observer.disconnect();window.removeEventListener('resize',place);document.removeEventListener('scroll',place,true);document.removeEventListener('keydown',escape);if(bubble.matches(':popover-open'))bubble.hidePopover();};});
+</script>
+<div bind:this={bubble} popover="manual" class="room-bubble" class:quiet={reduced} data-side={side} role="status" style:left={position.x+'px'} style:top={position.y+'px'} style:--tail-x={position.tailX+'px'} style:--tail-y={position.tailY+'px'}><span aria-hidden="true">{caption}</span><span class="sr-only">{speaker}：{text}</span></div>
+<style>
+ .room-bubble{position:fixed;inset:auto;margin:0;width:max-content;max-width:180px;padding:7px 12px;border:1px solid var(--xy-glass-border);border-radius:15px;background:var(--xy-glass-bg);backdrop-filter:blur(14px) saturate(1.08);color:var(--xy-ink);box-shadow:0 4px 14px #3020441c;overflow:visible;pointer-events:none;font:13px/20px 'Noto Sans SC','Microsoft YaHei',sans-serif;white-space:nowrap}
+ @media(prefers-reduced-motion:no-preference){.room-bubble:popover-open:not(.quiet){animation:bubble-in .24s cubic-bezier(.2,.8,.2,1)}@keyframes bubble-in{from{opacity:0;transform:translateY(7px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}}
+</style>

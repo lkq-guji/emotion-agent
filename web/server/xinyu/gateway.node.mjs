@@ -1,0 +1,20 @@
+import { test,after } from 'node:test';
+import assert from 'node:assert/strict';
+import express from 'express';
+import http from 'node:http';
+import { createGateway } from './gateway.mjs';
+const calls=[];
+const app=express();app.use('/xinyu-api',createGateway({XINYU_API_KEY:'fixture-server-secret',XINYU_MODEL:'test-model'},async(url,arg)=>{const body=JSON.parse(arg.body);calls.push({url,body,authorization:arg.headers.Authorization});if(body.stream)return new Response('data: {"choices":[{"delta":{"content":"工程流"}}]}\n\ndata: [DONE]\n\n',{headers:{'content-type':'text/event-stream'}});return new Response(JSON.stringify({choices:[{message:{role:'assistant',content:'工程测试'}}]}),{status:200,headers:{'content-type':'application/json'}});}));
+const server=app.listen(0,'127.0.0.1');await new Promise(resolve=>server.once('listening',resolve));
+const origin=`http://127.0.0.1:${server.address().port}`;
+after(()=>server.close());
+let cookie;
+test('状态不泄露密钥，会话 cookie 具备访问限制',async()=>{const response=await fetch(origin+'/xinyu-api/health');const text=await response.text();assert.equal(response.status,200);assert.ok(!text.includes('fixture-server-secret'));cookie=response.headers.get('set-cookie').split(';')[0];assert.match(response.headers.get('set-cookie'),/HttpOnly/);assert.match(response.headers.get('set-cookie'),/SameSite=Strict/);});
+test('没有会话不能调用模型',async()=>{const response=await fetch(origin+'/xinyu-api/chat/completions',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:'hello'}]})});assert.equal(response.status,401);});
+test('跨站 Origin 被拒绝',async()=>{const response=await fetch(origin+'/xinyu-api/chat/completions',{method:'POST',headers:{Origin:'http://attacker.example',Cookie:cookie,'Content-Type':'application/json'},body:'{}'});assert.equal(response.status,403);});
+test('Host 不能通过 DNS 重绑定伪装',async()=>{const status=await new Promise(resolve=>http.get({hostname:'127.0.0.1',port:server.address().port,path:'/xinyu-api/health',headers:{Host:'attacker.example'}},res=>{res.resume();resolve(res.statusCode);}));assert.equal(status,403);});
+test('上游目标与密钥只取服务器配置，返回实际传输结果',async()=>{const response=await fetch(origin+'/xinyu-api/chat/completions',{method:'POST',headers:{Origin:origin,Cookie:cookie,'Content-Type':'application/json'},body:JSON.stringify({url:'http://internal',model:'unapproved',messages:[{role:'user',content:'hello'}]})});assert.equal(response.status,200);assert.equal((await response.json()).choices[0].message.content,'工程测试');assert.equal(calls[0].url,'https://api.deepseek.com/chat/completions');assert.equal(calls[0].body.model,'test-model');assert.equal(calls[0].authorization,'Bearer fixture-server-secret');});
+test('非法消息不会发送给上游',async()=>{const before=calls.length;const response=await fetch(origin+'/xinyu-api/chat/completions',{method:'POST',headers:{Origin:origin,Cookie:cookie,'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'invalid',content:'hello'}]})});assert.equal(response.status,400);assert.equal(calls.length,before);});
+
+test('SSE 保持流式内容和结束标记',async()=>{const response=await fetch(origin+'/xinyu-api/chat/completions',{method:'POST',headers:{Origin:origin,Cookie:cookie,'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:'stream test'}],stream:true})});assert.equal(response.status,200);assert.match(response.headers.get('content-type'),/text\/event-stream/);const text=await response.text();assert.match(text,/工程流/);assert.match(text,/data: \[DONE\]/);assert.equal(calls.at(-1).body.stream,true);});
+test('注销后旧会话失效',async()=>{await fetch(origin+'/xinyu-api/logout',{method:'POST',headers:{Origin:origin,Cookie:cookie}});const response=await fetch(origin+'/xinyu-api/chat/completions',{method:'POST',headers:{Origin:origin,Cookie:cookie,'Content-Type':'application/json'},body:'{}'});assert.equal(response.status,401);});

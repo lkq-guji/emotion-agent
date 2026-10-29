@@ -1,0 +1,26 @@
+{
+  "method": "built-in image_gen",
+  "date": "2026-10-25",
+  "preservedWholeAssets": [
+    "public/xinyu/generated/girl-atlas.png",
+    "public/xinyu/generated/cat-atlas.png"
+  ],
+  "assets": [
+    {
+      "file": "public/xinyu/generated/xiaoyu-cardigan-whole.png",
+      "prompt": "Use case: identity-preserve. Edit target is the supplied transparent 4-column by 2-row sprite sheet of XiaoYu. Preserve the EXACT same lavender bob hair, purple cross clip, large purple eyes, natural peach skin, chibi proportions, face identity, eight poses, cell grid and full character silhouette. Every cell must show ONE COMPLETE, CONTINUOUS seated chibi from hair to hands and hem. Head attached naturally to neck, neck to shoulders, sleeves to torso, hands attached to cuffs. No detached puppet parts, no joint gaps, no isolated head or limbs, no cut seams, no extra person, no labels, no scene or opaque background. Keep all eight full characters within their own equal cells with transparent margins. The character drawings are the finished integrated artwork, used as whole sprites. Keep the original fine pastel pixel-art style, not simplified RPG pixels. Change ONLY the clothing in every cell. Replace the hoodie with a cozy cream-and-lavender knitted cardigan over a lilac blouse. Tiny round cream buttons, soft ribbed cuffs, modest lilac collar; hands and face unchanged. All neck/collar/shoulder transitions should be drawn as one anatomically coherent illustration. Preserve genuinely transparent alpha everywhere outside the complete characters.",
+      "kind": "Complete original-character outfit and expression atlas, no body-part assembly"
+    },
+    {
+      "file": "public/xinyu/generated/xiaoyu-sailor-whole.png",
+      "prompt": "Use case: identity-preserve. Edit target is the supplied transparent 4-column by 2-row sprite sheet of XiaoYu. Preserve the EXACT same lavender bob hair, purple cross clip, large purple eyes, natural peach skin, chibi proportions, face identity, eight poses, cell grid and full character silhouette. Every cell must show ONE COMPLETE, CONTINUOUS seated chibi from hair to hands and hem. Head attached naturally to neck, neck to shoulders, sleeves to torso, hands attached to cuffs. No detached puppet parts, no joint gaps, no isolated head or limbs, no cut seams, no extra person, no labels, no scene or opaque background. Keep all eight full characters within their own equal cells with transparent margins. The character drawings are the finished integrated artwork, used as whole sprites. Keep the original fine pastel pixel-art style, not simplified RPG pixels. Change ONLY the clothing in every cell. Replace the hoodie with a soft cream-and-lavender sailor blouse and a neat lilac ribbon bow, long cozy sleeves. Keep the exact same hands, head, eye expressions and pose placements. Collar must connect naturally under the chin with no visible join or hollow neckline. All neck/shoulder/sleeve transitions are one continuous illustration. Preserve genuinely transparent alpha everywhere outside the complete characters.",
+      "kind": "Complete original-character outfit and expression atlas, no body-part assembly"
+    }
+  ],
+  "removedSupersededPuppets": [
+    "xiaoyu-hoodie.png",
+    "xiaoyu-cardigan.png",
+    "xiaoyu-sailor.png",
+    "cat-rig-v3.png"
+  ]
+}

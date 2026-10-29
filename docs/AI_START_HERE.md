@@ -1,5 +1,7 @@
 # 交给 AI 的启动指令
 
+**2026-10-29 更新：** 当前桌面应用已经放入 `web/`。先读 [STATUS.md](STATUS.md)、[web README](../web/README.md)、[网页架构](../web/docs/ARCHITECTURE.md) 和 [接手验收表](../web/docs/TEAM_HANDOFF.md)。网页支持真实外部 Chat API，但 Python 正式推理 engine 仍是 MOCK；不要按下文早期快照重建已完成页面，也不要声称训练或官方评测已完成。密钥由每位成员自行配置，本仓库不包含私密环境文件。
+
 这份文件包含可以直接复制的指令。主需求文件是 [PROJECT_REQUIREMENTS.md](PROJECT_REQUIREMENTS.md)，历史背景是 [CONVERSATION_SUMMARY.md](CONVERSATION_SUMMARY.md)。
 
 ## 1. 项目负责人怎么用

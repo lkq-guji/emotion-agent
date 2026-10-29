@@ -1,0 +1,127 @@
+{
+  "recordedAt": "2026-10-26T10:06:18.595Z",
+  "purpose": "Reference provenance for five user-supplied React Bits prompts. Snapshot hashes identify reviewed engineering evidence; this is not an incorporated-source manifest.",
+  "repository": "https://github.com/DavidHDev/react-bits",
+  "license": {
+    "url": "https://github.com/DavidHDev/react-bits/blob/main/LICENSE.md",
+    "title": "MIT + Commons Clause License Condition v1.0",
+    "copyright": "Copyright (c) 2026 David Haz",
+    "snapshotSha256": "4bdd1fa59a6b7d5954bc3b213dbc34e455c635a94bbcecf9293553797d0fad02",
+    "reviewedOn": "2026-10-26",
+    "incorporatedSource": false
+  },
+  "applicationLicense": "Existing RisuAI GPL v3 foundation retained",
+  "newRuntimeDependencies": [],
+  "rasterAssetsAdded": 0,
+  "entries": [
+    {
+      "component": "Counter",
+      "promptHeading": "Counter",
+      "promptAttachmentId": "504dc66e-75e8-41da-95fd-2502c87b9844",
+      "promptSha256": "213aae66eb4b38aeda2ccdbe8474c002088ca5cb023bf80bc9db652f47d6d7fd",
+      "registryUrl": "https://reactbits.dev/r/Counter-JS-CSS.json",
+      "registryVariant": "JS-CSS",
+      "registrySnapshotSha256": "8760ddedc4a9129868275bdaa8946208c582779f6eec1f908c679bee53cbcdce",
+      "upstreamDependencies": [],
+      "reviewedFiles": [
+        {
+          "path": "Counter.css",
+          "sha256": "9f224c728e16bb2b4137cd0e5a3ff370043bc9c838450fa8aaed89e190a8a6f8"
+        },
+        {
+          "path": "Counter.jsx",
+          "sha256": "25e98c26331ef7b6b4326c48b7540feb1a2208b09160c7f2b96e4fbf146522f8"
+        }
+      ],
+      "integration": "Independent Svelte 5 / TypeScript / plain CSS implementation of requested interaction; no upstream source files or packages copied."
+    },
+    {
+      "component": "SloshGauge",
+      "promptHeading": "undefined (source identifies SloshGauge)",
+      "promptAttachmentId": "6e71be8c-3e5c-42f3-ac01-288bad37b084",
+      "promptSha256": "ab3917f9d3b9787d9d758e950b5dbdd00020a6de1fc81667dfbe52a93228f04e",
+      "registryUrl": "https://reactbits.dev/r/SloshGauge-JS-CSS.json",
+      "registryVariant": "JS-CSS",
+      "registrySnapshotSha256": "b5baf7f8a1ba301b2c05abab47c650045d494bc2d36d1e4824d68b6ffec57c5d",
+      "upstreamDependencies": [],
+      "reviewedFiles": [
+        {
+          "path": "SloshGauge.css",
+          "sha256": "2770955520f32bbd05939e70e63228492b9798a197b66a78d68847d5939cabe0"
+        },
+        {
+          "path": "SloshGauge.jsx",
+          "sha256": "23d80ec3e5f2df707c3ef7a5167315828a982bd25a84d5c8af6e1e30508a5e28"
+        }
+      ],
+      "integration": "Independent Svelte 5 / TypeScript / plain CSS implementation of requested interaction; no upstream source files or packages copied."
+    },
+    {
+      "component": "SquishSwitch",
+      "promptHeading": "SquishSwitch",
+      "promptAttachmentId": "c1390cd7-d9ad-42df-994d-d42952ae9e83",
+      "promptSha256": "196fb425993680534d43990ad70e4359be8f96553e4cb1f48a24661101db4a6a",
+      "registryUrl": "https://reactbits.dev/r/SquishSwitch-JS-CSS.json",
+      "registryVariant": "JS-CSS",
+      "registrySnapshotSha256": "ab3f4f5dc055a13167a784851b1a716aab298cbc231c0069d79f725f499ebd9a",
+      "upstreamDependencies": [
+        "motion@^12.23.12"
+      ],
+      "reviewedFiles": [
+        {
+          "path": "SquishSwitch.css",
+          "sha256": "c05d751d50995b2683ea005098c8459694e03a2c2a3d532f4ab545aac5d5dfcb"
+        },
+        {
+          "path": "SquishSwitch.jsx",
+          "sha256": "44402b851bbe4f82cabce067cf0b94eded19ad3e925bda3a8f0cb5781982a664"
+        }
+      ],
+      "integration": "Independent Svelte 5 / TypeScript / plain CSS implementation of requested interaction; no upstream source files or packages copied."
+    },
+    {
+      "component": "ParticleText",
+      "promptHeading": "ParticleText",
+      "promptAttachmentId": "025b2323-5a40-4fd9-a871-9565330f208f",
+      "promptSha256": "cb36e7db981a1304d7e3b8153ca584a17a844a05c64d4ab1cc05bcd1a4ae3331",
+      "registryUrl": "https://reactbits.dev/r/ParticleText-JS-CSS.json",
+      "registryVariant": "JS-CSS",
+      "registrySnapshotSha256": "313bc4168de0a339c992d513a7cec43efd5848fb3fab2b8cc275f8f3ccdc5f45",
+      "upstreamDependencies": [],
+      "reviewedFiles": [
+        {
+          "path": "ParticleText.css",
+          "sha256": "305c4d3cf0d48bf2bdd86206d8d0a0389a5d78b122d8f31bea928ef785370d04"
+        },
+        {
+          "path": "ParticleText.jsx",
+          "sha256": "0e22e4cd5e822aeeea69fc583c08336df709248a8960e9f4f218e4087ef6e0cb"
+        }
+      ],
+      "integration": "Independent Svelte 5 / TypeScript / plain CSS implementation of requested interaction; no upstream source files or packages copied."
+    },
+    {
+      "component": "Dock",
+      "promptHeading": "Dock",
+      "promptAttachmentId": "ef5567e9-32e2-4ef2-9aed-e89e84d04984",
+      "promptSha256": "54d165ecadb26e87e47cc1a59d9754ef024cf55c5f3874a7587f7518118ee03c",
+      "registryUrl": "https://reactbits.dev/r/Dock-JS-CSS.json",
+      "registryVariant": "JS-CSS",
+      "registrySnapshotSha256": "4179551970a368261828ff27314a9d6a0c0125daa4ef378008551bf92cfd42e5",
+      "upstreamDependencies": [
+        "react-dom@^19.0.0"
+      ],
+      "reviewedFiles": [
+        {
+          "path": "Dock.css",
+          "sha256": "68914a58df742acacbe82341d930f6ae6d2e0720176e9428f5edcad4353f53e6"
+        },
+        {
+          "path": "Dock.jsx",
+          "sha256": "f1eba9b158a023e78ff76242a0b17468ed733475918b1cb473158af19f59ebf9"
+        }
+      ],
+      "integration": "Independent Svelte 5 / TypeScript / plain CSS implementation of requested interaction; no upstream source files or packages copied."
+    }
+  ]
+}

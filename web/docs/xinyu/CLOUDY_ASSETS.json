@@ -1,0 +1,62 @@
+{
+  "method": "built-in image_gen image editing",
+  "date": "2026-10-28",
+  "purpose": "Desktop rainy island and companion-room window; no baked precipitation. Runtime time, rain and motion stay independent.",
+  "sources": [
+    {
+      "file": "public/xinyu/island/assets/island-day.png",
+      "sha256": "704088216eeb952de7c89d01e4ec093a81e9693fe427c5216ea26dde945d233b",
+      "origin": "User-provided island pack; ISLAND_ASSET_SOURCES.json"
+    },
+    {
+      "file": "public/xinyu/island/assets/island-night.png",
+      "sha256": "7adb83661489f7ce1b17b8c38b9e782475b2c2957c47eb65a26a6970f4faa4d9",
+      "origin": "User-provided island pack; ISLAND_ASSET_SOURCES.json"
+    },
+    {
+      "file": "public/xinyu/generated/warm_room.png",
+      "sha256": "06b832cc456121dd54940291f0be3a8976457034245a49350b30d90b0c89c548",
+      "origin": "Earlier built-in image_gen; GENERATED_ASSETS.json"
+    }
+  ],
+  "assets": [
+    {
+      "id": "island-overcast-day",
+      "file": "public/xinyu/island/assets/island-overcast-day-v1.png",
+      "width": 2172,
+      "height": 724,
+      "sha256": "64361f821d0872d09ced2f266532095118fba1a813e93caca502a8f56b32c7aa",
+      "prompt": "Edit the supplied pixel-art island panorama into a cozy OVERCAST DAY before light rain. Preserve the exact entire panorama composition and 3:1 framing. All buildings, house door, bridge, mailbox, trees, cat, floating islands, waterfall positions and sizes must remain pixel aligned to the input. Change WEATHER/LIGHTING ONLY: replace the saturated clear blue sky, sun and bright fluffy white clouds with layered soft slate lavender and blue-gray rain clouds; no visible sun, no sunbeams, no stars. Gentle diffuse daytime lighting, damp stone and subtle moist foliage, softly glowing amber windows. Still a bright, welcoming pastel pixel-art island with detailed crisp pixel textures, not dark, gloomy or photoreal. Do not paint raindrops: application adds animated rain separately. Do not add people, text, UI, borders, objects or change the camera. Full-bleed landscape 2172x724, same geometry."
+    },
+    {
+      "id": "island-overcast-night",
+      "file": "public/xinyu/island/assets/island-overcast-night-v1.png",
+      "width": 2172,
+      "height": 724,
+      "sha256": "578480840fe02a19acbde8edcba11f2315c0843c4341f55458df527081b83408",
+      "prompts": [
+        "Edit this exact pixel-art island panorama to a cozy OVERCAST RAINY NIGHT. Preserve the exact full panorama composition and 3:1 aspect, house/door/bridge/mailbox/cat/trees/floating islands and waterfalls all in their existing positions and sizes. Weather change only: hide the moon and stars completely behind layered deep lavender, slate and blue-gray rain clouds, with no clear sky holes or moon disc. Keep the island readable and warmly inviting with amber house windows and lanterns, subtle damp paths, muted cool surroundings, no black crush. Maintain the input's fine pixel-art style and every interaction anchor. Do not paint rain streaks, UI, text, people, frames or new objects. Full-bleed landscape 2172x724; camera and perspective unchanged.",
+        "Precise cleanup of this exact pixel-art panorama: remove ALL drawn diagonal streaks and vertical rain marks from the sky, clouds, trees, garden, foreground and water. This must be a STILL cloudy NIGHT before precipitation: no raindrops, no rain lines anywhere, no particles. Keep the thick cloudy moonless starless sky, warm lamps, damp reflections and all existing house, door, mailbox, cat, islands, bridge, waterfalls, colors and framing exactly unchanged. Reconstruct the underlying pixels where the white/blue streaks were, preserving fine pixel-art. Do not introduce anything else. 2172x724 full-bleed."
+      ],
+      "note": "First night candidate had baked rain; cleanup edit removed it before adoption."
+    },
+    {
+      "id": "window-overcast-day",
+      "file": "public/xinyu/generated/overcast-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "c0aa2b767b3c25e1e293778221f28b8126b6144a15014a5ea8fe42b421606a8d",
+      "prompt": "Edit WEATHER AND LIGHT ONLY in this detailed pastel pixel-art landscape used outside a cozy companion-room window. Preserve the exact landscape, left foreground terrace/roof/plants, all floating islands, buildings and waterfalls in their original positions and sizes, same 3:2 framing. Make it an OVERCAST DAY with thick layered soft lavender-gray rain clouds completely replacing saturated clear blue sky and sunlit white clouds. No sun, beams, stars or moon. Clear detailed damp greenery, softly diffuse daytime light, muted blue-green cliffs, warm tiny lanterns. Welcoming and gentle, not gloomy, no rain streaks baked into image (app animates rain), no text, UI, characters or borders. Keep crisp fine pixel art, full-bleed 1536x1024."
+    },
+    {
+      "id": "window-overcast-night",
+      "file": "public/xinyu/generated/overcast-night-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "a43c597269e6f58a23772a51920424e7a0a7b571201d5a6636277b45fba7f108",
+      "prompt": "Change only the time-of-day of this exact fine pixel-art landscape to cozy cloudy NIGHT. Preserve the exact islands/terrace/lanterns/trees/cliffs/waterfalls and composition and 3:2 frame, no moving architecture. Cloudy lavender-indigo sky with no stars or moon, no sun. Warm amber lanterns and tiny windows, cool damp blue-green landscape. Readable pastel twilight-night, not black or gloomy. Important: NO precipitation, NO rain streaks or snow marks painted into image: only continuous cloud layers. NO new objects, characters, text or UI. Full-bleed 1536x1024."
+    }
+  ],
+  "implementation": "New versioned files. Same source dimensions and panorama anchors; selected scene is never overwritten by rain. Dusk uses the day overcast file with warm runtime grading. Original environment masks continue moving clouds, islands and water.",
+  "limitations": "Artwork editing approximates original pixels rather than guaranteeing every plant is identical. The project retains the user's existing source-rights boundary; no new third-party downloads or license claims."
+}

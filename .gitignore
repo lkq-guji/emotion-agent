@@ -31,3 +31,13 @@ outputs/
 *.zip
 *.tar
 *.tar.gz
+
+# Desktop web dependencies, generated builds and local browser QA
+node_modules/
+dist/
+.impeccable/
+.taste-skill/
+test-results/
+playwright-report/
+*.log
+*.tsbuildinfo

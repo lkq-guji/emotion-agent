@@ -1,0 +1,865 @@
+{
+  "description": "Required checked-in static files; generated uploads and user data are not included.",
+  "files": [
+    {
+      "path": "public/assets/bergamot-translator-worker.js",
+      "bytes": 80474,
+      "sha256": "748b2418418a2ffc6e70721aeb10098d8e6fb589ea156b91f4ae8bc3490d8f7a"
+    },
+    {
+      "path": "public/assets/bergamot-translator-worker.wasm",
+      "bytes": 5174294,
+      "sha256": "95a2b58dd6773bf1b3f345d71f9149928b9f75f4ec9c9064c0b3e42c298671b2"
+    },
+    {
+      "path": "public/assets/translator-worker.js",
+      "bytes": 17191,
+      "sha256": "90257af9ee0758983501bdce77ca7ec168cd7360d4689298c20a81b0251d6b62"
+    },
+    {
+      "path": "public/bg.webp",
+      "bytes": 23152,
+      "sha256": "35dbb791cf4df989abc63e187626d514f4a7c69f25860363ed4cad58bfafafa9"
+    },
+    {
+      "path": "public/birthday.png",
+      "bytes": 5137,
+      "sha256": "9e3cdd563d7755d6f88f3d7c899bff4136fcbe62369753cdada55234b7847b3a"
+    },
+    {
+      "path": "public/colors.txt",
+      "bytes": 32,
+      "sha256": "242a6fecdab6890094d7df365670017cea7a6025eed893a199d3b853b907eb7e"
+    },
+    {
+      "path": "public/discord-mark-white.svg",
+      "bytes": 985,
+      "sha256": "ce7ab6feb066435ba5d791eeba1a9e0bbd9971d9f2e0a1ed6f2e05e79bdc4245"
+    },
+    {
+      "path": "public/favicon.png",
+      "bytes": 34806,
+      "sha256": "b1fdd16b9a2bd8fe213f6efa8b6a85db96f68a669ed9b422e78b4d60cc397d58"
+    },
+    {
+      "path": "public/functions/drive.js",
+      "bytes": 1246,
+      "sha256": "e888c7b56e0bc08d2fce2d9381aa6b453abab04f4b1a7a28bc6400a7c77b2a9f"
+    },
+    {
+      "path": "public/functions/proxy.js",
+      "bytes": 1751,
+      "sha256": "ddb52f8d99f5bc34c922058e878e614e8ef4011c041bf90a3eb03fdfac6c69fa"
+    },
+    {
+      "path": "public/functions/proxy2.js",
+      "bytes": 1876,
+      "sha256": "8b0e98a8941f647e4af8fbf8b667f7b5e414c64f04d78eed44fc0aa20337f7b9"
+    },
+    {
+      "path": "public/icon/github-mark-white.svg",
+      "bytes": 960,
+      "sha256": "fab00c2d598c56cb4838603981b66e3490ebe27ea56fb188120a7e6d4ca46970"
+    },
+    {
+      "path": "public/icon/patreon.png",
+      "bytes": 52210,
+      "sha256": "333b53be9ae5b156e1945a452d3cb997b97cdf9d609d4f6357e713add553969e"
+    },
+    {
+      "path": "public/logo2.png",
+      "bytes": 422367,
+      "sha256": "9c7c2a3b32c59730ae590412335b7f2bbd599b48e4005861c22ec33f1ea336f7"
+    },
+    {
+      "path": "public/logo_16.png",
+      "bytes": 679,
+      "sha256": "cb2a409679280631e54d786c5afacab0e551b127bda31680405fa78b54d3b295"
+    },
+    {
+      "path": "public/logo_192.png",
+      "bytes": 4964,
+      "sha256": "6958691ddf940dc6615d81f76bd6ed075d3cf287d15387ac7d3c0f3d4c318ed7"
+    },
+    {
+      "path": "public/logo_256.png",
+      "bytes": 7273,
+      "sha256": "a6d19fa295af03157524d88d9dedfc15a72002e33aeeae2a20ed703872315803"
+    },
+    {
+      "path": "public/logo_32.png",
+      "bytes": 1032,
+      "sha256": "857dc36da0a48b103dbbcd2825bfa6f6475f0eade7478899f4fbc4b130661ef5"
+    },
+    {
+      "path": "public/logo_512.png",
+      "bytes": 53549,
+      "sha256": "9d77e1651beb706940d97c5a1896e2a0d8e74d0049636d521a10c4cc857ac827"
+    },
+    {
+      "path": "public/logo_typo_small.avif",
+      "bytes": 40665,
+      "sha256": "4cf6a00d279365dfa88eb1e0824be79a63391b00654d19673ebca99bcd3afa6a"
+    },
+    {
+      "path": "public/logo_typo_trans.png",
+      "bytes": 326157,
+      "sha256": "6d14e52847fee2ab434ceff8d02c5f559573ac5b4305ff4c10dcb261246f432e"
+    },
+    {
+      "path": "public/logo_typo_trans_bg.png",
+      "bytes": 4141212,
+      "sha256": "32aa8a6ed7e2d3ae1f6da1a7ed78482b89c247b6d3fa2c1fc781e3478c89034f"
+    },
+    {
+      "path": "public/lua/json.lua",
+      "bytes": 9637,
+      "sha256": "a3c0a1693143a6a2aa4a55329733f55f7c1cff28bc3795b66623822c52a4d7a3"
+    },
+    {
+      "path": "public/manifest.json",
+      "bytes": 1468,
+      "sha256": "9a18fa5629d1721f9a395f57ea99dee9495ee75d17a882fe46bee5f333b572ae"
+    },
+    {
+      "path": "public/none.webp",
+      "bytes": 624,
+      "sha256": "b949bb4af9b39db09a0d3b3c0b6f67e62c5d55c72381ce474af19b205dc87b8e"
+    },
+    {
+      "path": "public/plugin_start.7z",
+      "bytes": 40274,
+      "sha256": "167d817f78332625673c11a1da61d22871606d9c141a7d97410837ce53fc4eae"
+    },
+    {
+      "path": "public/sample/rika.png",
+      "bytes": 4019221,
+      "sha256": "c013796794531818a515cc97a3f07ad8e9d2c55ff52c345082597d3ae3d6621f"
+    },
+    {
+      "path": "public/sample/yuzu.png",
+      "bytes": 3701498,
+      "sha256": "966ad91b91be7e11ecaa1e6ad39e87053a79f5c8f33a0b4106004427c1e58715"
+    },
+    {
+      "path": "public/santa.png",
+      "bytes": 4198,
+      "sha256": "0a4e407c7acfab1bf342d385931168044047437d8f6958f49a626296e4c23ba2"
+    },
+    {
+      "path": "public/ss2.webp",
+      "bytes": 5144,
+      "sha256": "a0b21e879701b3b98271eeb882a560f74352c0f34ff039119d540852aa9a4da9"
+    },
+    {
+      "path": "public/ss3.webp",
+      "bytes": 11420,
+      "sha256": "49cb217dcaf9fed32c9698c3c6a15de065772eecbe28bc7fe902ed78268c3d83"
+    },
+    {
+      "path": "public/ss4.webp",
+      "bytes": 86118,
+      "sha256": "6b891c99b89a081cd2e7ff7836c8aadc8e40c2eae197d454ead015908d7c44f9"
+    },
+    {
+      "path": "public/sun.webp",
+      "bytes": 6410,
+      "sha256": "7977e969b210f34fc35c9015530b42e3d2fbb11df887f31f73dca5fc05ef7e3c"
+    },
+    {
+      "path": "public/sw.js",
+      "bytes": 4555,
+      "sha256": "f5831a5c687408acd752a0e00007ee71f62fd07a24eda9aa20286eda700f1a1e"
+    },
+    {
+      "path": "public/token/claude/claude.json",
+      "bytes": 1774213,
+      "sha256": "c241737df24b4e7f7c9af4fdcee29a0ca903dcb288a8b753bc346a3092911767"
+    },
+    {
+      "path": "public/token/claude/LICENSE",
+      "bytes": 1054,
+      "sha256": "b312d7c633cbd876bcb81067a109e2ac0c949144e13c306a8e279cd2009701c2"
+    },
+    {
+      "path": "public/token/cohere/tokenizer.json",
+      "bytes": 12777505,
+      "sha256": "5e07ab012ff6144f924acb0c46e8462ade9119d6375a7712a170dc7620291493"
+    },
+    {
+      "path": "public/token/deepseek/tokenizer.json",
+      "bytes": 7847602,
+      "sha256": "ecb6f9fc369894346f0511f4074ca75cee5cd5f3b06d02f1ba35fcd39f8e121d"
+    },
+    {
+      "path": "public/token/deepseek/v4/tokenizer.json",
+      "bytes": 4363807,
+      "sha256": "3ad46a8c78edf140516eb696f948ae6e7c3522ec64993b219833145e2e9951d0"
+    },
+    {
+      "path": "public/token/gemma/tokenizer.json",
+      "bytes": 17477917,
+      "sha256": "2e94e8404e218b6fb63ae789a0ab796abf0ec3aad00b989ee713a69f2417ec70"
+    },
+    {
+      "path": "public/token/gemma/tokenizer.model",
+      "bytes": 4241111,
+      "sha256": "6969e64047744a44bb3abfb5c50f8de0f7ed8b571d5444426ef931f651d1a0ef"
+    },
+    {
+      "path": "public/token/glm4/SOURCE.md",
+      "bytes": 502,
+      "sha256": "266499b2b1232722b977ad1a06d6977906d4561d8cfe066a5c05518e73b19b6b"
+    },
+    {
+      "path": "public/token/glm4/tokenizer.json",
+      "bytes": 8578513,
+      "sha256": "1dfc31b811042be1dab7f489cd8e677eb014caa3f435d9543ae4807b27cb65ce"
+    },
+    {
+      "path": "public/token/glm5/SOURCE.md",
+      "bytes": 490,
+      "sha256": "fc77cf2da7961147d1acaea879b9600bf923759559e95ab0e06fb002b103b87b"
+    },
+    {
+      "path": "public/token/glm5/tokenizer.json",
+      "bytes": 8683422,
+      "sha256": "f73933d2e4b633ce5a75f049a68b339790c52b966025e895aae0a0eda67d5cda"
+    },
+    {
+      "path": "public/token/llama/llama.model",
+      "bytes": 499723,
+      "sha256": "9e556afd44213b6bd1be2b850ebbbd98f5481437a8021afaf58ee7fb1818d347"
+    },
+    {
+      "path": "public/token/llama/llama3.json",
+      "bytes": 9084490,
+      "sha256": "c05a3c2174e9edd5be19dc5a0748c42a9037bec2811ce062728bfd71f8702d78"
+    },
+    {
+      "path": "public/token/mistral/tokenizer.model",
+      "bytes": 493443,
+      "sha256": "dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055"
+    },
+    {
+      "path": "public/token/nai/nerdstash_v2.model",
+      "bytes": 1033744,
+      "sha256": "005ad680b10f1abd406bdb0ca9c6a5d83fc1f6e0a855bdd1942c1ceab1fb47ab"
+    },
+    {
+      "path": "public/token/trin/LICENSE",
+      "bytes": 1095,
+      "sha256": "92e2411b78abb2817f46dfd1af4aebfe143888ee71c081bdd0f5715271dac1d2"
+    },
+    {
+      "path": "public/token/trin/spiece.model",
+      "bytes": 1186989,
+      "sha256": "ec31a22c0dca80dc303894ca87547154961b22e312c10c6fab751db7c4584439"
+    },
+    {
+      "path": "public/welcome/claude/ant_0.webp",
+      "bytes": 10138,
+      "sha256": "c2dbcaee5789defdaef39ac535357cc1c4f6244ce7fbbb077fc6e1c4df929cf1"
+    },
+    {
+      "path": "public/welcome/claude/ant_1.webp",
+      "bytes": 12886,
+      "sha256": "042259f3a1a9c742b75eddcab439eab0c1304905e719e38175cc1f2ecd6958ac"
+    },
+    {
+      "path": "public/welcome/claude/ant_10.webp",
+      "bytes": 4076,
+      "sha256": "446983ebd5875d5e6ba3ff988594e6d3bebbe5852ecead35a129005cd4a460a6"
+    },
+    {
+      "path": "public/welcome/claude/ant_11.webp",
+      "bytes": 7758,
+      "sha256": "b39bba3ab92c93ce07de620a2637072f9ec82dd0e442704e06f8feff5da140fb"
+    },
+    {
+      "path": "public/welcome/claude/ant_2.webp",
+      "bytes": 8826,
+      "sha256": "7053098c854cc739801416d27b98b3bed10727f865ae77e5ac43411c6e905de3"
+    },
+    {
+      "path": "public/welcome/claude/ant_3.webp",
+      "bytes": 9612,
+      "sha256": "f6750e7c80f6f1f2547eccde644103c4d06b02a65774f40fd7a57a4dfff01ee3"
+    },
+    {
+      "path": "public/welcome/claude/ant_4.webp",
+      "bytes": 12418,
+      "sha256": "38f8ef45fb6aff50b704533cbfb7ab18a84714a009064eeb166266c16d518d32"
+    },
+    {
+      "path": "public/welcome/claude/ant_5.webp",
+      "bytes": 19386,
+      "sha256": "6f478e162541215a80fb317307ad99e401a872cd6cfad5e05c7af17256dba46a"
+    },
+    {
+      "path": "public/welcome/claude/ant_6.webp",
+      "bytes": 6300,
+      "sha256": "6286d5f1e8fcbd906bb1b00295b8b06334edbf921f226051dfdec26dbbe2adc4"
+    },
+    {
+      "path": "public/welcome/claude/ant_7.webp",
+      "bytes": 9234,
+      "sha256": "8da8ee505372ce79fc542def8f1c774521ab6320fcb23c26fb2a5266d06e1c1f"
+    },
+    {
+      "path": "public/welcome/claude/ant_8.webp",
+      "bytes": 9842,
+      "sha256": "888f58d0ae3f5652430f7a7cdd02e16480bfa2f47c44d0b9c565a2e0296dd911"
+    },
+    {
+      "path": "public/welcome/claude/ant_9.webp",
+      "bytes": 3858,
+      "sha256": "f16d21dc9ca1cbf839551c49b2218470226e9f9d04bdde2335ddbe0f75ddd6e7"
+    },
+    {
+      "path": "public/welcome/welcomebg.png",
+      "bytes": 412031,
+      "sha256": "3f9e84ae630066fe83fb3235c5db103e17df0b1a48909ab9e02b587f997076fc"
+    },
+    {
+      "path": "public/xinyu/art/avatar_chibi.png",
+      "bytes": 6693,
+      "sha256": "d271b5095daac24903dac1aee3cbe24a380c46956e2e3f477a56ddfdba8ba76c"
+    },
+    {
+      "path": "public/xinyu/art/cat_card.png",
+      "bytes": 31295,
+      "sha256": "90ced10dee5d20017f4c2fd2e8345a0c333ae2f272860e56a44cf86676a68c3c"
+    },
+    {
+      "path": "public/xinyu/art/floating_castle.png",
+      "bytes": 95678,
+      "sha256": "d06742c65b2f9811b304bb874bfc4fe3904411fb79fd9b6199aa8365eb0e5ccb"
+    },
+    {
+      "path": "public/xinyu/art/girl_card.png",
+      "bytes": 85875,
+      "sha256": "ad3e9d0a7dbc1bdf4b8198662f58829eb3e97e57bfc4b676095e113f62b69591"
+    },
+    {
+      "path": "public/xinyu/art/hero_character_room.png",
+      "bytes": 167784,
+      "sha256": "3d8aee861f0c9a43fc9daba0cc96190b4bac9ef5426750491e4c032b59f0dff3"
+    },
+    {
+      "path": "public/xinyu/art/hero_clean.png",
+      "bytes": 276229,
+      "sha256": "a07f23b0b8702cffb4b512286902d16fa9806381a2fd814e334946f4a541ff90"
+    },
+    {
+      "path": "public/xinyu/art/hero_scene.png",
+      "bytes": 750207,
+      "sha256": "044bbe10b1ff40ef620d058b3dfbd0af0497b9f0d821bb05cbc958ac06e08b44"
+    },
+    {
+      "path": "public/xinyu/art/logo_cloud.png",
+      "bytes": 9023,
+      "sha256": "abdc64eb0a765dd097ab437db5516a00318a174274ec66fcd651d84322719d23"
+    },
+    {
+      "path": "public/xinyu/art/nav_1.png",
+      "bytes": 4858,
+      "sha256": "1b6857b563e258bc0af39bdb20b3815f4ca68fd4d4b3102f940953e838123c9d"
+    },
+    {
+      "path": "public/xinyu/art/nav_2.png",
+      "bytes": 3695,
+      "sha256": "85bf5d5eed82d86e78c17c950156a4be00cdb5c0952c28c486af86aefdd3200f"
+    },
+    {
+      "path": "public/xinyu/art/nav_3.png",
+      "bytes": 3966,
+      "sha256": "516d5dfb35937d2de8a3b50aad229a0df54d0cf3745e69da7830163daaea377d"
+    },
+    {
+      "path": "public/xinyu/art/nav_4.png",
+      "bytes": 4323,
+      "sha256": "6330c1c66375323ec9a16453ca77a95cc2bc487c2df22d3c8c75b69843f5a302"
+    },
+    {
+      "path": "public/xinyu/art/nav_5.png",
+      "bytes": 3849,
+      "sha256": "0774f2071f3f28ec3a65d1a2615944ce587260cdacb334f7a64b1628f240a0e0"
+    },
+    {
+      "path": "public/xinyu/art/nav_6.png",
+      "bytes": 4185,
+      "sha256": "4cd1b0b77d72cf57554407cbcf6672206140531814ba713959702a8520747df4"
+    },
+    {
+      "path": "public/xinyu/art/nav_7.png",
+      "bytes": 4270,
+      "sha256": "705b3e57a66ff1772cd3b2ea9fe09fd31e294bd671dcf341b6c2054c7cf3c1d6"
+    },
+    {
+      "path": "public/xinyu/art/nav_8.png",
+      "bytes": 3461,
+      "sha256": "b2fa9537336b6f2e7bfd2d5337e49a58cca52c9c6bf76367f39c895e09257a95"
+    },
+    {
+      "path": "public/xinyu/art/nav_9.png",
+      "bytes": 3615,
+      "sha256": "970bea753eaf3dfcf10be1a192f74b58f3a05612d9a1dabf634c9a7de12beee1"
+    },
+    {
+      "path": "public/xinyu/art/scene_city.png",
+      "bytes": 12451,
+      "sha256": "13ab8b7f9d5563a105117523ed304e3e7636449148af94a40670eb9391828505"
+    },
+    {
+      "path": "public/xinyu/art/scene_island.png",
+      "bytes": 11636,
+      "sha256": "557d690af506b6e814385fc8857e6e80d52c62c7657c8808169d15197b6e26df"
+    },
+    {
+      "path": "public/xinyu/art/scene_sakura.png",
+      "bytes": 13057,
+      "sha256": "39d5be924457a3871865c6b40eb015e681bc9a7900227f9af397fb02942cb1c9"
+    },
+    {
+      "path": "public/xinyu/art/scene_star_room.png",
+      "bytes": 13219,
+      "sha256": "92b93520efdc3d3fb3baa17c331b07df55b8d02e8833ff8d619e2fcd3e595f8f"
+    },
+    {
+      "path": "public/xinyu/art/scene_sunset.png",
+      "bytes": 12899,
+      "sha256": "c544e56016a8290fb8308d3f960b90d9d458432b93f0ac901e81649d62b24754"
+    },
+    {
+      "path": "public/xinyu/art/scene_warm_room.png",
+      "bytes": 12695,
+      "sha256": "ef633889b408ca7ab486b83c1140e8dfa90f19fce304fb63e250b6b1050d2efb"
+    },
+    {
+      "path": "public/xinyu/art/side_island.png",
+      "bytes": 52480,
+      "sha256": "53fc2ab514a2e6b7ff812bc8dd70b8804472c78c3d2b2e633a8fa2dc21b08d70"
+    },
+    {
+      "path": "public/xinyu/audio/cat-meow.mp3",
+      "bytes": 27585,
+      "sha256": "a274714673a5327107f0a8c8b267366005b58fb81b5a2f47e2a3a385409b0e60"
+    },
+    {
+      "path": "public/xinyu/audio/GATO-LICENSE.txt",
+      "bytes": 1066,
+      "sha256": "724b87b2330c4285d058ecb8176656a42cd5002a71a6bc07ca239b70ef2fbca4"
+    },
+    {
+      "path": "public/xinyu/audio/neural/PROVENANCE.json",
+      "bytes": 1035,
+      "sha256": "52b9b63d92c8986e3fdad09a2f93419b0bff09cda1390947c86a6b4c7a67fbb4"
+    },
+    {
+      "path": "public/xinyu/audio/neural/soft-0.mp3",
+      "bytes": 26496,
+      "sha256": "dcdba59f616b566c4901ed0145e2cd139f1ccbee2bbe680de968462e060b6fbf"
+    },
+    {
+      "path": "public/xinyu/audio/neural/soft-1.mp3",
+      "bytes": 33840,
+      "sha256": "725e1be39575a022d1d0de21bdc47d1e85936af50f0c783725e6be5bb37482ae"
+    },
+    {
+      "path": "public/xinyu/audio/neural/soft-2.mp3",
+      "bytes": 25200,
+      "sha256": "e80e69589572c6031a05d07cae3ba0ef5991489856e6ed73fb04d6d71bb7c661"
+    },
+    {
+      "path": "public/xinyu/audio/neural/soft-3.mp3",
+      "bytes": 30240,
+      "sha256": "e63fc6482fdec602e4ec757640a1b43977f7b140a836e58880fa93dcf7dd36a6"
+    },
+    {
+      "path": "public/xinyu/audio/neural/soft-4.mp3",
+      "bytes": 22752,
+      "sha256": "d851f6b812f79f2c2f297bc6b6647bd007162a4b277d97b862c8b9a792b08ab5"
+    },
+    {
+      "path": "public/xinyu/audio/neural/soft-5.mp3",
+      "bytes": 22032,
+      "sha256": "5ee27696ba7ac4f1c578b7da7d963fffb9b45bada96deb7d4c3639fd7006e3f5"
+    },
+    {
+      "path": "public/xinyu/audio/neural/soft-6.mp3",
+      "bytes": 22896,
+      "sha256": "e82291b9b40d2cbdaf2d6db66beb3145000d360e5f99218b12bb909c80ce4b05"
+    },
+    {
+      "path": "public/xinyu/audio/neural/soft-7.mp3",
+      "bytes": 19728,
+      "sha256": "4c35b8839a5d83f6322f67bb88761bcce7db82e5b86e910bcded62c2e3c08aa8"
+    },
+    {
+      "path": "public/xinyu/audio/neural/soft-8.mp3",
+      "bytes": 22320,
+      "sha256": "724d2cda0b7996a20076fdcc429c48f3741f9ad289f5066b618317807503421e"
+    },
+    {
+      "path": "public/xinyu/audio/neural/warm-0.mp3",
+      "bytes": 27360,
+      "sha256": "f1a102a43c804b40e01b38747866a0ad762c70bb8a80e552641db7e1d9c43df3"
+    },
+    {
+      "path": "public/xinyu/audio/neural/warm-1.mp3",
+      "bytes": 34416,
+      "sha256": "699f35f4bfc816880d7213a47ece331da8da5a9d8285356b091ec61cc56b97a1"
+    },
+    {
+      "path": "public/xinyu/audio/neural/warm-2.mp3",
+      "bytes": 24480,
+      "sha256": "d37ba410826aa5ed85806476f20fe9e6a87ab6e6d48fd37497021043d9eaf8f0"
+    },
+    {
+      "path": "public/xinyu/audio/neural/warm-3.mp3",
+      "bytes": 32832,
+      "sha256": "618f3f56c21e505fde2a27a2dbd22f4ce77397e623b4838846a3675430cd6dfa"
+    },
+    {
+      "path": "public/xinyu/audio/neural/warm-4.mp3",
+      "bytes": 22896,
+      "sha256": "a9892a95c65c1d305d3804a2602f21436d0165addfa86aee67059266097b524c"
+    },
+    {
+      "path": "public/xinyu/audio/neural/warm-5.mp3",
+      "bytes": 22176,
+      "sha256": "c14814dfa0104eed0c8224a610c4779c0321c31b7f4e2cd5293d77b263593631"
+    },
+    {
+      "path": "public/xinyu/audio/neural/warm-6.mp3",
+      "bytes": 22032,
+      "sha256": "72c0894b6d210b5dca545a2fb6f7bc4dd30a66cd623c4a0881ea16ebeb49fd8e"
+    },
+    {
+      "path": "public/xinyu/audio/neural/warm-7.mp3",
+      "bytes": 20304,
+      "sha256": "1e6a74ccf520e5023915cc22868ee65feb9d87624867d3a90ba12de725a91fa5"
+    },
+    {
+      "path": "public/xinyu/audio/neural/warm-8.mp3",
+      "bytes": 22176,
+      "sha256": "68ced5053d09540728c9779fd83468cffcccdef42389e778fdbcf6ce228851f3"
+    },
+    {
+      "path": "public/xinyu/audio/rain/ambient-soft-v1.ogg",
+      "bytes": 519400,
+      "sha256": "5069bde75055a230fa13457116226e9b9e84aa58b73482cba8d47b3a33a3fb17"
+    },
+    {
+      "path": "public/xinyu/audio/rain/CREDITS.txt",
+      "bytes": 475,
+      "sha256": "32b6098194e4740bb1aac07b120a16da3a5051c296f111dfa3202bbe4653487f"
+    },
+    {
+      "path": "public/xinyu/audio/rain/PROVENANCE.json",
+      "bytes": 2103,
+      "sha256": "fe15a94fd7f366b9c7f9cfb57f473219b635ebf8784aec1c661d1746e4754b28"
+    },
+    {
+      "path": "public/xinyu/audio/rain/window-soft-v1.ogg",
+      "bytes": 150414,
+      "sha256": "9aef164d1d615531248671f4bd8240b14800d17e8cc82d154179a90a5c6fbc8c"
+    },
+    {
+      "path": "public/xinyu/audio/xiaoyu-0.wav",
+      "bytes": 115236,
+      "sha256": "018a2edd1a3742f798dae04bced70bebef081762a9c6d37792bcdc572ed133b8"
+    },
+    {
+      "path": "public/xinyu/audio/xiaoyu-1.wav",
+      "bytes": 137002,
+      "sha256": "1bd12e63600e43d5d097bbac246ee435e9828bb567a076f17644b6f083a84c40"
+    },
+    {
+      "path": "public/xinyu/audio/xiaoyu-2.wav",
+      "bytes": 127902,
+      "sha256": "7c583051464d69d5269244a40023541c1eb6318b340acdafe9b597fdece37f04"
+    },
+    {
+      "path": "public/xinyu/audio/xiaoyu-3.wav",
+      "bytes": 136602,
+      "sha256": "ea830f58df0e68f4ca1cfb3407ecd6dc1f1b37f5bc89dc9fea10b5a241cd1533"
+    },
+    {
+      "path": "public/xinyu/credits.html",
+      "bytes": 2930,
+      "sha256": "3a6709b5030abbcab933cb733fd2afa46f9493011701299ecedb633e29fb1b82"
+    },
+    {
+      "path": "public/xinyu/favicon-v2.svg",
+      "bytes": 477,
+      "sha256": "e62cf87b4b2dab16f6fdecee4d0ebe40f758dffe7ccf6cee0bdbd948316e33b1"
+    },
+    {
+      "path": "public/xinyu/generated/cat-atlas.png",
+      "bytes": 1083364,
+      "sha256": "0bd94debd49d9714c5e900a72b908a68b2581e223aae093114010fda3dca13c5"
+    },
+    {
+      "path": "public/xinyu/generated/city.png",
+      "bytes": 2954763,
+      "sha256": "e96b2a2c0f576c40dae68f47455cfccd8964800f4a0438f59d7e8985896ea0bb"
+    },
+    {
+      "path": "public/xinyu/generated/forest-v2.png",
+      "bytes": 3405748,
+      "sha256": "78a1a9ad52bf1dab498ee779f0f085dcf113188df88ffac4640c474b3658795c"
+    },
+    {
+      "path": "public/xinyu/generated/girl-atlas.png",
+      "bytes": 2045221,
+      "sha256": "a97e385aa323ac9ff1aea552a9a1eef4f3ebc3219271037e0e45e8109af297f3"
+    },
+    {
+      "path": "public/xinyu/generated/island.png",
+      "bytes": 2898688,
+      "sha256": "b5205ac1b207dada244879f258b357c7fe51f3de95bb16f4de6e2afdb077e57d"
+    },
+    {
+      "path": "public/xinyu/generated/lighthouse-v2.png",
+      "bytes": 2670529,
+      "sha256": "6b9d1d7c5b048932d6d4383369b5eb933f3e13755d90c135c92410256880d64c"
+    },
+    {
+      "path": "public/xinyu/generated/mountain-v2.png",
+      "bytes": 2699151,
+      "sha256": "7455185df21ab9d8519c16772166d91d040e6d4150d0643c9bd47e1e4c38e95d"
+    },
+    {
+      "path": "public/xinyu/generated/overcast-night-v1.png",
+      "bytes": 2565577,
+      "sha256": "a43c597269e6f58a23772a51920424e7a0a7b571201d5a6636277b45fba7f108"
+    },
+    {
+      "path": "public/xinyu/generated/overcast-v1.png",
+      "bytes": 2727703,
+      "sha256": "c0aa2b767b3c25e1e293778221f28b8126b6144a15014a5ea8fe42b421606a8d"
+    },
+    {
+      "path": "public/xinyu/generated/room-foreground-v3.png",
+      "bytes": 835802,
+      "sha256": "63a04498f67c4c104cec1927047bddb40f24d7b1173241e0a63a5cace5e4c850"
+    },
+    {
+      "path": "public/xinyu/generated/room-panorama-v3.png",
+      "bytes": 1906837,
+      "sha256": "0660ad7e49893ad68e2b82edb6668c2cce7db908065b016be6a6004c704ff354"
+    },
+    {
+      "path": "public/xinyu/generated/sakura.png",
+      "bytes": 3492485,
+      "sha256": "da4745a5b9cdebcb636ccee359dfe40e65b78ffb083c425994e42dd6a07c0777"
+    },
+    {
+      "path": "public/xinyu/generated/sidebar-island-v3.png",
+      "bytes": 930717,
+      "sha256": "e915dcc58c2bc0813d2a72e0211563a21025eab8be4f60fee009f1d8603954ff"
+    },
+    {
+      "path": "public/xinyu/generated/star_room.png",
+      "bytes": 2911172,
+      "sha256": "2213239a1128cfe740c9041dab94ca337ef8d6784d2de53984ddd01605f74f34"
+    },
+    {
+      "path": "public/xinyu/generated/sunset.png",
+      "bytes": 2548997,
+      "sha256": "950e5f7a05815d839af4b58c14c49fd1c0dbf784f9a172c31c189b85f6f5101b"
+    },
+    {
+      "path": "public/xinyu/generated/warm_room.png",
+      "bytes": 2719911,
+      "sha256": "06b832cc456121dd54940291f0be3a8976457034245a49350b30d90b0c89c548"
+    },
+    {
+      "path": "public/xinyu/generated/xiaoyu-cardigan-whole.png",
+      "bytes": 2143323,
+      "sha256": "950655deeb6c20fae4bb111edba5444d648b039a52d84dcb54d3f2242bcb09ba"
+    },
+    {
+      "path": "public/xinyu/generated/xiaoyu-sailor-whole.png",
+      "bytes": 2083153,
+      "sha256": "31609598fc6bbd1756666c933b7ce56a66a5672f6baef3a279e6cff95850cd61"
+    },
+    {
+      "path": "public/xinyu/island/assets/cottage-door-atlas-v2.png",
+      "bytes": 709858,
+      "sha256": "9ac63bccd06c2a74f9143e30455c4a1c9e0d63a27882639554e73070f37e4931"
+    },
+    {
+      "path": "public/xinyu/island/assets/island-day.png",
+      "bytes": 2710267,
+      "sha256": "704088216eeb952de7c89d01e4ec093a81e9693fe427c5216ea26dde945d233b"
+    },
+    {
+      "path": "public/xinyu/island/assets/island-dusk.png",
+      "bytes": 2722104,
+      "sha256": "45d71ddb5bbd781b73cee640310f053247ea03ca714a9b4f302b4e5235bdfff9"
+    },
+    {
+      "path": "public/xinyu/island/assets/island-night.png",
+      "bytes": 2700189,
+      "sha256": "7adb83661489f7ce1b17b8c38b9e782475b2c2957c47eb65a26a6970f4faa4d9"
+    },
+    {
+      "path": "public/xinyu/island/assets/island-overcast-day-v1.png",
+      "bytes": 2733728,
+      "sha256": "64361f821d0872d09ced2f266532095118fba1a813e93caca502a8f56b32c7aa"
+    },
+    {
+      "path": "public/xinyu/island/assets/island-overcast-night-v1.png",
+      "bytes": 2719958,
+      "sha256": "578480840fe02a19acbde8edcba11f2315c0843c4341f55458df527081b83408"
+    },
+    {
+      "path": "public/xinyu/island/assets/xiaoyu-cardigan-atlas-v1.png",
+      "bytes": 1290784,
+      "sha256": "dfbb72522d334119ed484e1652e5a4205ea1a1d9fc6888eaeed2071fb720281f"
+    },
+    {
+      "path": "public/xinyu/island/assets/xiaoyu-cardigan-turn-v2.png",
+      "bytes": 1294704,
+      "sha256": "943ae5664dd545dc3c399187b535f394e48b23a08e3b0601783c095a1cbb62b9"
+    },
+    {
+      "path": "public/xinyu/island/assets/xiaoyu-enter-atlas.png",
+      "bytes": 1322996,
+      "sha256": "32f9007f3349c063cf1d3ffdbfd61cd040169442139a5e54a59e87105a116af6"
+    },
+    {
+      "path": "public/xinyu/island/assets/xiaoyu-hoodie-atlas-v1.png",
+      "bytes": 1273831,
+      "sha256": "b8677bcfecd3e71d9117448f442a3354155b4b116dfc4ee964b0dd669bd34c3f"
+    },
+    {
+      "path": "public/xinyu/island/assets/xiaoyu-hoodie-turn-v2.png",
+      "bytes": 1278184,
+      "sha256": "ca20f80eeaeae4d8248338266c4fa6edae3575bd08d1263e5c3709e82dbafce9"
+    },
+    {
+      "path": "public/xinyu/island/assets/xiaoyu-sailor-atlas-v1.png",
+      "bytes": 1239511,
+      "sha256": "6f6023b9b0ff05ac10af0277b6174dd77d2fda091370dd109c024f8fd7a27221"
+    },
+    {
+      "path": "public/xinyu/island/assets/xiaoyu-sailor-turn-v2.png",
+      "bytes": 1282691,
+      "sha256": "d1d1e3e29ad73c9aaac71fa3898c1acbd618732107e1badf429486c9b293348c"
+    },
+    {
+      "path": "public/xinyu/island/assets.json",
+      "bytes": 6187,
+      "sha256": "db9da096d25a4814ab2327cb0c63e31f5d83c620ec5923f9a2785c60f1e4b05a"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/cardigan-cream-lilac.webm",
+      "bytes": 685380,
+      "sha256": "f975cdc316bc5ff40d3e9fbf0ec2badf03db58bb91bd7771b55ec39d368321f2"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/cardigan-cream-rose.webm",
+      "bytes": 688830,
+      "sha256": "97d04b24e916befcfcfc6d1515781e7b52cd9090928e7d937728c63747b7fa52"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/cardigan-lilac-lilac.webm",
+      "bytes": 684699,
+      "sha256": "f71803f72067c433d7b8c9b990f36f71b94fd4f3ad3aa020716c1dbfc64d40de"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/cardigan-lilac-rose.webm",
+      "bytes": 686410,
+      "sha256": "c611496ecec921d27a009bd127237ef87d75c0b67d7b8087bcb9df5beac77a0e"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/cardigan-rose-lilac.webm",
+      "bytes": 685222,
+      "sha256": "9ed29433d5947bf1c81cbe4491bbcb710a412bcb51f6b569579ca0ce1da3692c"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/cardigan-rose-rose.webm",
+      "bytes": 687665,
+      "sha256": "d8761ce900246494eca7c725d0db9771600a34194d16b6a2fae9b4c0d4208660"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/hoodie-cream-lilac.webm",
+      "bytes": 662000,
+      "sha256": "99189e5fb9186a33dba3a627fb6af3651b7af0b42826e4f45549776f978acd36"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/hoodie-cream-rose.webm",
+      "bytes": 663736,
+      "sha256": "0598e1fbe8a4b9bcc08ed7be290b0fe43859c75929548e80d05d9aa3c9c7ef9b"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/hoodie-lilac-lilac.webm",
+      "bytes": 666400,
+      "sha256": "3f8ff5fa5f363fecf9b535f9a98976d9470d0e5334c69f4b3e700d9404fd1ae0"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/hoodie-lilac-rose.webm",
+      "bytes": 667919,
+      "sha256": "164f76954fd81065dddb2bfc3bbdada1ba7b61e31dea54c1f5b3264204de904e"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/hoodie-rose-lilac.webm",
+      "bytes": 661906,
+      "sha256": "0a70427d1938ae138a8834d35b20c60b7903d97d3906d446d1af0c2c36adf867"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/hoodie-rose-rose.webm",
+      "bytes": 663539,
+      "sha256": "1f7f0c7f78f4bf4d414540387418e91ab064c483f24dda96db9af929f64488ff"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/sailor-cream-lilac.webm",
+      "bytes": 657297,
+      "sha256": "a6e87f7a8d2ec2ef7b3bd2920907ab31612902a8a02e611ac678ccb261f6cb23"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/sailor-cream-rose.webm",
+      "bytes": 659524,
+      "sha256": "2db982a09f7159665948b31e35f279dc96e393450b0cf3c1bc51d4720f0d2c6c"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/sailor-lilac-lilac.webm",
+      "bytes": 658738,
+      "sha256": "4de03c0c7f0dbd78aed8cce2b528f92f599b44da9e2cff7faffa25ffedf9609d"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/sailor-lilac-rose.webm",
+      "bytes": 661066,
+      "sha256": "d4d767a7df2dda253e9b8ba4fa5197ad8388d04d9988e97e31bbab1f6a8a092d"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/sailor-rose-lilac.webm",
+      "bytes": 657873,
+      "sha256": "fa0ba85d186b2dd6354bb7d7a3dc2306cd91bc9d2e1c70e324cd67c85ef6d44e"
+    },
+    {
+      "path": "public/xinyu/island/entry-videos/sailor-rose-rose.webm",
+      "bytes": 658577,
+      "sha256": "175ca60e9b59f3c73d5a252c1d8fe9a4a111f3956e10b51b5c3b1f4923725057"
+    },
+    {
+      "path": "public/xinyu/manifest.webmanifest",
+      "bytes": 1005,
+      "sha256": "625481ba6c986cb90e63012fbf72a7ca30c461421d72e31f69586b5e7ebfa17d"
+    },
+    {
+      "path": "public/xinyu/privacy.html",
+      "bytes": 2261,
+      "sha256": "245f072e143d389e9005bb59fedefff0226d526da0fc1a6f3855b515a3b87557"
+    },
+    {
+      "path": "public/xinyu/terms.html",
+      "bytes": 1533,
+      "sha256": "0929a3c11249f03e91d662a13b215cadb52628a2fad12f31043dc5aa7aa2ced5"
+    }
+  ]
+}

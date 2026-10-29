@@ -1,0 +1,54 @@
+{
+  "name": "心屿智伴",
+  "icons": [
+    {
+      "type": "image/svg+xml",
+      "src": "/xinyu/favicon-v2.svg",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#e7e6f7",
+  "share_target": {
+    "action": "/receive-files/",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        {
+          "name": "character",
+          "accept": [
+            ".charx"
+          ]
+        },
+        {
+          "name": "preset",
+          "accept": [
+            ".risup"
+          ]
+        },
+        {
+          "name": "module",
+          "accept": [
+            ".risum"
+          ]
+        }
+      ]
+    }
+  },
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "application/octet-stream": [
+          ".charx",
+          ".risup",
+          ".risum"
+        ]
+      }
+    }
+  ],
+  "short_name": "心屿智伴"
+}

@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-27",
+  "generator": "OpenAI built-in imagegen, image edit mode with transparent background",
+  "edit_target": "public/xinyu/island/assets/xiaoyu-enter-atlas.png",
+  "grid": "4 columns × 2 rows; 1774 × 887; original assets.json integer rectangles and foot anchors",
+  "assets": [
+    {
+      "file": "public/xinyu/island/assets/xiaoyu-hoodie-atlas-v1.png",
+      "reference": "public/xinyu/generated/girl-atlas.png",
+      "generated_file": "[local source] exec-308a88b4-50ac-43af-a68b-ab50f2054bb6.png",
+      "prompt": "Editing request for a production 2D game sprite atlas. First image is the exact eight-pose full-body Xiaoyu atlas to edit. Second image is the clothing reference: same Xiaoyu wearing her soft lavender-white hoodie, NOT the cardigan. Edit the FIRST image only: replace the cream cable-knit cardigan with a coherent full lavender-white hooded sweatshirt with drawstrings in EVERY ONE of its eight complete figures, matching the hood, sleeves and color in the SECOND reference. Keep the first image's identical 4-column by 2-row grid, all eight distinct turn/walk/reach/open/enter poses, directions, feet, hands, head, hair, face and purple flower pin, skirt, proportions, exact alignment, perspective, pixel-art style, color treatment, margins, no text, no panel lines. Each full body is a single coherent character with no disconnected parts; all eight poses are isolated on truly transparent background. Maintain as much pixel-accurate placement as possible; this will be used as animation frames, so no pose shifts, extra limbs, cropped figures or repeating front poses. Keep the first image's aspect ratio.",
+      "generated_sha256": "1cf05b807b9aed655f7d82ef0e4e731ef9b8f84f8c27ef66559d964597e881b0",
+      "project_sha256": "b8677bcfecd3e71d9117448f442a3354155b4b116dfc4ee964b0dd669bd34c3f"
+    },
+    {
+      "file": "public/xinyu/island/assets/xiaoyu-sailor-atlas-v1.png",
+      "reference": "public/xinyu/generated/xiaoyu-sailor-whole.png",
+      "generated_file": "[local source] exec-cf2be95d-9203-4a7c-971c-9934a514d4d5.png",
+      "prompt": "Editing request for a production 2D game sprite atlas. First image is the exact eight-pose full-body Xiaoyu atlas to edit. Second image is clothing reference: same Xiaoyu in a cream lavender sailor top with a broad lavender sailor collar and a front bow. Edit the FIRST image only: replace the cream cable-knit cardigan with the sailor top from the SECOND reference on EVERY ONE of its eight complete figures, with accurate front bow and appropriately shaped back sailor collar. Keep the first image's identical 4-column by 2-row grid, all eight distinct turn/walk/reach/open/enter poses, directions, feet, hands, head, hair, face and purple flower pin, skirt, proportions, exact alignment, perspective, pixel-art style, color treatment, margins, no text, no panel lines. Each full body is a single coherent character with no disconnected parts; all eight poses are isolated on truly transparent background. Maintain as much pixel-accurate placement as possible; this will be used as animation frames, so no pose shifts, extra limbs, cropped figures or repeating front poses. Keep the first image's aspect ratio.",
+      "generated_sha256": "097253bb5510bd87b0b1ba3fc80415dffcf0afadf167bb5494ab0d3513f1a805",
+      "project_sha256": "6f6023b9b0ff05ac10af0277b6174dd77d2fda091370dd109c024f8fd7a27221"
+    },
+    {
+      "file": "public/xinyu/island/assets/xiaoyu-cardigan-atlas-v1.png",
+      "reference": "public/xinyu/generated/xiaoyu-cardigan-whole.png",
+      "generated_file": "[local source] exec-f116616b-1a94-4444-844e-4357b6010bb2.png",
+      "prompt": "Editing request for a production game sprite atlas. The first image is the eight-pose full-body Xiaoyu atlas; the second image is her actual indoor cardigan outfit. Edit ONLY the clothing of the first atlas so every pose wears the second image's ivory cable-knit cardigan, pale-lavender Peter Pan collar, purple bow and buttons. Preserve the skirt, both feet, hands, hair, face and flower pin, exact same eight front/turn/back/walk/reach/push/enter poses and 4-by-2 layout, identical character size and placement, clean transparent background, no text or grid. The output will be used as animation frames: no anatomy changes, no repeated front-facing poses, no extra limbs. Match all poses and anchor positions to first image.",
+      "generated_sha256": "e1960bf6b60b586c96c3c9fdc66aa06c1f9d4924b956fe116ce714bdc99dc060",
+      "project_sha256": "dfbb72522d334119ed484e1652e5a4205ea1a1d9fc6888eaeed2071fb720281f"
+    }
+  ],
+  "validation": "scripts/xinyu/verify-island-outfits.py checks RGBA, dimensions, largest connected component, each frame’s bounding box and foot alignment against the original atlas; metadata was embedded into project copies."
+}

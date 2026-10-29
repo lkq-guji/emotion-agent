@@ -1,0 +1,7 @@
+<script lang="ts">
+ import {companion,updateData} from '../state.svelte';import type {Weather} from '../weather';import {strengthName} from '../precipitation';import {ambience,wakeAmbience} from '../ambience.svelte';
+ let {weather,showControl=true,intensity=.16}:{weather:Weather;showControl?:boolean;intensity?:number}=$props();
+ async function toggle(){updateData(d=>d.preferences.ambientSound=!d.preferences.ambientSound);if(companion.data.preferences.ambientSound)await wakeAmbience();}
+</script>
+{#if showControl}<button type="button" class="weather-sound" aria-label="环境背景音" aria-pressed={companion.data.preferences.ambientSound===true} onclick={toggle} title="环境音与角色互动语音独立，调灯光和切换页面不会重播；开始与结束会渐变。">{weather==='sunny'?'晴天':strengthName(weather,intensity)} · {ambience.failed?'声音暂不可用':ambience.loading?'正在准备雨声':ambience.playing?'环境音已开启':companion.data.preferences.ambientSound?'声音已开启':'开启环境音'}</button>{:else}<span class="weather-anchor" aria-hidden="true" data-playing={ambience.playing}></span>{/if}
+<style>.weather-anchor{position:absolute;top:2px;right:2px;width:2px;height:2px;pointer-events:none}.weather-sound{position:absolute;right:12px;top:10px;z-index:2;min-height:44px;padding:7px 12px;border:1px solid var(--xy-glass-border);border-radius:14px;background:var(--xy-glass-bg);backdrop-filter:blur(12px);color:var(--xy-ink);font-size:12px;cursor:pointer}.weather-sound:focus:not(:focus-visible){outline:none}</style>

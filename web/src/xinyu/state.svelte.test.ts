@@ -1,0 +1,10 @@
+import {beforeEach,it,expect,vi} from 'vitest';
+import {companion,initializeCompanion,updateData,setPin,unlock,disablePin,lockApp,NAMESPACE} from './state.svelte';
+import {freshData} from './domain';
+import {saveKV} from '../ts/storage/saveKV';
+beforeEach(()=>{companion.data=freshData();companion.error='';companion.ready=false;companion.locked=false;saveKV.load({});});
+it('同步写入失败时不发布新的 UI 数据',()=>{initializeCompanion();const spy=vi.spyOn(saveKV,'set').mockImplementation(()=>{throw new Error('quota');});expect(()=>updateData(d=>{d.preferences.name='不得假装保存';})).toThrow('quota');expect(companion.data.preferences.name).toBe('');spy.mockRestore();});
+it('锁定状态不能修改私密数据',()=>{companion.locked=true;expect(()=>updateData(d=>{d.preferences.name='blocked';})).toThrow('解锁');expect(companion.data.preferences.name).toBe('');});
+it('异步存档失败会显示错误并阻止覆盖',()=>{initializeCompanion();window.dispatchEvent(new CustomEvent('xinyu:save',{detail:{ok:false}}));expect(companion.error).toContain('存储写入失败');expect(()=>updateData(d=>{d.preferences.name='not saved';})).toThrow();});
+it('关闭应用锁验证原密码，错误时保留锁，成功时删除持久化校验值且保留记录',async()=>{initializeCompanion();updateData(data=>data.preferences.name='保留称呼');await setPin('123456');await expect(disablePin('000000')).rejects.toThrow('密码不正确');expect(companion.data.lock).toBeDefined();await disablePin('123456');expect(companion.data.lock).toBeUndefined();expect((saveKV.get(NAMESPACE,'data') as any).lock).toBeUndefined();expect(companion.data.preferences.name).toBe('保留称呼');});
+it('锁定时不允许从关闭入口绕过解锁',async()=>{initializeCompanion();await setPin('123456');lockApp();await expect(disablePin('123456')).rejects.toThrow('请先解锁');expect(companion.data.lock).toBeDefined();expect(companion.locked).toBe(true);await unlock('123456');});

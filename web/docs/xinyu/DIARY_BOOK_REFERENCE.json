@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-28T12:58:41.571Z",
+  "project": "Nodlik/StPageFlip",
+  "url": "https://github.com/Nodlik/StPageFlip",
+  "license": "MIT",
+  "copyright": "Copyright (c) 2020 Nodlik",
+  "licenseUrl": "https://github.com/Nodlik/StPageFlip/blob/master/LICENSE",
+  "reference": "https://github.com/Nodlik/StPageFlip/blob/master/src/Render/HTMLRender.ts",
+  "sha256": "8c3fe4488c929e19465cddf8492548d006372d1ab9327ab2553c8e62aa3bbdf0",
+  "sourceBytes": 12849,
+  "studied": [
+    "drawHardInnerShadow",
+    "drawHardOuterShadow",
+    "drawLeftPage",
+    "drawRightPage"
+  ],
+  "adaptation": "Independent Svelte/CSS fixed cover, retained native page block and book spine shadow. No upstream code/runtime installed. DOM retains genuine record forms. No React frontend added."
+}

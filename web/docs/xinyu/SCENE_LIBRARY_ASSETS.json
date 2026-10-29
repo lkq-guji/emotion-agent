@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-28",
+  "method": "built-in image_gen edit of existing room; code-native SVG icon",
+  "room": {
+    "file": "public/xinyu/generated/room-panorama-v3.png",
+    "reference": "public/xinyu/generated/room-panorama-v2.png",
+    "prompt": "Edit this existing pixel-art room background for the same cozy Chinese companion app. Preserve the exact 2:1 panoramic aspect ratio, lavender walls, warm wood, delicate game pixels, shelves, flowers, books and cozy identity. This is a BACKGROUND plate with no people or cats. Redesign layout for a clear window and natural desk: put a single unobstructed rectangular window on the FAR LEFT, its inner pane spanning approximately x=4% to 29% of image width and y=10% to 49% of image height. The inner pane must be a completely flat uniform muted powder blue (#8eb6df), with NO clouds, branches, reflections, light triangles, flowers or plants inside it; runtime inserts scenery here. Use a slender warm wooden frame outside this rectangle, no bars. Keep all plants outside the inner window opening. Leave the wall between x=30% and 64% relatively calm with two gentle chairs behind the desk; our character and cat will be composited here, to the RIGHT of the window, not over it. A complete lavender laptop sits low at the far lower left on the desk, its base entirely visible. Desk tabletop rear edge is a clean horizontal contact line exactly about y=61.5% of image height, with continuous warm wood surface filling the remaining bottom 38.5%; no gap or dark band. Small cozy lamp toward right at about x=83%, warm diffuse light. No UI, text, speech bubbles, no character, no cat, no silhouettes, no watermarks. Match source art texture and preserve consistent horizontal table perspective. Important: whole blue window pane is clean and rectangular, nothing painted in it; larger view space does not overlap where characters will sit.",
+    "placement": {
+      "virtualSize": [
+        2176,
+        1088
+      ],
+      "window": [
+        82,
+        108,
+        615,
+        370
+      ],
+      "desk": 680,
+      "characterCenter": 1055,
+      "catCenter": 720,
+      "foregroundContactPixels": 2
+    },
+    "note": "Original plates retained. Explicit rectangular pane replaces heuristic color mask; complete wardrobe sprites unchanged.",
+    "width": 1774,
+    "height": 887,
+    "sha256": "0660ad7e49893ad68e2b82edb6668c2cce7db908065b016be6a6004c704ff354"
+  },
+  "icon": {
+    "file": "public/xinyu/favicon-v2.svg",
+    "method": "New transparent code-native SVG pixel cloud and heart; no opaque rectangular matte. Browser chrome itself is unchanged.",
+    "sha256": "e62cf87b4b2dab16f6fdecee4d0ebe40f758dffe7ccf6cee0bdbd948316e33b1"
+  }
+}

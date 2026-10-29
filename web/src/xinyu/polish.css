@@ -1,0 +1,91 @@
+/* Shared refinements: the existing plain CSS and pixel identity remain authoritative. */
+.xinyu-app{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;--xy-ease:cubic-bezier(.2,0,0,1)}
+.xinyu-app :is(h1,h2,h3){text-wrap:balance}
+.xinyu-app :is(.xy-page-heading p,.section-description,.module-empty,.quiet-note,.setting-row p,.module-caption){text-wrap:pretty}
+.xinyu-app :is(time,output,.growth-stats strong,.profile-summary strong,.distribution-row strong,.calendar-caption,.day-count,.time-value,.emotion-history h2 small,.memory-layout .panel-title small){font-variant-numeric:tabular-nums}
+.xinyu-app :is(.xy-btn,.icon-btn,.text-button,.filter-tabs button,.xy-tabs button,.wardrobe-options fieldset button,.appearance-modes button){min-height:40px;transition:scale .15s var(--xy-ease),background-color .15s ease-out,border-color .15s ease-out,color .15s ease-out,box-shadow .15s ease-out}
+.xinyu-app :is(.icon-btn,.text-button){min-width:40px}
+.xinyu-app :is(.xy-btn,.icon-btn,.text-button,.filter-tabs button,.xy-tabs button,.wardrobe-options fieldset button,.appearance-modes button):not(:disabled):not([data-static-motion]):active{scale:.96}
+.xinyu-app :is(.xy-btn,.icon-btn,.text-button):disabled{cursor:not-allowed;opacity:.6;scale:1}
+.xinyu-app :is(button,form)[aria-busy=true]{cursor:progress}
+.xinyu-app .xy-btn.primary:hover{box-shadow:0 2px 6px color-mix(in srgb,var(--xy-accent) 16%,transparent)}
+.xinyu-app .xy-btn svg{stroke-width:2;flex:none}
+.xinyu-app .icon-btn svg{stroke-width:1.5;flex:none}
+.xinyu-app :is(.xy-input,.mood-form select,.mood-form textarea,.record-list select,.conversation-list select,.profile-card input){transition:border-color .15s ease-out,background-color .15s ease-out;min-height:40px}
+.xinyu-app .xy-panel form>:is(input:not([type=checkbox]):not([type=radio]),select,textarea){min-height:40px}
+.xinyu-app :is(input,textarea,select):focus-visible{outline:2px solid var(--xy-accent);outline-offset:2px;border-color:var(--xy-accent)}
+.xinyu-app :is(.xy-tabs,.filter-tabs) button{font-size:14px}
+.xinyu-app :is(.xy-tabs,.filter-tabs) button[aria-pressed=true]{font-weight:600}
+.xinyu-app .xy-tabs{gap:6px}
+.xinyu-app .memory-actions{flex-wrap:wrap;column-gap:10px;row-gap:2px;align-items:center}
+.xinyu-app .xy-page-heading>div:first-child{min-width:0}
+.xinyu-app .hero-copy :is(h1,p){width:max-content;max-width:100%}
+.xinyu-app .chat-context .context-avatar{float:none;display:block;width:58px;height:58px;margin:0 0 12px;object-fit:cover}
+.xinyu-app .emotion-now>img{width:60px;height:68px;margin:0 12px 10px 0}
+.xinyu-app .emotion-now>strong{display:block;min-height:68px;font-size:18px;line-height:1.6;text-wrap:balance}
+.xinyu-app .emotion-now>p{clear:both;text-wrap:pretty}
+.xinyu-app .chat-context p{text-wrap:pretty}
+.xinyu-app .profile-card>p{text-wrap:balance}
+.xinyu-app :is(.module-empty.illustrated,.milestones>div,.chat-note)>.pixel-icon{margin-inline:auto}
+.xinyu-app .module-empty.illustrated>.pixel-icon{margin-bottom:12px}
+.xinyu-app .xy-panel .module-empty{background:transparent}
+.xinyu-app :is(.setting-row,.settings-identity,.profile-summary,.consent-strip){border-color:var(--xy-border)}
+.xinyu-app .filter-tabs{gap:6px;flex-wrap:wrap}
+.xinyu-app .xy-banner h2>span{display:inline-block}
+.xinyu-app .avatar-preview .avatar-room{aspect-ratio:810/390;min-height:0}
+.xinyu-app[data-theme=night] :is(.chat-top,.xy-tabs){background:var(--xy-sidebar);border-color:var(--xy-border);color:var(--xy-ink)}
+.xinyu-app[data-theme=night] .conversation-item.chosen{background:var(--xy-selected);color:var(--xy-ink)}
+.xinyu-app[data-theme=night] :is(.chat-welcome>span,.message-name,.message-name time,.composer-bottom>span,.conversation-item small,.chat-top span){color:var(--xy-secondary)}
+.xinyu-app[data-theme=night] .chat-top h2{color:var(--xy-ink)}
+.xinyu-app[data-theme=night] :is(.emotion-now>img,.xy-banner>img,.context-avatar){mix-blend-mode:normal}
+.xinyu-app[data-theme=night] .growth-banner>div>span{background:var(--xy-selected);color:var(--xy-ink)}
+.xinyu-app[data-theme=night] .chat-error{background:color-mix(in srgb,var(--xy-panel) 88%,var(--xy-pink));border-color:color-mix(in srgb,var(--xy-border) 50%,var(--xy-pink));color:var(--xy-ink)}
+.xinyu-app[data-theme=night] .chat-error a{color:var(--xy-ink)}
+.xinyu-app .chat-error p{color:inherit}
+.xinyu-app[data-theme=night] .xy-error{color:var(--xy-pink)!important}
+.xinyu-app[data-theme=night] .xy-dialog{background:var(--xy-panel);color:var(--xy-ink)}
+.xinyu-app .record-list article{row-gap:8px}
+.xinyu-app .goal-list label{min-height:40px;gap:10px}
+.xinyu-app .goal-list label input{accent-color:var(--xy-accent);flex:none}
+.xinyu-app .goal-list article.completed>label>span{color:var(--xy-secondary)}
+.xinyu-app .mood-day{transition:background-color .15s ease-out,border-color .15s ease-out}
+.xinyu-app .mood-day.recorded:hover{background:var(--xy-selected)}
+.xinyu-app .mood-day:disabled{opacity:1}
+.xinyu-app .avatar-presets>button{border-radius:12px;border-width:1px;padding:7px;transition:background-color .15s ease-out,border-color .15s ease-out,box-shadow .15s ease-out}
+.xinyu-app .avatar-presets>button.chosen{border-width:1px;padding:7px;border-color:var(--xy-accent);box-shadow:inset 0 0 0 1px var(--xy-accent)}
+.xinyu-app .scene-card.chosen{border-width:1px;border-color:var(--xy-accent);box-shadow:0 0 0 1px var(--xy-accent)}
+.xinyu-app .scene-preview-button .scene-art{outline:1px solid oklch(0 0 0 / .1);outline-offset:-1px}
+.xinyu-app[data-theme=night] .scene-preview-button .scene-art{outline-color:oklch(1 0 0 / .1)}
+.xinyu-app .favorite-scene{transition:color .15s ease-out,background-color .15s ease-out}
+.xinyu-app .favorite-scene:hover{background:var(--xy-selected);border-radius:6px}
+.xinyu-app .xy-switch{transition:background-color .15s ease-out}
+.xinyu-app .xy-switch i{transition:transform .2s var(--xy-ease)}
+.xinyu-app .chat-top>div{min-width:0}
+.xinyu-app .chat-top h2{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xinyu-app .message-bubble{overflow-wrap:anywhere}
+.xinyu-app .message-bubble pre{max-width:100%;overflow-x:auto;overflow-wrap:normal}
+.xinyu-app .message-bubble a{text-decoration:underline;text-underline-offset:3px}
+.xinyu-app .message-bubble a:focus-visible{outline-offset:3px}
+.xinyu-app .thinking{display:flex;align-items:center;gap:7px;font-size:14px;color:var(--xy-secondary)}
+.xinyu-app .chat-composer:focus-within{border-top-color:var(--xy-accent)}
+.xinyu-app .composer-bottom>span{line-height:1.6}
+.xinyu-app .xy-dialog{border:1px solid var(--xy-border);box-shadow:0 16px 48px color-mix(in srgb,var(--xy-ink) 18%,transparent);border-radius:16px}
+.xinyu-app .xy-dialog p{max-width:58ch;line-height:1.9;text-wrap:pretty}
+.xinyu-app .xy-dialog .xy-actions{gap:10px;margin-top:22px}
+.xinyu-app details>summary{cursor:pointer;min-height:40px;display:list-item;align-content:center}
+@media(max-width:1000px){
+ .xinyu-app :is(.xy-btn,.icon-btn,.text-button,.filter-tabs button,.xy-tabs button,.wardrobe-options fieldset button,.appearance-modes button,.xy-input,.mood-form select,.mood-form textarea,.record-list select,.conversation-list select,.profile-card input){min-height:44px}
+ .xinyu-app :is(.icon-btn,.text-button){min-width:44px}
+ .xinyu-app .goal-list label{min-height:44px}
+ .xinyu-app .xy-panel form>:is(input:not([type=checkbox]):not([type=radio]),select,textarea){min-height:44px}
+ .xinyu-app details>summary{min-height:44px}
+ .xinyu-app .about-settings a{display:inline-flex;align-items:center;min-height:44px}
+}
+@media(max-width:720px){.xinyu-app .xy-page-heading{flex-wrap:wrap;gap:12px}.xinyu-app .xy-tabs{flex-wrap:wrap}}
+@media(max-width:720px){.xinyu-app .xy-banner{gap:14px}.xinyu-app .xy-banner>img{width:68px;height:76px;flex:none}.xinyu-app .xy-banner>div{flex:1;min-width:0}.xinyu-app .xy-banner h2{font-size:20px}.xinyu-app .wardrobe-stage{position:relative;top:auto}}
+.xinyu-app.reduce-motion *,.xinyu-app.reduce-motion *::before,.xinyu-app.reduce-motion *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.xinyu-app.reduce-motion :is(.xy-btn,.icon-btn,.text-button,.filter-tabs button,.xy-tabs button,.wardrobe-options fieldset button,.appearance-modes button):active{scale:1!important}
+@media(prefers-reduced-motion:reduce){
+ .xinyu-app *,.xinyu-app *::before,.xinyu-app *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+ .xinyu-app :is(.xy-btn,.icon-btn,.text-button,.filter-tabs button,.xy-tabs button,.wardrobe-options fieldset button,.appearance-modes button):active{scale:1!important}
+}

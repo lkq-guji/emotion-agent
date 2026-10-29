@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-28",
+  "license": "MIT + Commons Clause; official source checked",
+  "licenseSource": "https://github.com/DavidHDev/react-bits/blob/main/LICENSE.md",
+  "author": "David Haz",
+  "components": [
+    {
+      "component": "WakeSlider",
+      "variant": "WakeSlider-JS-CSS",
+      "source": "https://reactbits.dev/r/WakeSlider-JS-CSS.json",
+      "dependencies": [
+        "motion@^12.23.12"
+      ],
+      "files": {
+        "WakeSlider.css": {
+          "sha256": "a13a7146ab463e0d9f6f475c9ad50198beb13da685707de82ce02b9b3b11f3a6",
+          "matchesAttachment": true
+        },
+        "WakeSlider.jsx": {
+          "sha256": "d38ae1655c373928de0f3ef633845341241d814dd68f48a1c703861021552633",
+          "matchesAttachment": true
+        }
+      },
+      "adaptation": "Svelte 5 and existing Canvas/CSS; no React or motion dependency added."
+    },
+    {
+      "component": "PixelSwap",
+      "variant": "PixelSwap-JS-CSS",
+      "source": "https://reactbits.dev/r/PixelSwap-JS-CSS.json",
+      "dependencies": [],
+      "files": {
+        "PixelSwap.css": {
+          "sha256": "61c612bdba091affb4af6c93f9b51ff67052b80e471ddccbce991fb49c84fb2a",
+          "matchesAttachment": true
+        },
+        "PixelSwap.jsx": {
+          "sha256": "13998ab61c5b3a52aefaa0a46aa2b8f93cf0085cc28e5bab5402024d554bc43e",
+          "matchesAttachment": true
+        }
+      },
+      "adaptation": "Svelte 5 and existing Canvas/CSS; no React or motion dependency added."
+    },
+    {
+      "component": "SplitFlapText",
+      "variant": "SplitFlapText-JS-CSS",
+      "source": "https://reactbits.dev/r/SplitFlapText-JS-CSS.json",
+      "dependencies": [],
+      "files": {
+        "SplitFlapText.css": {
+          "sha256": "8f9df3a8792475cd2ce4f53f0a29467119d19afc05905a89e0dfd04170c2748e",
+          "matchesAttachment": true
+        },
+        "SplitFlapText.jsx": {
+          "sha256": "65e8393bc39417487e5bdf15af307e105a5707c3c168c1c3542a5f132e82ed3a",
+          "matchesAttachment": true
+        }
+      },
+      "adaptation": "Svelte 5 and existing Canvas/CSS; no React or motion dependency added."
+    },
+    {
+      "component": "LineSidebar",
+      "variant": "LineSidebar-JS-CSS",
+      "source": "https://reactbits.dev/r/LineSidebar-JS-CSS.json",
+      "dependencies": [],
+      "files": {
+        "LineSidebar.css": {
+          "sha256": "ed63c3baae3fc17a370a6029f73709bbdda64724d73810bc4adf9d8ac8eb1da5",
+          "matchesAttachment": true
+        },
+        "LineSidebar.jsx": {
+          "sha256": "2b26d03207dfb3c25a718e1f6d9e898ae05453763b952900c8e1ec319939b0b2",
+          "matchesAttachment": true
+        }
+      },
+      "adaptation": "Svelte 5 and existing Canvas/CSS; no React or motion dependency added."
+    }
+  ]
+}

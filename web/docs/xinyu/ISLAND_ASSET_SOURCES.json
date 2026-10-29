@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "source": "User-provided xinyu-island-assets-v1.zip and expanded folder",
+  "files": [
+    {
+      "file": "assets/island-day.png",
+      "origin": "[local source] island-day.png",
+      "sha256": "44a5fe4b063cd3c83e5d8dcaf9830efbc32bfc0663bf707661463d0e8e99332f",
+      "use": "user-supplied, runtime layers and original integer frame rectangles"
+    },
+    {
+      "file": "assets/island-dusk.png",
+      "origin": "[local source] island-dusk.png",
+      "sha256": "ae39ed2909a1db29eac7149c36deae2931f053575ad9280d20532b57124249ad",
+      "use": "user-supplied, runtime layers and original integer frame rectangles"
+    },
+    {
+      "file": "assets/island-night.png",
+      "origin": "[local source] island-night.png",
+      "sha256": "9df31dfb74f28954a08b7b7e2526319d05d9f21991f017538d1522e00ba91d98",
+      "use": "user-supplied, runtime layers and original integer frame rectangles"
+    },
+    {
+      "file": "assets/xiaoyu-enter-atlas.png",
+      "origin": "[local source] xiaoyu-enter-atlas.png",
+      "sha256": "d0f373070cc01842a24e443ff76575e14a38586cf409e3fedff70d56499e1444",
+      "use": "user-supplied, runtime layers and original integer frame rectangles"
+    },
+    {
+      "file": "assets/cottage-door-atlas-v2.png",
+      "origin": "[local source] cottage-door-atlas-v2.png",
+      "sha256": "92b667b4b185989ccdf9dc5abd600055885d246b88a6017df5bad850858b55c2",
+      "use": "user-supplied, runtime layers and original integer frame rectangles"
+    },
+    {
+      "file": "assets.json",
+      "origin": "[local source] assets.json",
+      "sha256": "db9da096d25a4814ab2327cb0c63e31f5d83c620ec5923f9a2785c60f1e4b05a",
+      "use": "user-supplied, runtime layers and original integer frame rectangles"
+    }
+  ],
+  "previewCopied": false,
+  "newGeneration": false
+}

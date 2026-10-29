@@ -1,0 +1,32 @@
+/* 正文 14px、辅助信息 12px；中文保持可读字形。 */
+.xinyu-app :is(.xy-panel p,.xy-page-heading p,.feature>p,.home-bottom p,.chat-welcome p,.message-bubble,.message-bubble p,.chat-composer textarea,.xy-input){font-size:14px}
+.xinyu-app :is(small,label,.sidebar-original,.room-caption,.message-name,.remember-link,.conversation-item small,.chat-welcome>span,.chat-top span,.composer-bottom>span,.xy-status,.record-list time,.record-list small,.favorite-scene,.settings-identity span,.milestones small,.goal-list small,.connection-line small,.scene-preview-button p,.about-settings>small,.text-button,.xy-tabs button,.filter-tabs button,.home-footnote){font-size:12px}
+.xinyu-app :is(.quiet-note,.setting-row p,.consent-strip p,.memory-actions){font-size:12px!important}
+.xinyu-app .record-list p{font-size:14px!important}
+.hero-copy p{font-size:clamp(14px,1.1vw,17px)}
+.xinyu-app .xy-sidebar nav>a{font-size:16px;height:48px}
+.xinyu-app .xy-btn{font-size:14px}
+.xinyu-app .xy-btn.primary{color:#342247}
+.xinyu-app .xy-btn.primary:hover{background:#a590ca}
+.xinyu-app :is(.xy-tabs,.filter-tabs) button.chosen{color:#342247}
+.xinyu-app img[src$="girl_card.png"]{object-fit:cover;object-position:center 38%}
+.hero-copy h1{white-space:normal}
+.hero-greeting{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scene-preview-button>.scene-art{display:block;width:100%;height:auto;aspect-ratio:2.5;image-rendering:pixelated}
+@media(max-width:1000px){
+  .xinyu-app :is(.xy-btn,.icon-btn,.top-user,.text-button,.text-link,.remember-link,.favorite-scene,.delete-conversation,.filter-tabs button,.xy-tabs button,.sidebar-original,.original-link){min-height:44px}
+  .xinyu-app :is(.icon-btn,.top-user,.delete-conversation){min-width:44px}
+  .xinyu-app .xy-page-heading>.xy-btn{min-height:44px;font-size:12px}
+  .xinyu-app .xy-switch{height:44px;width:62px;min-width:62px;border:11px solid transparent;border-radius:28px;background-clip:padding-box}
+  .xinyu-app .xy-switch[aria-checked=true]{border-color:transparent}
+  .xinyu-app .xy-switch i{height:17px;width:17px}
+}
+@media(max-width:720px){
+  .xy-hero .pixel-room{inset:215px 0 9px}
+  .xinyu-app .xy-topbar{height:68px}
+  .xinyu-app .global-search{height:44px}
+  .xinyu-app .global-search input{font-size:14px}
+  .hero-copy p{font-size:14px}
+}
+
+@media(max-width:700px){.xy-topbar .global-search{min-width:0;flex:1;width:0}.xy-topbar .global-search input{min-width:0;width:100%}.xy-topbar .global-search svg{flex:none}.xy-topbar .top-user{flex:none}.xy-hero{height:454px!important}.xy-hero .pixel-room{inset:238px 0 9px!important}}

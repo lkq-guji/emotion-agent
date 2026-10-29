@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-10-25",
+  "risuai": {
+    "repository": "https://github.com/kwaroran/Risuai",
+    "commit": "f50b5942ec6aa59aa3c56049ac687ca09667fec7",
+    "license": "GPL-3.0",
+    "source": "official GitHub codeload archive"
+  },
+  "gatoCafe": {
+    "repository": "https://github.com/sh3rqxs/gato-cafe",
+    "commit": "a06b4d3292df8d8887edfb1f661c4873f0937fc1",
+    "license": "MIT",
+    "source": "official GitHub codeload archive",
+    "canvasEngine": false
+  },
+  "designReference": "../心屿智伴_V3像素治愈版",
+  "existingWorkPreserved": "../emotion-agent"
+}

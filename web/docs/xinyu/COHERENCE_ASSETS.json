@@ -1,0 +1,44 @@
+{
+  "method": "built-in image_gen",
+  "date": "2026-10-25",
+  "assets": [
+    {
+      "id": "xiaoyu-hoodie",
+      "file": "public/xinyu/generated/xiaoyu-hoodie.png",
+      "prompt": "Production 2D puppet clothing atlas for the EXACT chibi companion in the reference. Head and face will be reused from the reference at runtime; do NOT draw any head, face, hair, background or different person. ONE transparent 2x2 equal-square-cell atlas, wide equal 1024x1024. All garments are for the same short round seated chibi, original lavender and cream hoodie with thick rounded sleeves and tiny pale peach hands. Cell top-left: torso hoodie only from neck/collar to waist, no arms. Cell top-right: viewer-left whole relaxed rounded sleeve and little resting hand, detached at shoulder. Cell bottom-left: viewer-right whole relaxed rounded sleeve and little resting hand, detached at shoulder. Cell bottom-right: viewer-right bent sleeve and forearm with gently open curved-finger waving palm near shoulder, detached at shoulder. Each object fully inside its cell, same pixel scale; no labels or grid. Original small pastel pixel clusters and lavender outlines, natural soft shapes. Transparent background including gaps. Do not draw any body/head under the clothes. This is ONE real layered puppet atlas, not four full characters.",
+      "status": "Superseded by complete sprites; body-part atlas removed from the application and public assets",
+      "replacementManifest": "INTEGRATED_SPRITES_ASSETS.json"
+    },
+    {
+      "id": "xiaoyu-cardigan",
+      "file": "public/xinyu/generated/xiaoyu-cardigan.png",
+      "prompt": "Create ONE production clothing puppet atlas for the EXACT same round chibi companion in the reference, her head is reused separately so NO head, face or hair. Same seated body proportions and small pale peach hands. Outfit: cream soft knitted cardigan with lavender trim and small round buttons over pale lilac blouse, cozy cute anime chibi look. Exactly 2x2 equal square cells on ONE transparent 1024x1024 atlas: top-left torso only neck-to-waist no arms; top-right viewer-left relaxed cardigan sleeve plus resting tiny hand detached at shoulder; bottom-left viewer-right relaxed cardigan sleeve plus resting tiny hand detached at shoulder; bottom-right viewer-right bent cardigan sleeve plus raised forearm with gentle curved open waving palm detached at shoulder. All four pieces same pixel scale, fully in cells. Exact reference pastel pixel-art drawing language and dark lavender outlines. No text, no grid lines, no scene, no other person, no geometric placeholder hand. Real alpha.",
+      "status": "Superseded by complete sprites; body-part atlas removed from the application and public assets",
+      "replacementManifest": "INTEGRATED_SPRITES_ASSETS.json"
+    },
+    {
+      "id": "xiaoyu-sailor",
+      "file": "public/xinyu/generated/xiaoyu-sailor.png",
+      "prompt": "Create ONE layered clothing puppet atlas fitting the EXACT same round chibi girl in reference, face and head are reused separately; no head, hair or face in this asset. A soft cream and lavender sailor blouse with lilac bow and rounded cozy long sleeves, cute gentle chibi anime pixel style. Exactly 2x2 equal square cells on ONE transparent 1024x1024 atlas. Top-left: blouse torso only neck-to-waist, no arms. Top-right: viewer-left whole relaxed sleeve with tiny natural peach resting hand, detached at shoulder. Bottom-left: viewer-right whole relaxed sleeve with tiny natural peach resting hand, detached at shoulder. Bottom-right: viewer-right bent sleeve and forearm with gentle open curved-finger waving palm near shoulder, detached at shoulder. Pieces at consistent pixel scale, fully inside each cell, match same chibi anatomy and purple outlines. No body/head under garments, no text, no grid lines or background. Real alpha.",
+      "status": "Superseded by complete sprites; body-part atlas removed from the application and public assets",
+      "replacementManifest": "INTEGRATED_SPRITES_ASSETS.json"
+    },
+    {
+      "id": "room-foreground-v3",
+      "file": "public/xinyu/generated/room-foreground-v3.png",
+      "prompt": "Edit target: this precise existing wide pastel pixel room plate. Keep its existing window frame, walls, wall pictures, desk, laptop, plants, chair and layout exactly, with no people or animals. Remove ONLY the outdoor view inside the window glass on the left of the room, making that aperture genuinely transparent so a different landscape can be drawn BEHIND the actual frame and potted plants. Also make the existing plain near-white blank left half and soft outer top/bottom fades genuinely transparent, keeping soft alpha edges so this room can sit naturally on either pale or dark UI backgrounds. Preserve every remaining physical room object and original coordinate placement/aspect ratio 2100x749. Preserve crisp small pastel pixel clusters. No invented window/perspective, no sky outside the glass, no opaque matte, no checkerboard pixels, no text. Real transparent cutout of the existing room, including the glass hole."
+    },
+    {
+      "id": "sidebar-island-v3",
+      "file": "public/xinyu/generated/sidebar-island-v3.png",
+      "prompt": "Edit this exact pastel pixel lighthouse floating island into a clean transparent game sprite. Preserve the lighthouse, purple grassy floating rock, trees, small cloud puffs and tiny warm sparkles in exactly the same cute pastel pixel style. Remove the rectangular pale blue/white sky background and any rectangular ground so the island and individual clouds have organic pixel edges floating in real alpha. Keep the composition, don't add people or text or a UI frame. Soft lavender, mint grass, cream and pink clouds. Art fills the canvas with safe transparent margins. Do not redraw it as realistic detailed concept art."
+    },
+    {
+      "id": "cat-rig-v3",
+      "file": "public/xinyu/generated/cat-rig-v3.png",
+      "prompt": "Production animation puppet atlas of the EXACT fluffy white kitten from the reference. Same round cute white cat, lilac ear/tail markings, pink ear interiors, same pastel pixel clusters and purple outline. ONE transparent 2x2 equal-square-cell atlas 1024x1024, isolated puppet parts, not four complete cats. Top-left: lying fluffy BODY only, no head, no tail, paws resting in front; keep a smooth overlap where the head will sit. Top-right: round HEAD only, ears and face with sleepy open eyes, detached just below the chin. Bottom-left: curled fluffy striped TAIL only, detached at its base, curving upward then inward. Bottom-right: one small soft raised front PAW only with pink pads, detached at wrist. All parts fully within each cell and matching the same cat scale. No text, no grid, no opaque background. Real alpha. These parts will animate with continuous small rotations, not pose crossfades.",
+      "status": "Superseded by complete sprites; body-part atlas removed from the application and public assets",
+      "replacementManifest": "INTEGRATED_SPRITES_ASSETS.json"
+    }
+  ]
+}

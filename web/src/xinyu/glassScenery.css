@@ -1,0 +1,28 @@
+/* Desktop-only continuation of the existing lavender pixel system. */
+.xinyu-app .xy-topbar{height:80px;padding:6px 24px;gap:20px}
+.xinyu-app .shell-brand{gap:8px;margin:0}
+.xinyu-app .xy-topbar>.pixel-clock{min-width:182px;margin:0;padding-left:18px;border-left:1px solid var(--xy-border)}
+.topbar-place{display:flex;align-items:center;justify-content:center;gap:10px;flex:1;min-width:100px;color:var(--xy-ink)}
+.topbar-place>div{display:grid;gap:4px;min-width:0}.topbar-place strong{font-size:15px;font-weight:600;letter-spacing:.06em}.topbar-place>div>span{font-size:12px;color:var(--xy-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}.place-spark{font-size:22px;color:var(--xy-accent)}
+.topbar-tools{display:flex;align-items:center;gap:12px;flex:none;padding-left:16px;border-left:1px solid var(--xy-border)}
+.xinyu-app .xy-topbar .top-lock{margin-left:0}
+/* Confirmed A: a single floating conversation surface, over a continuous full room. */
+.xinyu-app .companion-layout .theatre-world .chat-main{inset:auto 16px auto auto;top:50%;translate:0 -50%;width:38%;max-width:620px;min-width:410px;height:calc(100% - 32px);max-height:820px;overflow:hidden;pointer-events:auto;border:1px solid var(--xy-glass-border);border-radius:16px;background:color-mix(in srgb,var(--xy-panel) 48%,transparent);backdrop-filter:blur(18px) saturate(.86);box-shadow:0 10px 32px #231d3520,inset 0 1px 0 #ffffff50}
+.xinyu-app .companion-layout .theatre-world .chat-top{position:static;min-height:78px;padding:12px 16px;gap:8px;background:transparent;backdrop-filter:none;border-bottom:1px solid var(--xy-glass-border)}
+.xinyu-app .theatre-world .chat-top>div>span{font-size:12px}.xinyu-app .theatre-world .chat-quick-actions{gap:8px;justify-content:flex-end}.xinyu-app .theatre-world .chat-quick-actions .text-link{min-height:40px}
+.xinyu-app .companion-layout .theatre-world .theatre-present,.xinyu-app .companion-layout .theatre-world.history-open .message-list{position:static;inset:auto;translate:none;width:auto;height:auto;max-height:none;flex:1;min-height:0;overflow:auto;overflow-anchor:none;padding:18px;background:transparent;border:0;border-radius:0;box-shadow:none;backdrop-filter:none;scrollbar-width:thin}
+.xinyu-app .theatre-world .theatre-present .message-wrap{max-width:calc(100% - 36px)}
+.xinyu-app .companion-layout .theatre-world .theatre-present .message-row .message-bubble,.xinyu-app .companion-layout .theatre-world .message-list .message-row .message-bubble{font-size:15px;line-height:1.85;padding:12px 14px;background:color-mix(in srgb,var(--xy-panel) 46%,transparent)!important;border:1px solid var(--xy-glass-border);box-shadow:0 2px 8px #231d3508}
+.xinyu-app .companion-layout .theatre-world .theatre-present .from-user .message-bubble,.xinyu-app .companion-layout .theatre-world .message-list .from-user .message-bubble{background:color-mix(in srgb,var(--xy-selected) 62%,transparent)!important}
+.xinyu-app .companion-layout .theatre-world .chat-composer{position:static;inset:auto;translate:none;width:auto;height:auto;flex:none;padding:14px 16px;border:0;border-top:1px solid var(--xy-glass-border);border-radius:0;background:transparent;backdrop-filter:none}
+.xinyu-app .companion-layout .theatre-world .chat-composer textarea{height:76px;min-height:60px;max-height:120px;resize:vertical;background:color-mix(in srgb,var(--xy-panel) 32%,transparent)}
+.xinyu-app .theatre-world .composer-bottom>span{font-size:11px}
+.xinyu-app .companion-layout .theatre-world .chat-error{position:static;max-width:none;flex:none;margin:0 16px;padding:8px 12px}
+.xinyu-app .companion-layout .theatre-world.scene-hidden .chat-main{inset:0;translate:none;width:100%;max-width:none;height:100%;max-height:none;border-radius:0;background:var(--xy-panel)}
+.xinyu-app[data-theme=night] .theatre-world .chat-main{background:color-mix(in srgb,var(--xy-panel) 58%,transparent)}
+.xinyu-app .theatre-world .weather-sound{top:18px;left:18px;right:auto}.xinyu-app .theatre-world .room-voice{top:68px;left:18px;right:auto}
+.xinyu-app .island-stage>.weather-sound{top:auto;bottom:64px;right:16px}
+.xinyu-app .scene-detail{position:sticky;top:0}.xinyu-app .scene-detail-preview{height:190px}
+.room-voice{position:absolute;right:12px;top:62px;z-index:2;min-height:40px;padding:6px 12px;border:1px solid var(--xy-glass-border);border-radius:10px;background:var(--xy-glass-bg);backdrop-filter:blur(12px);font-size:12px;color:var(--xy-ink)}
+@media(max-width:1350px){.xinyu-app .xy-topbar{gap:12px;padding-inline:20px}.topbar-place .place-spark{display:none}.topbar-place>div>span{max-width:180px}.topbar-tools{gap:6px;padding-left:10px}.xinyu-app .top-user>span:not(.top-portrait){max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+@media(max-height:800px){.xinyu-app .companion-layout .theatre-world .chat-main{inset:12px 12px 12px auto;height:auto;translate:none}.xinyu-app .companion-layout .theatre-world .chat-top{min-height:66px;padding:6px 14px}.xinyu-app .companion-layout .theatre-world .chat-composer{padding:10px 14px}.xinyu-app .companion-layout .theatre-world .chat-composer textarea{min-height:52px;height:52px}.xinyu-app .theatre-world .composer-bottom{margin-top:6px}}

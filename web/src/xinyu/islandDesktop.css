@@ -1,0 +1,81 @@
+/* Latest scope: desktop workspaces. Narrow windows use desktop scrolling, with no new phone layout. */
+.xinyu-app{min-width:1100px}
+.xinyu-app .xy-topbar{flex:none}
+.xinyu-app[data-period=dusk][data-theme=light]{--xy-page:#f8eff4;--xy-header:#eee0ec;--xy-selected:#ead8ee}
+.xinyu-app .xy-main.chat-page{padding:18px 24px 12px;overflow:hidden}
+.xinyu-app .chat-page>.chat-heading{margin-bottom:14px;min-height:48px;align-items:center}
+.xinyu-app .chat-heading h1{font-size:24px;line-height:1.4;margin:0}
+.xinyu-app .chat-heading p{font-size:14px;line-height:1.6;margin-top:4px}
+.room-page-actions{display:flex;align-items:center;gap:12px;flex:none}.room-page-actions>.text-link{font-size:14px;min-height:40px;display:flex;align-items:center;padding:0 6px}
+.xinyu-app .xy-chat-layout{width:100%;max-width:2140px;margin-inline:auto;display:grid;grid-template-columns:204px minmax(360px,.9fr) minmax(410px,1.1fr);gap:16px;height:auto;min-height:0}
+.xinyu-app .xy-chat-layout.room-collapsed{grid-template-columns:224px minmax(0,1fr)}
+.xinyu-app .conversation-list{display:flex;min-height:0;padding:16px}
+.xinyu-app .conversation-list h2{font-size:16px}.xinyu-app .conversation-list select{font-size:14px;min-height:40px}.xinyu-app .conversation-item strong{font-size:14px}.xinyu-app .conversation-item small{font-size:12px}.xinyu-app .original-link{font-size:12px}
+.room-pane{display:flex;flex-direction:column;min-height:0;border:1px solid var(--xy-border);border-radius:12px;background:var(--xy-panel);overflow:hidden}
+.room-pane-heading{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:16px 18px;flex:none}
+.room-pane-heading h2{font-size:16px;line-height:1.5;font-weight:650;margin:0}.room-pane-heading p{font-size:12px;color:var(--xy-secondary);line-height:1.7;margin-top:3px}
+.room-pane-heading>div:last-child{display:flex;gap:12px;align-items:center}.room-pane-heading a{font-size:12px;display:flex;align-items:center;min-height:40px;color:var(--xy-accent);text-decoration:underline;text-underline-offset:3px}
+.chat-room-stage{position:relative;aspect-ratio:810/390;flex:none;background:var(--xy-page);overflow:hidden}
+.xinyu-app .room-pane .chat-context{display:flex;flex:1;min-height:0;overflow:auto;gap:0;padding:0 18px;overscroll-behavior:contain}
+.xinyu-app .room-pane .chat-context>.xy-panel{background:transparent;border:0;border-radius:0;padding:15px 0;box-shadow:none}
+.xinyu-app .room-pane .chat-context>.xy-panel+.xy-panel{border-top:1px solid var(--xy-border)}
+.xinyu-app .room-pane .chat-context h2{font-size:14px;margin-bottom:8px;line-height:1.5}.xinyu-app .room-pane .chat-context p{font-size:14px;line-height:1.8}.xinyu-app .room-pane .chat-context .text-link{font-size:12px;padding-top:4px;min-height:36px;display:inline-flex;align-items:center}.xinyu-app .room-pane .context-avatar{display:none}
+.xinyu-app .room-pane .chat-note{display:none}.xinyu-app .context-memories{font-size:14px}.xinyu-app .context-mood{font-size:16px;margin-top:0}
+.xinyu-app .chat-top{height:60px;padding:8px 18px;flex:none}.chat-top-portrait{display:block;width:44px;height:44px;flex:none}
+.xinyu-app .chat-top span:not(.chat-top-portrait){font-size:12px}.xinyu-app .chat-top h2{font-size:16px}
+.xinyu-app .chat-composer{padding:12px 16px}.xinyu-app .chat-composer textarea{font-size:14px;min-height:64px;line-height:1.7;padding:10px 12px}
+.xinyu-app .composer-bottom{margin-top:6px}.xinyu-app .composer-bottom>span{font-size:12px}.xinyu-app .composer-bottom .xy-btn{min-height:40px;font-size:14px}
+.xinyu-app .chat-welcome{margin:24px auto;max-width:38ch}.xinyu-app .chat-welcome h2{font-size:20px;text-wrap:balance}.xinyu-app .chat-welcome p{font-size:14px;line-height:1.8}.xinyu-app .chat-welcome span{font-size:12px;margin-top:12px}
+.xinyu-app .message-wrap{max-width:min(90%,68ch)}.xinyu-app .message-list{padding:18px}.xinyu-app .message-bubble,.xinyu-app .message-bubble p{font-size:14px;line-height:1.85}
+@media(max-height:820px){.xinyu-app .room-pane-heading{padding:8px 14px}.xinyu-app .room-pane-heading p{display:none}.xinyu-app .room-pane .chat-context>.xy-panel{padding:10px 0}.xinyu-app .chat-welcome{margin:14px auto}.xinyu-app .chat-heading p{display:none}}
+@media(min-width:1800px){.xinyu-app .xy-chat-layout{grid-template-columns:230px minmax(460px,.95fr) minmax(550px,1.05fr);gap:22px}.xinyu-app .room-pane .chat-context{display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:24px}.xinyu-app .room-pane .chat-context>.xy-panel+.xy-panel{border-top:0}.xinyu-app .room-pane .chat-context>.xy-panel{padding-top:22px}.xinyu-app .chat-composer textarea{min-height:86px}}
+
+@media(prefers-reduced-motion:no-preference){.xinyu-app:not(.reduce-motion) .room-arrival .room-pane{animation:room-settle .38s ease-out}@keyframes room-settle{from{opacity:.65;filter:blur(2px)}to{opacity:1;filter:blur(0)}}}
+
+.xinyu-app .chat-main.xy-panel{padding:0}
+
+/* Room functions reuse the actual pages inside the companion column. */
+.room-tools{display:flex;flex:none;gap:3px;padding:8px 10px;border-block:1px solid var(--xy-border);overflow-x:auto;scrollbar-width:thin}
+.room-tools button{flex:1 0 auto;min-height:38px;padding:6px 8px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--xy-secondary);font-size:14px;cursor:pointer;white-space:nowrap}
+.room-tools button:hover{background:var(--xy-page);color:var(--xy-ink)}
+.room-tools button.chosen{background:var(--xy-selected);border-color:var(--xy-border);color:var(--xy-ink);font-weight:600}
+.room-pane.room-tools-open .chat-room-stage{height:clamp(130px,19vh,220px);aspect-ratio:auto}
+.room-content{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:16px 18px;scrollbar-width:thin;scrollbar-color:var(--xy-border) transparent}
+.room-content:focus-visible{outline:2px solid var(--xy-accent);outline-offset:-3px}
+.xinyu-app .room-content>.chat-context{display:block;overflow:visible;padding:0}
+.room-content .chat-context .text-link,.xinyu-app .chat-top button.text-link{border:0;background:transparent;color:var(--xy-accent);cursor:pointer;text-align:left}
+.xinyu-app .chat-top button.text-link{margin-left:auto;min-height:36px}
+.room-content>.xy-page-heading{display:flex;flex-wrap:wrap;align-items:start;gap:10px;margin-bottom:16px}
+.room-content>.xy-page-heading h1{font-size:20px;line-height:1.4}.room-content>.xy-page-heading p{font-size:14px;line-height:1.6}
+.xinyu-app .room-content :is(.emotion-grid,.memory-layout,.profile-layout,.growth-layout,.avatar-layout,.scenes-layout,.settings-grid,.wardrobe-layout){grid-template-columns:minmax(0,1fr)!important;gap:14px}
+.xinyu-app .room-content :is(.emotion-grid,.memory-layout,.profile-layout,.growth-layout,.avatar-layout,.scenes-layout,.settings-grid)>*{grid-column:auto!important;grid-row:auto!important;min-width:0}
+.xinyu-app .room-content .emotion-grid .mood-form{order:-1}
+.xinyu-app .room-content :is(.xy-panel,.settings-grid>.xy-panel){padding:16px;min-width:0}
+.xinyu-app .room-content .chat-context>.xy-panel{padding:10px 0}
+.xinyu-app .room-content :is(.scene-grid,.growth-stats){grid-template-columns:repeat(2,minmax(0,1fr))}
+.xinyu-app .room-content .avatar-presets{gap:8px}.xinyu-app .room-content .avatar-presets>button{min-width:0;padding:6px}
+.xinyu-app .room-content .wardrobe-stage{position:static}.xinyu-app .room-content .wardrobe-stage canvas{height:220px}
+.xinyu-app .room-content .avatar-room,.xinyu-app .room-content .scene-detail-preview{height:200px}
+.xinyu-app .room-content .xy-banner img,.xinyu-app .room-content .growth-banner img{max-width:30%}
+@media(max-height:820px){.room-tools{padding-block:4px}.room-content{padding-block:10px}.room-tools button{min-height:34px}}
+/* A single room holds the companion and the real conversation. */
+.xinyu-app .xy-chat-layout,.xinyu-app .xy-chat-layout.room-collapsed{grid-template-columns:220px minmax(0,1fr);gap:16px}
+.conversation-world{position:relative;min-width:0;min-height:0;overflow:hidden;isolation:isolate;border:1px solid var(--xy-border);border-radius:14px;background:var(--xy-header)}
+.companion-room{position:absolute;inset:0;overflow:hidden}
+.scene-caption{position:absolute;top:65px;right:14px;display:flex;align-items:center;gap:10px;z-index:2;padding:9px 12px;border-radius:10px;background:color-mix(in srgb,var(--xy-panel) 76%,transparent);backdrop-filter:blur(10px);color:var(--xy-ink);pointer-events:none}
+.scene-caption>div{display:grid;gap:3px}.scene-caption strong{font-size:16px;font-weight:650}.scene-caption span:not(.scene-presence){font-size:12px;color:var(--xy-secondary)}
+.scene-presence{width:8px;height:8px;border-radius:50%;background:#74bba1;box-shadow:0 0 0 4px #74bba124}
+.xinyu-app .conversation-world .chat-main{position:absolute;inset:0 auto 0 0;width:46%;min-width:410px;height:100%;display:flex;flex-direction:column;border:0;border-radius:0;background:linear-gradient(90deg,color-mix(in srgb,var(--xy-panel) 90%,transparent),color-mix(in srgb,var(--xy-panel) 78%,transparent) 74%,transparent);backdrop-filter:blur(7px);box-shadow:none}
+.xinyu-app .conversation-world .chat-top{background:transparent;border-color:color-mix(in srgb,var(--xy-border) 75%,transparent)}
+.xinyu-app .conversation-world .message-list{flex:1;min-height:0;overflow-y:auto;padding:20px 18px;scrollbar-width:thin;scrollbar-color:var(--xy-border) transparent}
+.xinyu-app .conversation-world .message-bubble{background:color-mix(in srgb,var(--xy-panel) 93%,var(--xy-selected));border:1px solid color-mix(in srgb,var(--xy-border) 70%,transparent);box-shadow:0 3px 10px #3222550c}
+.xinyu-app .conversation-world .from-user .message-bubble{background:color-mix(in srgb,var(--xy-selected) 84%,var(--xy-panel));}
+.xinyu-app .conversation-world .message-wrap{max-width:min(92%,68ch)}
+.xinyu-app .conversation-world .chat-composer{background:linear-gradient(90deg,color-mix(in srgb,var(--xy-panel) 74%,transparent) 70%,transparent);border-top:1px solid color-mix(in srgb,var(--xy-border) 75%,transparent)}
+.xinyu-app .conversation-world.scene-hidden .chat-main{width:100%;background:var(--xy-panel);backdrop-filter:none}
+@media(max-height:820px){.scene-caption{top:62px;right:12px}.scene-caption span:not(.scene-presence){display:none}.xinyu-app .conversation-world .message-list{padding:14px 16px}}
+@media(min-width:1800px){.xinyu-app .xy-chat-layout{grid-template-columns:230px minmax(0,1fr);gap:22px}.xinyu-app .conversation-world .chat-main{width:46%}}
+
+.xinyu-app .conversation-world .message-row:not(.from-user){flex-direction:row-reverse}.xinyu-app .conversation-world .message-row:not(.from-user) .message-name{text-align:right}.xinyu-app .conversation-world .message-row.from-user{flex-direction:row}.xinyu-app .conversation-world .from-user .message-name{text-align:left}.xinyu-app .conversation-world .message-row:not(.from-user) .message-bubble{border-radius:12px 3px 12px 12px}.xinyu-app .conversation-world .from-user .message-bubble{border-radius:3px 12px 12px 12px}
+
+.xinyu-app .conversation-world .message-portrait{display:block;flex:none;width:28px;height:28px;margin-top:16px}

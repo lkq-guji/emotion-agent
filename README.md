@@ -1,77 +1,52 @@
-# emotion-agent
+# 心屿智伴 · emotion-agent
 
-三人协作开发“数字人综合情感陪伴对话模型”的初始骨架。
+中文治愈系像素 AI 陪伴项目。**当前桌面应用在 `web/`**，包含小岛首页、进屋对话、情绪日记、授权记忆、画像、成长、衣橱、动态窗景和个人设置。
 
-**当前状态：仅完成共享接口与 MOCK 联调。未接入真实模型、未训练、未获得比赛分数。**
+交接版没有共享密钥、个人聊天或浏览器数据。每位组员自行配置 DeepSeek；不填写密钥也能启动界面和使用本地记录，聊天会提示未配置或调用失败，不以假回复代替。
 
-最近的验证结果和下一步任务见 [项目状态](docs/STATUS.md)。
+## 组员先运行当前页面
 
-## 分支怎么用
+准备 Node.js 24 LTS 和 pnpm 10.34.1：
 
-| 分支 | 用途 |
-|---|---|
-| `main` | 正式版本，保留为仓库默认分支，接收已验收的阶段成果。 |
-| `develop` | 日常开发集成和测试，三个人从这里开始工作。 |
+```sh
+npm install --global pnpm@10.34.1
+git clone --branch develop https://github.com/lkq-guji/emotion-agent.git
+cd emotion-agent/web
+pnpm install --frozen-lockfile
+pnpm run doctor
+pnpm dev
+```
 
-协作流程：`feat/个人任务 → develop → 测试验收 → main`。日常 Pull Request 的目标分支选择 `develop`，阶段发布时再从 `develop` 向 `main` 提 Pull Request。具体命令见 [三人协作约定](TEAM.md)。
+访问 **http://127.0.0.1:5178**。DeepSeek 配置、生产启动和测试说明见 **[web/README.md](web/README.md)**。已有仓库的成员保存修改后更新 develop，再进入 web/。
 
-## 交给 AI 接手
+## 当前两条开发线
 
-1. 先读 [AI 启动指令](docs/AI_START_HERE.md)，复制总控或 A/B/C 的提示词。
-2. 以 [项目需求与逐步执行手册](docs/PROJECT_REQUIREMENTS.md) 为工作入口。
-3. [完整对话总结](docs/CONVERSATION_SUMMARY.md) 保留讨论背景、决定、实际成果与尚未完成事项。
+| 目录 | 当前状态 | 下一步 |
+| --- | --- | --- |
+| web/ | Svelte 5 + TypeScript，一个前端；已接真实 Chat API 请求链路，凭据自配 | 接正式模型服务，补质量/性能验收；不是比赛推理入口 |
+| emotion_agent/、training/、data_tools/、evaluation/、official/ | 保留三人协作骨架；Python engine 仍是明确标记的 MOCK | 实现正式模型、数据转换、训练评测和官方入口 |
 
-需求手册已按三人团队、用户当时剩余 18 天、RTX 4060 Laptop 约 8GB 显存安排阶段。接手时重新检查仓库、环境和精确截止日期，保留队友后续工作。
+网页当前调用成员配置的外部模型，**尚未调用根目录 Python engine**。网页可用不代表已完成模型训练、正式评分或平台提交。
 
-## 每个人第一次拉取后做什么
+## 接手资料
 
-安装 Python 3.10+，在项目根目录执行（基础联调不需要 GPU 和第三方依赖）：
+- [当前状态与缺口](docs/STATUS.md)
+- [网页架构](web/docs/ARCHITECTURE.md) 与 [下一步分工/验收](web/docs/TEAM_HANDOFF.md)
+- [三人协作约定](TEAM.md)：feat/... → develop → main
+- [比赛需求与约束](docs/PROJECT_REQUIREMENTS.md) 和 [共享接口](docs/INTERFACE.md)
+- [AI 接手入口](docs/AI_START_HERE.md)
+- [开源与素材来源](THIRD_PARTY.md)
 
-```bash
+main 保留已验收版本，develop 作为日常集成入口。同步保留原仓库历史和队友目录。没有上传原始比赛数据、模型权重、虚拟环境、node_modules、构建产物、私密配置、截图或运行缓存。
+
+## Python 接口骨架检查
+
+在仓库根目录，用 Python 3.10+ 运行：
+
+```sh
+python -X utf8 -m unittest discover -s tests -v
 python -X utf8 -m emotion_agent mock --input examples/smoke_input.jsonl --output .runtime/mock_predictions.jsonl
 python -X utf8 -m emotion_agent validate --input examples/smoke_input.jsonl --predictions .runtime/mock_predictions.jsonl
-python -X utf8 -m unittest discover -s tests -v
 ```
 
-第一条生成两条固定的假回复，以及明确标记 `mode=mock` 的元数据。后两条只检查程序接口与输出格式，**不评估模型能力**。`examples/` 是自造样例，不是比赛数据。`-X utf8` 用于统一 Windows/Linux 的中文输出编码。
-
-## 三人分工
-
-| 人员 | 负责什么 | 主要目录 |
-|---|---|---|
-| A | 基座模型、训练、真实模型接口 | `training/`、`emotion_agent/engine.py` |
-| B | 数据转换、批量推理、评测和校验 | `data_tools/`、`evaluation/`、`emotion_agent/runner.py` |
-| C | 正式入口、平台验收、演示、文档与报告整理 | `official/`、`demo/`、`docs/`、`.github/` |
-
-每个人记录自己实际做的实验；具体协作方法见 [TEAM.md](TEAM.md)。
-
-## 先约定好接口
-
-模型模块提供 `generate(history) -> dict`：输入历史消息，返回 `response_text`、`emotion_label`、`user_profile`、`memory_refs` 四个字段。批处理模块负责把输入 `id` 原样补回，并检查结果。
-
-字段、调用例子、正式要求与开发检查的差异见 [接口说明](docs/INTERFACE.md)。所有人先按此接口开发，A 后续用真实模型替换 MockEngine，B 与 C 可以继续使用相同字段。
-
-## 第一批文件
-
-```text
-emotion_agent/     共享接口、假模型、批处理和命令行
-examples/          自造接口样例
-tests/             共享接口检查
-training/          A 后续添加训练配置、训练脚本
-data_tools/        B 后续添加官方数据转换
-evaluation/        B 后续添加真实质量与延迟评测
-demo/              C 后续添加聊天演示
-official/          官方入口接入说明
-docs/             接口、阶段任务和实验记录模板
-.github/          自动检查和 Pull Request 模板
-```
-
-数据、权重、虚拟环境、密钥和大部分生成结果已列入 `.gitignore`。把需要保留的小型实验汇总放进 `docs/experiments/`，不要依赖被忽略的运行目录作为唯一记录。
-
-## 接下来完成的三个任务
-
-1. A：在独立 CUDA 环境中加载许可明确的公开基座，实现真实 `generate(history)`。
-2. B：把官方验证集的预测点转换成输入和独立标签，保证目标回复及未来轮次不进入历史，再建立基线评测。
-3. C：整理正式入口和平台接入说明，用假模型联调展示；核心流程稳定后完善真实演示和交付材料。
-
-最终仍须通过比赛方的统一入口和正式环境验收。本骨架 CLI 不是正式 `start.sh` 的替代品。
+这些命令只检查共享接口与 MOCK 联调，不评估真实模型质量。官方入口仍以比赛方 start.sh / run_inference.py 及最新规则为准。

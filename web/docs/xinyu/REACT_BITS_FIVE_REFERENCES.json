@@ -1,0 +1,79 @@
+{
+  "reviewDate": "2026-10-27",
+  "officialRepository": "https://github.com/DavidHDev/react-bits",
+  "license": "MIT + Commons Clause",
+  "licenseUrl": "https://github.com/DavidHDev/react-bits/blob/main/LICENSE.md",
+  "upstreamCopyright": "Copyright (c) 2026 David Haz",
+  "installedDependencies": [],
+  "framework": "Svelte 5 / TypeScript; no React runtime or copied React components",
+  "scope": "Desktop only; real chat and real settings remain connected to existing RisuAI storage and request pipeline.",
+  "references": [
+    {
+      "component": "MagicBento",
+      "variant": "JS-CSS reference, independently adapted to Svelte 5 + TypeScript",
+      "target": "我的页面",
+      "attachment": "[local source] 已粘贴的文本.txt",
+      "attachmentSha256": "bd0d6b7f465cf1ecf4e64bdceca4ad7ce4e60fb97364d63cdf333959544bbca9",
+      "registry": "https://reactbits.dev/r/MagicBento-JS-CSS.json",
+      "registrySha256": "214b51dded9183c265f483724580edb9f10cd662b165394a1578d61a10522ea4",
+      "upstreamDependencies": [
+        "@hugeicons/react@^1.1.10",
+        "@hugeicons/core-free-icons@^4.3.3"
+      ],
+      "adaptedImplementation": "src/xinyu/components/PixelBento.svelte",
+      "adaptation": "Per-card spotlight, edge lighting and square click wave; native settings remain; no tilt or analytics fixtures."
+    },
+    {
+      "component": "LightTunnel",
+      "variant": "JS-CSS reference, independently adapted to Svelte 5 + TypeScript",
+      "target": "首页进入对话",
+      "attachment": "[local source] 已粘贴的文本.txt",
+      "attachmentSha256": "9d8e5a24b3fed0b0702a578849ea54d0e9ad79fd904b1e8dadaaefe4cb370996",
+      "registry": "https://reactbits.dev/r/LightTunnel-JS-CSS.json",
+      "registrySha256": "39750ff4978bf50021f5f9117c6482af53f1c19d5d9cd16b05859c20e503baeb",
+      "upstreamDependencies": [],
+      "adaptedImplementation": "src/xinyu/components/LightTunnel.svelte",
+      "adaptation": "Canvas 2D pixel perspective fibres and inward pulses; 1090ms envelope spanning the existing entry and real route switch."
+    },
+    {
+      "component": "PixelSnow",
+      "variant": "JS-CSS reference, independently adapted to Svelte 5 + TypeScript",
+      "target": "岛与房间的雪天",
+      "attachment": "[local source] 已粘贴的文本.txt",
+      "attachmentSha256": "7d4b805835a31f97e882ee63c13f2940f0865e7921d7db2a55d2537c0cb7b869",
+      "registry": "https://reactbits.dev/r/PixelSnow-JS-CSS.json",
+      "registrySha256": "215265bbebc91648ee8007d8106882b70085a04589443dddb479ced0f8075a16",
+      "upstreamDependencies": [],
+      "adaptedImplementation": "src/xinyu/pixelSnow.ts",
+      "adaptation": "Seeded depth, pixel crystals, drift and pointer brushing in the shared Canvas scheduler; independent persisted weather selection."
+    },
+    {
+      "component": "GlassSurface",
+      "variant": "JS-CSS reference, independently adapted to Svelte 5 + TypeScript",
+      "target": "首页悬浮入口",
+      "attachment": "[local source] 已粘贴的文本.txt",
+      "attachmentSha256": "73e9e0cf0975c4e33d7b850da74d819a0437f7f3b378cd0457f47178b62c2685",
+      "registry": "https://reactbits.dev/r/GlassSurface-JS-CSS.json",
+      "registrySha256": "ae2154425852dd697d3b9e72b8c0bbf80f6e66acbf6cf63735a0ab8ab31bcd93",
+      "upstreamDependencies": [],
+      "adaptedImplementation": "src/xinyu/components/GlassSurface.svelte",
+      "adaptation": "Own rounded edge-normal displacement map, SVG backdrop filter, frost fallback and unfiltered text."
+    },
+    {
+      "component": "CodeSlots",
+      "variant": "JS-CSS reference, independently adapted to Svelte 5 + TypeScript",
+      "target": "应用锁",
+      "attachment": "[local source] 已粘贴的文本.txt",
+      "attachmentSha256": "5a3d9fc08dc36bbf7bf1107294e8171d146297fec8cd1f5426bfaa320866f18f",
+      "registry": "https://reactbits.dev/r/CodeSlots-JS-CSS.json",
+      "registrySha256": "d11da299d559f5100a9fdb28223b16067820cce3bda60e1a2f9002a1f4411b64",
+      "upstreamDependencies": [
+        "motion@^12.23.12",
+        "@hugeicons/react@^1.1.10",
+        "@hugeicons/core-free-icons@^4.3.3"
+      ],
+      "adaptedImplementation": "src/xinyu/components/CodeSlots.svelte",
+      "adaptation": "Native password input with masked slots, paste and selection; variable 6–12 digits and optional length metadata for legacy compatibility."
+    }
+  ]
+}

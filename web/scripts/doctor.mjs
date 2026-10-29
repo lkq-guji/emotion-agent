@@ -1,0 +1,10 @@
+import {existsSync,readFileSync} from 'node:fs';
+const version=process.versions.node.split('.').map(Number),supported=version[0]>=22&&(version[0]>22||version[1]>=12);
+const required=['src/App.svelte','version.json','public/xinyu/island/assets.json','public/xinyu/generated/room-panorama-v3.png','server/xinyu/gateway.mjs','pnpm-lock.yaml'];
+const missing=required.filter(f=>!existsSync(f));let configured=!!(process.env.DEEPSEEK_API_KEY||process.env.XINYU_API_KEY);
+if(existsSync('.env.local'))configured ||= /^(?:DEEPSEEK_API_KEY|XINYU_API_KEY)\s*=\s*\S+/m.test(readFileSync('.env.local','utf8'));
+console.log(`Node ${process.versions.node}：${supported?'可用':'请安装 Node 24 LTS'}`);
+console.log(`项目文件：${missing.length?'缺少 '+missing.join(', '):'完整'}`);
+console.log(configured?'模型配置：已填写（此检查不会发送请求）':'模型配置：未填写。页面可运行；对话前在 .env.local 填写自己的密钥并重启。');
+console.log('开发：pnpm dev；生产：pnpm build && pnpm start；默认地址 http://127.0.0.1:5178');
+if(!supported||missing.length)process.exitCode=1;

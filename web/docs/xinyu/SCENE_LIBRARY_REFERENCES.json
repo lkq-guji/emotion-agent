@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-28",
+  "strokeText": {
+    "registry": "https://reactbits.dev/r/StrokeText-JS-CSS.json",
+    "variant": "StrokeText-JS-CSS",
+    "author": "David Haz",
+    "license": "MIT + Commons Clause",
+    "licenseURL": "https://github.com/DavidHDev/react-bits/blob/main/LICENSE.md",
+    "attachmentSha256": "de4d8ddd53c21492559231cf7451b3e665390d4ab760dc4260db2bb8097b5a75",
+    "files": [
+      {
+        "path": "StrokeText.css",
+        "sha256": "572e1f8076a85a564f099496b8dac313a5e2e0a5afa9fc29db0f90089e711ad8"
+      },
+      {
+        "path": "StrokeText.jsx",
+        "sha256": "0c8c15f248d7efecb66158c7afc4226b0f7129ba53bdd3fe3b68bdaaff829a09"
+      }
+    ],
+    "adaptation": "Svelte/SVG outline draw and fill wipe; keep an always-readable base text; no React or new GSAP runtime. Use within application only."
+  },
+  "diary": {
+    "source": "https://github.com/huntabyte/bits-ui",
+    "docs": "https://www.bits-ui.com/docs/components/collapsible",
+    "license": "MIT",
+    "licenseURL": "https://github.com/huntabyte/bits-ui/blob/main/LICENSE",
+    "studied": [
+      "collapsible-trigger.svelte",
+      "collapsible-content.svelte",
+      "controlled open, native trigger, forceMount and content state"
+    ],
+    "adaptation": "Independent native Svelte controls with aria-expanded/controls, SVG state icon and retained inert pages. Reuse existing interruptible CSS transitions; no library installed."
+  }
+}
