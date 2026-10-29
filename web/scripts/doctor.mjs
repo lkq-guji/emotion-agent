@@ -1,6 +1,6 @@
 import {existsSync,readFileSync} from 'node:fs';
 const version=process.versions.node.split('.').map(Number),supported=version[0]>=22&&(version[0]>22||version[1]>=12);
-const required=['src/App.svelte','version.json','public/xinyu/island/assets.json','public/xinyu/generated/room-panorama-v3.png','server/xinyu/gateway.mjs','pnpm-lock.yaml'];
+const required=['src/App.svelte','src/ts/process/models/nai.ts','src/ts/process/models/local.ts','src/ts/process/models/modelString.ts','src/ts/rpack/rpack_map.bin','version.json','public/xinyu/island/assets.json','public/xinyu/generated/room-panorama-v3.png','server/xinyu/gateway.mjs','pnpm-lock.yaml'];
 const missing=required.filter(f=>!existsSync(f));let configured=!!(process.env.DEEPSEEK_API_KEY||process.env.XINYU_API_KEY);
 if(existsSync('.env.local'))configured ||= /^(?:DEEPSEEK_API_KEY|XINYU_API_KEY)\s*=\s*\S+/m.test(readFileSync('.env.local','utf8'));
 console.log(`Node ${process.versions.node}：${supported?'可用':'请安装 Node 24 LTS'}`);

@@ -11,3 +11,8 @@ playwright-report/
 *.log
 *.tsbuildinfo
 .DS_Store
+
+# These are application source files, not model weights.
+!src/ts/process/models/
+!src/ts/process/models/**
+!src/ts/rpack/rpack_map.bin
