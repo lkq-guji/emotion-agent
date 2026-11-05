@@ -18,9 +18,9 @@ export type ProfileCategory='interest'|'rhythm'|'support'|'goal'|'boundary'|'oth
 export interface Fact { id: string; label: string; value: string; origin: 'user_provided'|'model_inferred'; confirmed: boolean; at: number; source?: Source; category?:ProfileCategory;active?:boolean;updatedAt?:number }
 export type FactSnapshot=Pick<Fact,'label'|'value'|'origin'|'confirmed'|'category'|'active'>;
 export interface FactRevision {id:string;factId:string;at:number;action:'created'|'edited'|'confirmed'|'paused'|'resumed';before?:FactSnapshot;after:FactSnapshot;source?:Source}
-export interface Goal { id: string; text: string; at: number; completedAt?: number }
+export interface Goal { id: string; text: string; at: number; completedAt?: number;status?:'active'|'completed'|'cancelled' }
 export interface Preferences {
-  name: string; memoryEnabled: boolean; profileEnabled: boolean; analysisEnabled: boolean; brightness?: number; roomLamp?: boolean; chatView?:'table'|'theatre';
+  name: string; memoryEnabled: boolean; profileEnabled: boolean; analysisEnabled: boolean; agentMode?:boolean; brightness?: number; roomLamp?: boolean; chatView?:'table'|'theatre';
   reduceMotion: boolean; sound: boolean; ambientSound?:boolean; dockAutoHide?: boolean; weatherMode?:import('./weather').WeatherMode; rainStrength?:import('./precipitation').PrecipitationStrength; snowStrength?:import('./precipitation').PrecipitationStrength; scene: string; avatar: string; theme: 'light'|'dusk'|'night'; appearanceMode?: import('./theme').AppearanceMode; voiceProfile?: 'soft'|'warm'; islandLight?: boolean; favorites: string[]; sidebarCollapsed?: boolean; gatewaySetupVersion?: number; customAvatar?: import('./wardrobe').WardrobeConfig;
 }
 export interface CompanionData {
@@ -71,12 +71,12 @@ export function hydrateData(input: unknown): CompanionData {
     ||data.emotions.some(e=>!Object.hasOwn(emotions,e.label)||typeof e.note!=='string'||!['manual','model'].includes(e.origin)||typeof e.confirmed!=='boolean'||!validSource(e.source))
     ||data.memories.some(m=>m.consented!==true||typeof m.text!=='string'||!['daily','interest','goal','important'].includes(m.category)||!validSource(m.source))
     ||data.facts.some(f=>typeof f.label!=='string'||typeof f.value!=='string'||!['user_provided','model_inferred'].includes(f.origin)||typeof f.confirmed!=='boolean'||!validSource(f.source))
-    ||data.goals.some(g=>typeof g.text!=='string'||(g.completedAt!==undefined&&!validAt(g.completedAt)))) throw new Error('记录内容校验失败。原数据已保留，请先导出备份。');
+    ||data.goals.some(g=>typeof g.text!=='string'||(g.completedAt!==undefined&&!validAt(g.completedAt))||(g.status!==undefined&&!['active','completed','cancelled'].includes(g.status)))) throw new Error('记录内容校验失败。原数据已保留，请先导出备份。');
   const score=(n:unknown)=>typeof n==='number'&&Number.isInteger(n)&&n>=0&&n<=10;
   const snapshot=(f:FactSnapshot)=>f&&typeof f.label==='string'&&typeof f.value==='string'&&['user_provided','model_inferred'].includes(f.origin)&&typeof f.confirmed==='boolean'&&(f.active===undefined||typeof f.active==='boolean')&&(f.category===undefined||['interest','rhythm','support','goal','boundary','other'].includes(f.category));
   if(data.emotions.some(e=>e.reflection&&(!Array.isArray(e.reflection.labels)||!e.reflection.labels.length||e.reflection.labels.length>3||e.reflection.labels.some(l=>!Object.hasOwn(emotions,l))||!score(e.reflection.intensity)||['context','need','action'].some(k=>typeof e.reflection[k]!=='string')||typeof e.reflection.actionDone!=='boolean'||e.reflection.review&&(!score(e.reflection.review.intensity)||typeof e.reflection.review.note!=='string'||!['yes','unsure','no'].includes(e.reflection.review.helpful)||!validAt(e.reflection.review.at)))))throw new Error('情绪回看内容校验失败，原数据已保留。');
   if(data.facts.some(f=>!snapshot(f)||f.updatedAt!==undefined&&!validAt(f.updatedAt))||!Array.isArray(next.factHistory)||next.factHistory.some(h=>!validId(h.id)||!validId(h.factId)||!validAt(h.at)||!['created','edited','confirmed','paused','resumed'].includes(h.action)||!snapshot(h.after)||h.before!==undefined&&!snapshot(h.before)||!validSource(h.source)))throw new Error('画像变化记录校验失败，原数据已保留。');
-  for(const key of ['memoryEnabled','profileEnabled','analysisEnabled','reduceMotion','sound','ambientSound']) if(data.preferences[key]!==undefined&&typeof data.preferences[key]!=='boolean') throw new Error('隐私偏好格式不正确，原数据已保留。');
+  for(const key of ['memoryEnabled','profileEnabled','analysisEnabled','agentMode','reduceMotion','sound','ambientSound']) if(data.preferences[key]!==undefined&&typeof data.preferences[key]!=='boolean') throw new Error('隐私偏好格式不正确，原数据已保留。');
   next.preferences = { ...freshData().preferences, ...data.preferences };
   next.preferences.ambientSound=data.preferences.ambientSound===undefined?data.preferences.sound===true:data.preferences.ambientSound;
   if(next.preferences.avatar==='mint')next.preferences.avatar='cream';

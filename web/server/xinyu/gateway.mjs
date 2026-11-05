@@ -2,6 +2,8 @@ import express from 'express';
 import { randomBytes } from 'node:crypto';
 import { Readable } from 'node:stream';
 import { rateLimit } from 'express-rate-limit';
+import {createAgentStore,AgentError} from './agent-store.mjs';
+import {createAgentRouter} from './agent.mjs';
 
 // 仅本机同源会话；客户端不能指定上游 URL 或获取服务端密钥。
 export function createGateway(env = process.env, fetchImpl = fetch) {
@@ -10,6 +12,17 @@ export function createGateway(env = process.env, fetchImpl = fetch) {
   const model = env.XINYU_MODEL || env.DEEPSEEK_MODEL || 'deepseek-flash';
   const base = (env.XINYU_BASE_URL || env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com').replace(/\/$/,'');
   const endpoint = base.endsWith('/chat/completions') ? base : base+'/chat/completions';
+  const store=createAgentStore(env.XINYU_AGENT_DB||'.runtime/xinyu-agent.sqlite3');
+  const agent=createAgentRouter({store,configured:!!key,requestModel:async(messages,tools,signal)=>{
+    let url;try{url=new URL(endpoint);}catch{throw new AgentError('服务端模型地址配置有误。',503);}
+    if(url.protocol!=='https:'&&!(url.protocol==='http:'&&['127.0.0.1','localhost','[::1]'].includes(url.hostname)))throw new AgentError('远程模型地址需要 HTTPS。',503);
+    const body={model,messages,tools,max_tokens:1200,stream:false};
+    if(url.hostname==='api.deepseek.com')body.thinking={type:'disabled'};
+    const modelSignal=AbortSignal.any([signal,AbortSignal.timeout(Math.round(Math.max(1,Math.min(Number(env.DEEPSEEK_TIMEOUT_SECONDS)||120,300))*1000))]);
+    const response=await fetchImpl(endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(body),signal:modelSignal});
+    if(!response.ok)throw new AgentError('模型服务返回 HTTP '+response.status+'，请检查连接后重试。',502);
+    try{return await response.json();}catch{throw new AgentError('模型没有返回有效的 JSON 回复。',502);}
+  }});
   const sessions = new Map();
   router.use((req,res,next)=> {
     res.setHeader('Cache-Control','no-store'); res.setHeader('X-Content-Type-Options','nosniff');
@@ -24,7 +37,7 @@ export function createGateway(env = process.env, fetchImpl = fetch) {
     if (sessions.size>200) sessions.delete(sessions.keys().next().value);
     const token = randomBytes(32).toString('hex'); sessions.set(token,Date.now()+8*3600_000);
     res.cookie('xinyu_session',token,{httpOnly:true,sameSite:'strict',path:'/xinyu-api',maxAge:8*3600_000});
-    res.json({configured:!!key,model,localOnly:true});
+    res.json({configured:!!key,model,localOnly:true,agent:true});
   });
   router.use((req,res,next)=> {
     const cookie = (req.headers.cookie || '').split(';').map(c=>c.trim()).find(c=>c.startsWith('xinyu_session='));
@@ -34,6 +47,7 @@ export function createGateway(env = process.env, fetchImpl = fetch) {
   });
   router.post('/logout',(req,res)=> { sessions.delete(res.locals.token); res.clearCookie('xinyu_session',{path:'/xinyu-api'}); res.json({ok:true}); });
   router.use(express.json({limit:'2mb'}));
+  router.use('/agent',rateLimit({windowMs:60_000,limit:180,standardHeaders:'draft-8',legacyHeaders:false}),agent.router);
   router.use(rateLimit({windowMs:60_000,limit:24,standardHeaders:'draft-8',legacyHeaders:false}));
   router.post('/chat/completions',async(req,res)=> {
     if (!key) return res.status(503).json({error:{message:'服务端未配置模型密钥，请查看运行说明。'}});
@@ -60,5 +74,5 @@ export function createGateway(env = process.env, fetchImpl = fetch) {
   });
   router.use((error,req,res,next)=>res.status(error.status===413?413:400).json({error:{message:'请求内容无法读取或过大。'}}));
   // Vite 的 Connect 中间件没有 Express 的 response 方法，需要由 app 安装。
-  const app = express(); app.disable('x-powered-by'); app.use(router); return app;
+  const app = express(); app.disable('x-powered-by'); app.locals.closeAgent=agent.close;app.use(router); return app;
 }

@@ -14,8 +14,10 @@ import { processScriptFull } from '../ts/process/scripts';
 import { companion, updateData, notify } from './state.svelte';
 import { changeLanguage } from '../lang';
 import { clearDerivedSaveCaches,clearAllOriginStores } from './storagePrivacy';
-import { addEmotion, removeConversationSources, type Emotion, type Source, emotions,visibleReply } from './domain';
+import { addEmotion, removeConversationSources, type Emotion, type Source, emotions,visibleReply,memoriesForCharacter } from './domain';
 import {activeFacts} from './companionship';
+import {relevantMemories} from './memoryRetrieval.mjs';
+import {agentState,setAgentAvailable,runAgentTurn,syncAgentPrivacy,clearAgentData,forgetAgentConversation,invalidateAgentContext} from './agent.svelte';
 
 export const chatState = $state({ busy: false, analyzing: false, error: '', gatewayReady: false, gatewayModel: '', failedMessageId: '', lastSaved: '' });
 let controller: AbortController;
@@ -44,6 +46,7 @@ export async function prepareCompanion() {
   await tick();
   if (get(selectedCharID) < 0) await selectCharacter(0);
   await refreshGateway();
+  if(chatState.gatewayReady&&agentState.available&&companion.data.preferences.agentMode!==false)await connectGateway(false);
   if(chatState.gatewayReady&&companion.data.preferences.gatewaySetupVersion!==1){await connectGateway(false);updateData(data=>data.preferences.gatewaySetupVersion=1);}
 }
 export async function selectCharacter(index: number) {
@@ -66,6 +69,7 @@ export async function deleteConversation(index: number) {
   if (chatState.busy) throw new Error('请先停止当前回复。');
   if (forageStorage.isAccount) throw new Error('云同步已开启，请先管理云端副本，再删除来源对话。');
   const char = currentCharacter(); const chat = char?.chats[index]; if (!chat) return;
+  await forgetAgentConversation({characterId:char.chaId,conversationId:chat.id});
   await pruneBackups(()=>{
     updateData(data=>removeConversationSources(data,char.chaId,chat.id));
     char.chats.splice(index,1); if (!char.chats.length) char.chats.push(blankChat());
@@ -77,10 +81,12 @@ export async function deleteConversation(index: number) {
 export function sourceOf(messageId?: string): Source {
   return { characterId:currentCharacter().chaId,conversationId:currentChat().id,messageId };
 }
-export function syncPersonalLore() {
+export function syncPersonalLore(query='') {
+  if(!query&&agentState.busy)invalidateAgentContext();
+  void syncAgentPrivacy().catch(error=>{agentState.error=String(error).replace(/^Error: /,'');});
   for (const char of DBState.db.characters) {
     char.globalLore = (char.globalLore ?? []).filter(item=>!item.id?.startsWith('xinyu-'));
-    if (companion.data.preferences.memoryEnabled) for (const memory of companion.data.memories) {
+    if (companion.data.preferences.memoryEnabled) for (const memory of relevantMemories(memoriesForCharacter(companion.data.memories,char.chaId),query)) {
       if (memory.source?.characterId && memory.source.characterId !== char.chaId) continue;
       char.globalLore.push({ id:'xinyu-memory-'+memory.id,key:'',secondkey:'',comment:'用户同意保存的心屿记忆',content:memory.text,mode:'constant',alwaysActive:true,selective:false,insertorder:100 });
     }
@@ -108,9 +114,15 @@ export async function sendMessage(text: string, retry=false) {
       if (target < 0 || chat.message[target].role !== 'user' || chat.message.slice(target+1).some(m=>m.role==='user')) throw new Error('这条消息已不在末尾，请发送新消息。');
       chat.message.splice(target+1);
     }
-    chat.lastDate = Date.now(); chat.fmIndex ??= -1; syncPersonalLore();
+    chat.lastDate = Date.now(); chat.fmIndex ??= -1; syncPersonalLore(chat.message.filter(m=>m.role==='user').at(-1)?.data||'');
     const before = chat.message.length;
-    const sent = await sendChat(-1,{ signal:controller.signal });
+    let sent;
+    if(agentState.available&&companion.data.preferences.agentMode!==false){
+      const history=chat.message.filter(m=>!m.isComment).slice(-16).map((m,i,all)=>({role:m.role==='user'?'user' as const:'assistant' as const,content:(m.role==='char'?visibleReply(m.data):m.data).slice(0,i===all.length-1?12000:2000)}));
+      const answer=await runAgentTurn(history,sourceOf(chatState.failedMessageId),controller.signal);
+      if(companion.locked||controller.signal.aborted)throw new Error('已停止回复，请解锁后重试。');
+      chat.message.push({role:'char',data:answer,time:Date.now(),chatId:crypto.randomUUID(),saying:char.chaId});sent=true;
+    }else sent=await sendChat(-1,{ signal:controller.signal });
     if (!sent || currentChat().message.length <= before) {
       const alert = get(alertStore); alertStore.set({type:'none',msg:''});
       throw new Error(controller.signal.aborted ? '已停止回复。你可以重试这条消息。' : (alert.msg && alert.msg !== 'n' ? alert.msg : '模型没有返回回复，请检查模型配置后重试。'));
@@ -148,7 +160,7 @@ export async function analyzeChat() {
   finally { chatState.analyzing = false; }
 }
 export async function refreshGateway() {
-  try { const response = await fetch('/xinyu-api/health'); if(!response.ok) throw new Error(); const data = await response.json(); chatState.gatewayReady = data.configured===true; chatState.gatewayModel = data.model ?? ''; }
+  try { const response = await fetch('/xinyu-api/health'); if(!response.ok) throw new Error(); const data = await response.json(); chatState.gatewayReady = data.configured===true; chatState.gatewayModel = data.model ?? '';setAgentAvailable(data.agent===true); }
   catch { chatState.gatewayReady = false; }
 }
 export async function connectGateway(showNotice=true) {
@@ -176,6 +188,7 @@ export async function exportPersonalData() {
 export async function clearAllLocalData() {
   if (forageStorage.isAccount) throw new Error('请先关闭云同步，再清除本机数据。云端副本需在对应服务中删除。');
   stopMessage();
+  await clearAgentData();
   await withPausedDatabaseWrites(async()=>{
     await clearSceneMedia();
     setDatabase({} as Database); saveKV.load({}); requiresFullEncoderReload.state = true;
