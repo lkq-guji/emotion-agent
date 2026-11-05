@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.34.1",
   "type": "module",
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": ">=24.14.0"
   },
   "scripts": {
     "dev": "vite",
@@ -16,13 +16,14 @@
     "buildsite": "vite build --outDir dist",
     "start": "node server/xinyu/start.mjs",
     "test:gateway": "node --test server/xinyu/gateway.node.mjs",
+    "test:agent": "node --test server/xinyu/agent.node.mjs",
     "test:e2e": "playwright test",
     "test:upstream": "vitest run src/ts",
     "doctor": "node scripts/doctor.mjs",
     "verify:assets": "node scripts/verify-assets.mjs",
     "verify:repo": "node scripts/check-repo.mjs",
     "test:startup": "node --test tests/startup.node.mjs",
-    "test:smoke": "playwright test tests/xinyu/window-flow.pw.ts tests/xinyu/scene-library.pw.ts"
+    "test:smoke": "playwright test tests/xinyu/window-flow.pw.ts tests/xinyu/scene-library.pw.ts tests/xinyu/agent-workflow.pw.ts"
   },
   "dependencies": {
     "@adobe/css-tools": "4.4.4",

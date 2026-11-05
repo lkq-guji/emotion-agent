@@ -8,6 +8,7 @@ const known=[process.env.DEEPSEEK_API_KEY,process.env.XINYU_API_KEY].filter(v=>v
 for(const f of files){const full=path.join(root,f);if(!existsSync(full)||!statSync(full).isFile())continue;
  if(/(?:^|\/)(?:node_modules|dist|\.runtime|\.impeccable|\.taste-skill|playwright-report|test-results)\//.test(f)||/(?:^|\/)\.env(?:\..*)?$/.test(f)&&!f.endsWith('.env.example'))bad.push({file:f,reason:'local-only artifact'});
  if(statSync(full).size>50*1024*1024)bad.push({file:f,reason:'oversized file'});
+ if(/\.(?:sqlite(?:3)?(?:-(?:wal|shm))?|db(?:-(?:wal|shm))?)$/i.test(f))bad.push({file:f,reason:'private task database'});
  if(/\.(?:md|json|ts|js|svelte|html|css|mjs|yml|yaml|toml|txt|example|py|lock)$/.test(f)){const b=readFileSync(full);if(sensitive.test(b.toString('utf8'))||known.some(k=>b.includes(Buffer.from(k))))bad.push({file:f,reason:'credential-like value'});}
 }
 const tracked=execFileSync('git',['ls-files','-z'],{cwd:root,encoding:'utf8'}).split('\0');
