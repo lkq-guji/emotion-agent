@@ -86,7 +86,7 @@ export function syncPersonalLore(query='') {
   void syncAgentPrivacy().catch(error=>{agentState.error=String(error).replace(/^Error: /,'');});
   for (const char of DBState.db.characters) {
     char.globalLore = (char.globalLore ?? []).filter(item=>!item.id?.startsWith('xinyu-'));
-    if (companion.data.preferences.memoryEnabled) for (const memory of relevantMemories(memoriesForCharacter(companion.data.memories,char.chaId),query)) {
+    if (companion.data.preferences.memoryEnabled) for (const memory of relevantMemories(memoriesForCharacter(companion.data.memories.filter(m=>m.reviewed),char.chaId),query)) {
       if (memory.source?.characterId && memory.source.characterId !== char.chaId) continue;
       char.globalLore.push({ id:'xinyu-memory-'+memory.id,key:'',secondkey:'',comment:'用户同意保存的心屿记忆',content:memory.text,mode:'constant',alwaysActive:true,selective:false,insertorder:100 });
     }
@@ -119,7 +119,7 @@ export async function sendMessage(text: string, retry=false) {
     let sent;
     if(agentState.available&&companion.data.preferences.agentMode!==false){
       const history=chat.message.filter(m=>!m.isComment).slice(-16).map((m,i,all)=>({role:m.role==='user'?'user' as const:'assistant' as const,content:(m.role==='char'?visibleReply(m.data):m.data).slice(0,i===all.length-1?12000:2000)}));
-      const answer=await runAgentTurn(history,sourceOf(chatState.failedMessageId),controller.signal);
+      const answer=await runAgentTurn(history,sourceOf(chatState.failedMessageId),controller.signal,retry);
       if(companion.locked||controller.signal.aborted)throw new Error('已停止回复，请解锁后重试。');
       chat.message.push({role:'char',data:answer,time:Date.now(),chatId:crypto.randomUUID(),saying:char.chaId});sent=true;
     }else sent=await sendChat(-1,{ signal:controller.signal });

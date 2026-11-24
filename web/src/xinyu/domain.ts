@@ -10,7 +10,7 @@ export type Emotion = keyof typeof emotions;
 export interface Source { characterId: string; conversationId: string; messageId?: string }
 export interface EmotionReflection { labels:Emotion[]; intensity:number; context:string; need:string; action:string; actionDone:boolean; review?:{intensity:number;note:string;helpful:'yes'|'unsure'|'no';at:number} }
 export interface EmotionRecord { id: string; label: Emotion; note: string; at: number; origin: 'manual' | 'model'; confirmed: boolean; source?: Source; reflection?:EmotionReflection }
-export interface Memory { id: string; text: string; category: 'daily'|'interest'|'goal'|'important'; at: number; consented: true; source?: Source }
+export interface Memory { id: string; text: string; category: 'daily'|'interest'|'goal'|'important'; at: number; consented: true; reviewed?: boolean; awaitingReceipt?: boolean; source?: Source }
 export function memoriesForCharacter(memories:Memory[],characterId?:string):Memory[]{
   return memories.filter(memory=>!memory.source?.characterId||memory.source.characterId===characterId);
 }

@@ -89,7 +89,7 @@ test('the real agent loop reads tools, proposes a plan, receives tool results an
  const s=createAgentStore(':memory:');s.setPolicy('one',{memoryEnabled:true,profileEnabled:false});const requests=[],events=[];let n=0;
  const requestModel=async(messages)=>{requests.push(structuredClone(messages));return ++n===1?model({tool_calls:[call('search_memory',{query:'英语学习专注时长'}),call('get_progress',{})]}):n===2?model({tool_calls:[call('create_goal',{title:'英语学习',steps:['复习单词'],focusMinutes:25})]}):model({content:'按你喜欢的25分钟安排好了，确认卡片后才会生效。'});};
  try{
-  const x=validateTurn(input()),run=s.run('one',x.turnId,x.source);await runAgent({store:s,space:'one',run,input:x,requestModel,signal:new AbortController().signal,emit:e=>events.push(e)});
+  const x=validateTurn(input());for(const memory of x.context.memories)s.grant('one',memory);const run=s.run('one',x.turnId,x.source);await runAgent({store:s,space:'one',run,input:x,requestModel,signal:new AbortController().signal,emit:e=>events.push(e)});
   assert.equal(n,3);assert(!requests[0][0].content.includes('奶糖'));assert(requests[1].some(m=>m.role==='tool'&&m.content.includes('25分钟')));
   assert.equal(s.snapshot('one').items.length,0);assert.equal(s.snapshot('one').actions.length,1);assert(events.some(e=>e.type==='done'));
   await runAgent({store:s,space:'one',run:s.run('one',x.turnId,x.source),input:x,requestModel:()=>{throw Error('must not call twice');},signal:new AbortController().signal,emit:()=>{}});
@@ -140,4 +140,133 @@ test('HTTP agent returns actual provider output and does not expose its server c
  const f=await httpFixture(t,'test-server-credential'),client=await f.client();const r=await client('/agent/runs','POST',input());assert.equal(r.status,200);
  const events=(await r.text()).trim().split('\n').map(x=>JSON.parse(x));assert(events.some(e=>e.type==='answer'&&e.text==='真实HTTP传输测试'));assert(!JSON.stringify(events).includes('test-server-credential'));
  await client('/agent/runs','POST',input());assert.equal(f.requests(),1);
+});
+test('another conversation cannot send pending card data during any model step',async()=>{
+ const store=createAgentStore(':memory:');
+ try{
+  store.setPolicy('one',{memoryEnabled:true,profileEnabled:false});
+  const original=store.run('one','private',source);
+  const action=store.propose('one',original.id,'remember_preference',{text:'private-marker-A'});
+  const turn=input({source:{...source,conversationId:'other'}});
+  const requests=[];
+  await runAgent({store,space:'one',run:store.run('one',turn.turnId,turn.source),input:turn,signal:new AbortController().signal,emit:()=>{},requestModel:async messages=>{
+   requests.push(JSON.stringify(messages));
+   return requests.length===1?model({tool_calls:[call('get_progress',{})]}):model({content:'完成'});
+  }});
+  assert.equal(requests.length,2);
+  assert.ok(requests.every(payload=>!payload.includes('private-marker-A')));
+  assert.equal(store.confirm('one',action.id,{localMemorySaved:true}).action.status,'executed');
+ }finally{store.close();}
+});
+test('knowledge versions, sharing, scope, citations and physical FTS deletion',async()=>{
+ const s=createAgentStore(':memory:');try{
+  s.space('a');s.space('b');
+  const k=s.knowledge,d=await k.put('a','学习.md',Buffer.from('# 星光\n火星观测手册'),false);
+  assert.equal(k.search('a','火星',true).length,0);
+  const [local]=k.search('a','火星');assert.equal(local.heading,'星光');assert.equal(local.page,1);
+  k.share('a',d.id,true);assert.equal(k.search('a','火星',true)[0].id,local.id);
+  assert.deepEqual(k.search('b','火星'),[]);assert.throws(()=>k.chunk('b',local.id));
+  await assert.rejects(k.put('a','失败.pdf',Buffer.from('bad'),true,d.id));assert.equal(k.chunk('a',local.id).version,1);
+  await k.put('a','更新.txt',Buffer.from('候鸟迁徙'),true,d.id);
+  assert.throws(()=>k.chunk('a',local.id));assert.deepEqual(k.search('a','火星'),[]);
+  assert.equal(k.search('a','候鸟')[0].version,2);k.remove('a',d.id);assert.deepEqual(k.search('a','候鸟'),[]);
+ }finally{s.close();}
+});
+test('grant requires matching content and character; deleting source revokes the grant',()=>{
+ const s=createAgentStore(':memory:');try{
+  const memory={id:'m',text:'月球',source};s.setPolicy('a',{memoryEnabled:true,profileEnabled:false});s.grant('a',memory);
+  assert.equal(s.authorized('a',source.characterId,[memory]).length,1);
+  assert.deepEqual(s.authorized('a','other',[memory]),[]);assert.deepEqual(s.authorized('a',source.characterId,[{...memory,text:'changed'}]),[]);
+  s.removeConversation('a',source);assert.deepEqual(s.authorized('a',source.characterId,[memory]),[]);
+ }finally{s.close();}
+});
+test('manual idempotency rejects changed payload and trace is private and metadata-only',()=>{
+ const s=createAgentStore(':memory:');try{
+  s.manual('a','k','create_goal',{title:'private title'});assert.throws(()=>s.manual('a','k','create_goal',{title:'changed'}),e=>e.status===409);
+  const r=s.run('a','turn',source);s.record(r.id,'model','completed',20,null);
+  assert.equal(s.trace('a',r.id).events[0].tokens,null);assert.throws(()=>s.trace('b',r.id));
+  s.removeConversation('a',source);assert.throws(()=>s.trace('a',r.id));
+ }finally{s.close();}
+});
+test('text PDF can be imported and its page citation opened',async()=>{
+ const stream='BT /F1 12 Tf 20 80 Td (Lighthouse astronomy) Tj ET';
+ const objects=['<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids [3 0 R] /Count 1 >>','<< /Type /Page /Parent 2 0 R /MediaBox [0 0 200 200] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>','<< /Length '+stream.length+' >>\nstream\n'+stream+'\nendstream'];
+ let pdf='%PDF-1.4\n';const offsets=[0];
+ objects.forEach((o,i)=>{offsets.push(pdf.length);pdf+=(i+1)+' 0 obj\n'+o+'\nendobj\n';});
+ const xref=pdf.length;pdf+='xref\n0 6\n0000000000 65535 f \n'+offsets.slice(1).map(o=>String(o).padStart(10,'0')+' 00000 n \n').join('')+'trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF';
+ const s=createAgentStore(':memory:');try{
+  s.space('one');await s.knowledge.put('one','field.pdf',Buffer.from(pdf),true);
+  const hit=s.knowledge.search('one','astronomy',true)[0];assert.equal(hit.page,1);assert.match(s.knowledge.chunk('one',hit.id).text,/Lighthouse/);
+ }finally{s.close();}
+});
+test('legacy database upgrade requires explicit action and produces an independently readable backup',async()=>{
+ const {DatabaseSync}=await import('node:sqlite');
+ const {upgrade}=await import('./migration.mjs');
+ const {readdirSync}=await import('node:fs');
+ const dir=mkdtempSync(join(tmpdir(),'xinyu-migrate-')),path=join(dir,'old.db');
+ try{
+  const db=new DatabaseSync(path);db.exec("CREATE TABLE spaces(id TEXT PRIMARY KEY,memory_enabled INTEGER,profile_enabled INTEGER,policy_version INTEGER,imported INTEGER); INSERT INTO spaces VALUES('legacy',1,0,2,1)");
+  assert.throws(()=>upgrade(db,path),/停服/);upgrade(db,path,true);upgrade(db,path,true);db.close();
+  const backup=join(dir,readdirSync(dir).find(p=>p.includes('pre-agent2'))),copy=new DatabaseSync(backup,{readOnly:true});
+  assert.equal(copy.prepare('PRAGMA user_version').get().user_version,0);assert.equal(copy.prepare('SELECT policy_version FROM spaces').get().policy_version,2);copy.close();
+  const s=createAgentStore(path);assert.equal(s.policy('legacy').version,2);s.close();
+ }finally{assert(resolve(dir).startsWith(resolve(tmpdir())+sep+'xinyu-migrate-'));rmSync(dir,{recursive:true,force:true});}
+});
+test('sqlite-vec exact scoped distance and deletion work on this platform',async()=>{
+ const {DatabaseSync}=await import('node:sqlite'),{getLoadablePath}=await import('sqlite-vec');
+ const db=new DatabaseSync(':memory:',{allowExtension:true});try{
+  db.loadExtension(getLoadablePath());db.enableLoadExtension(false);
+  db.exec("CREATE TABLE vectors(space TEXT,id INTEGER,embedding BLOB,PRIMARY KEY(space,id)); INSERT INTO vectors VALUES('a',1,vec_f32('[0,1]')),('b',2,vec_f32('[0,0]'))");
+  const find=db.prepare("SELECT id FROM vectors WHERE space=? ORDER BY vec_distance_L2(embedding,vec_f32('[0,0]')) LIMIT 1");
+  assert.equal(find.get('a').id,1);db.exec("DELETE FROM vectors WHERE space='a'");assert.equal(find.get('a'),undefined);assert.equal(find.get('b').id,2);
+ }finally{db.close();}
+});
+test('paired backup restores the browser-space fixture and SQLite to an independent directory',async()=>{
+ const {execFileSync}=await import('node:child_process');
+ const {readFileSync,writeFileSync,mkdirSync}=await import('node:fs');
+ const dir=mkdtempSync(join(tmpdir(),'xinyu-pair-')),database=join(dir,'source.db'),profile=join(dir,'profile'),bundle=join(dir,'bundle'),restored=join(dir,'restored');
+ const cli=new URL('./paired-backup.mjs',import.meta.url),{fileURLToPath}=await import('node:url');
+ const run=(...args)=>execFileSync(process.execPath,[fileURLToPath(cli),...args],{stdio:'pipe'});
+ try{
+  const s=createAgentStore(database);s.manual('cookie-space','cmd','create_goal',{title:'旧约定'});s.close();
+  mkdirSync(profile);writeFileSync(join(profile,'origin-fixture'),'cookie-space');
+  run('backup',database,profile,bundle);run('restore',bundle,restored);
+  const copy=createAgentStore(join(restored,'agent.sqlite3'));
+  try{assert.equal(copy.snapshot(readFileSync(join(restored,'browser','origin-fixture'),'utf8')).items[0].title,'旧约定');}finally{copy.close();}
+  writeFileSync(join(bundle,'browser','origin-fixture'),'changed');
+  assert.throws(()=>run('restore',bundle,join(dir,'corrupt')));
+ }finally{assert(resolve(dir).startsWith(resolve(tmpdir())+sep+'xinyu-pair-'));rmSync(dir,{recursive:true,force:true});}
+});
+test('restart resumes durable proposal over HTTP, then racing confirmations create one reminder',async()=>{
+ const {createHash}=await import('node:crypto');
+ const dir=mkdtempSync(join(tmpdir(),'xinyu-resume-')),path=join(dir,'agent.db'),cookie='a'.repeat(64);
+ const space=createHash('sha256').update(cookie).digest('hex'),x=input();let server,gateway,modelCalls=0;
+ try{
+  const s=createAgentStore(path),run=s.run(space,x.turnId,x.source,x.messages.at(-1).content);
+  const proposal=s.propose(space,run.id,'manage_reminder',{operation:'create',title:'喝水',at:new Date(Date.now()+600000).toISOString()});s.close();
+  gateway=createGateway({XINYU_AGENT_DB:path,XINYU_API_KEY:'fixture'},async()=>{modelCalls++;throw Error('unexpected model request');});
+  const app=express();app.use('/xinyu-api',gateway);server=app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));
+  const origin='http://127.0.0.1:'+server.address().port,session=(await fetch(origin+'/xinyu-api/health')).headers.getSetCookie()[0].split(';')[0];
+  const post=(path,body)=>fetch(origin+'/xinyu-api/agent'+path,{method:'POST',headers:{Origin:origin,Cookie:session+'; xinyu_agent_space='+cookie,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const resumed=await post('/runs/'+run.id+'/resume',x);assert.equal(resumed.status,200);assert.match(await resumed.text(),/from_proposal|已经生成安排/);
+  const replies=await Promise.all([post('/actions/'+proposal.id+'/confirm',{}),post('/actions/'+proposal.id+'/confirm',{})]);
+  for(const r of replies){assert.equal(r.status,200);assert.equal((await r.json()).snapshot.items.length,1);}
+  assert.equal(modelCalls,0);
+  assert.equal((await post('/runs',{...x,messages:[{role:'user',content:'changed'}]})).status,409);
+ }finally{await gateway?.locals.closeAgent();if(server){server.closeAllConnections();await new Promise(r=>server.close(r));}assert(resolve(dir).startsWith(resolve(tmpdir())+sep+'xinyu-resume-'));rmSync(dir,{recursive:true,force:true});}
+});
+test('semantic search only reads shared, active and in-space vectors after awaiting embedding',async()=>{
+ let onQuery;const encode=async(texts,query)=>{
+  if(query)onQuery?.();
+  return {model:'fixture',vectors:texts.map(()=>new Float32Array([1,0]))};
+ };
+ const s=createAgentStore(':memory:',Date.now,encode);
+ try{
+  s.space('one');s.space('two');
+  const k=s.knowledge,d=await k.put('one','语义.txt',Buffer.from('旧标题'),true);
+  await k.put('two','别人的.txt',Buffer.from('旧标题'),true);
+  assert.equal((await k.retrieve('one','同义词',true))[0].name,'语义.txt');
+  onQuery=()=>k.share('one',d.id,false);assert.deepEqual(await k.retrieve('one','同义词',true),[]);
+  onQuery=undefined;k.remove('one',d.id);assert.deepEqual(await k.retrieve('one','同义词'),[]);
+ }finally{s.close();}
 });

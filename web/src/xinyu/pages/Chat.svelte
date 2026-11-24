@@ -1,4 +1,5 @@
 <script lang="ts">
+  import {reviewMemory,agentJson} from '../agent.svelte';
   import PixelRoom from '../components/PixelRoom.svelte';
   import CompanionPortrait from '../components/CompanionPortrait.svelte';
   import PixelIcon from '../components/PixelIcon.svelte';
@@ -24,26 +25,40 @@
   let followMessages=true;
   function trackScroll(event:Event){const el=event.currentTarget as HTMLElement;followMessages=el.scrollHeight-el.clientHeight-el.scrollTop<12;}
   let char=$derived(DBState.db.characters[$selectedCharID]);let chat=$derived(char?.chats[char.chatPage]);
+  let checkpoint=$derived(agentState.resumable.find(r=>r.conversation_id===chat?.id&&r.character_id===char?.chaId&&chat?.message.at(-1)?.chatId===r.turn_id));
+  let lastRun=$derived(agentState.resumable.find(r=>r.conversation_id===chat?.id&&r.character_id===char?.chaId&&r.turn_id===chat?.message.findLast(m=>m.role==='user')?.chatId));
   let currentRound=$derived.by(()=>{const messages=chat?.message.filter(m=>!m.isComment)||[];const index=messages.findLastIndex(m=>m.role==='user');return index<0?messages.slice(-1):messages.slice(index);});
   let actionSignature=$derived(agentState.actions.filter(a=>a.status==='pending'&&a.conversation_id===chat?.id&&a.character_id===char?.chaId).map(a=>a.id+':'+a.status).join('|'));
   let pendingCount=$derived(actionSignature?actionSignature.split('|').length:0);
   let references=$derived(companion.data.preferences.memoryEnabled?companion.data.memories.filter(m=>agentState.memoryIds.includes(m.id)):[]);
   let currentAgentTurn=$derived(agentState.source.characterId===char?.chaId&&agentState.source.conversationId===chat?.id);
+  let traceId=$derived(currentAgentTurn&&agentState.runId?agentState.runId:lastRun?.id);
   function showPending(){const list=messagesElement,card=list?.querySelector<HTMLElement>('.agent-action-card');if(list&&card){followMessages=false;list.scrollTo({top:list.scrollTop+card.getBoundingClientRect().top-list.getBoundingClientRect().top,behavior:companion.data.preferences.reduceMotion?'auto':'smooth'});}}
   $effect(()=>{const signature=actionSignature;if(signature&&followMessages)void tick().then(()=>messagesElement?.scrollTo({top:messagesElement.scrollHeight}));});
   let speaking=$derived(chatState.busy&&chat?.message.at(-1)?.role==='char'&&!!chat?.message.at(-1)?.data);
   const markdown=new MarkdownIt({html:false,breaks:true,linkify:false});
+  let sourceDetail=$state(''),traceDetail=$state('');
+  async function openChunk(id:string){
+   try{const hit=await agentJson('/chunks/'+id);sourceDetail=hit.name+' · 第 '+hit.page+' 页 '+hit.heading+'\n'+hit.text;}catch(e){sourceDetail=String(e);}
+  }
+  async function openTrace(){
+   try{const trace=await agentJson('/traces/'+traceId);traceDetail=trace.events.map(e=>[e.kind,e.status,e.duration_ms==null?'':e.duration_ms+' ms',e.kind==='model'&&e.status==='completed'?(e.tokens??'未知')+' tokens':''].filter(Boolean).join(' · ')).join('\n');}catch(e){traceDetail=String(e);}
+  }
+  $effect(()=>{chat?.id;sourceDetail='';traceDetail='';});
   function rendered(text:string,role:string){return DOMPurify.sanitize(markdown.render(role==='char'?visibleReply(text):String(text||'')));}
   function suggest(text:string){draft=text;void tick().then(()=>document.querySelector<HTMLTextAreaElement>('#message-input')?.focus());}
   async function send(){const value=draft;if(!value.trim())return;draft='';followMessages=true;try{await sendMessage(value);}catch(e){notify(String(e));}await tick();if(followMessages)messagesElement?.scrollTo({top:messagesElement.scrollHeight,behavior:companion.data.preferences.reduceMotion||matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
-  function remember(text:string,messageId:string){try{updateData(data=>addMemory(data,text,'important',true,sourceOf(messageId)));syncPersonalLore();notify('这段话已保存，可在记忆页查看和删除。');}catch(e){notify(String(e).replace(/^Error: /,''));}}
+  function remember(text:string,messageId:string){try{updateData(data=>addMemory(data,text,'important',true,sourceOf(messageId)));void reviewMemory(companion.data.memories[0]).then(()=>syncPersonalLore()).catch(e=>notify(String(e)));notify('这段话已保存，可在记忆页查看和删除。');}catch(e){notify(String(e).replace(/^Error: /,''));}}
   $effect(()=>{chat?.id;followMessages=true;});
   $effect(()=>{const count=chat?.message.length;const text=chat?.message.at(-1)?.data;const list=messagesElement;if(count)void tick().then(()=>{if(list&&followMessages)list.scrollTo({top:list.scrollHeight});});});
   $effect(()=>{const list=messagesElement;if(!list)return;const resize=new ResizeObserver(()=>{if(followMessages)list.scrollTo({top:list.scrollHeight});});resize.observe(list);return()=>resize.disconnect();});
 </script>
 <div class="chat-heading xy-page-heading"><div><h1>说给小屿听</h1><p>{view==='theatre'?'一间亮着灯的小屋，和一段属于你的对话。':'像坐在同一张桌边，有话可以慢慢说。'}</p></div><div class="room-page-actions"><div class="chat-view-switch xy-tabs" aria-label="陪伴模式"><button type="button" class:chosen={view==='table'} aria-pressed={view==='table'} onclick={()=>changeView('table')}>同桌陪伴</button><button type="button" class:chosen={view==='theatre'} aria-pressed={view==='theatre'} onclick={()=>changeView('theatre')}>沉浸剧场</button></div><button type="button" class="xy-btn" aria-expanded={listOpen} onclick={()=>listOpen=!listOpen}>对话与功能</button><a class="text-link" href="#/">回到小岛</a></div></div>
+{#if checkpoint&&!chatState.busy&&companion.data.preferences.agentMode!==false}<button class="xy-btn" onclick={()=>{if(checkpoint){chatState.failedMessageId=checkpoint.turn_id;void sendMessage('',true);}}}>{checkpoint.status==='completed'?'取回上次答复':'继续上次安排（可能重新调用模型）'}</button>{/if}
+{#if traceId}<button class="text-button" onclick={openTrace}>查看本轮执行记录</button>{/if}
+{#if sourceDetail||traceDetail}<section class="xy-panel"><pre style="white-space:pre-wrap">{sourceDetail||traceDetail}</pre><button class="text-button" onclick={()=>{sourceDetail='';traceDetail='';}}>收起</button></section>{/if}
 {#snippet messageCard(message,index)}
- <article class="message-row" class:from-user={message.role==='user'}>{#if message.role==='user'}<PixelIcon src='/xinyu/art/nav_9.png' size={24}/>{:else}<span class="message-portrait"><CompanionPortrait tone={companion.data.preferences.avatar}/></span>{/if}<div class="message-wrap"><span class="message-name">{message.role==='user'?(companion.data.preferences.name||'我'):(DBState.db.characters.find(item=>item.chaId===message.saying)?.name||char?.name||'小屿')}{#if message.time}<time>{new Date(message.time).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})}</time>{/if}</span><div class="message-bubble">{@html rendered(message.data,message.role)}</div>{#if companion.data.preferences.memoryEnabled}<button class="remember-link" onclick={()=>remember(message.role==='char'?visibleReply(message.data):message.data,message.chatId)}>保存为记忆</button>{/if}</div></article>
+ <article class="message-row" class:from-user={message.role==='user'}>{#if message.role==='user'}<PixelIcon src='/xinyu/art/nav_9.png' size={24}/>{:else}<span class="message-portrait"><CompanionPortrait tone={companion.data.preferences.avatar}/></span>{/if}<div class="message-wrap"><span class="message-name">{message.role==='user'?(companion.data.preferences.name||'我'):(DBState.db.characters.find(item=>item.chaId===message.saying)?.name||char?.name||'小屿')}{#if message.time}<time>{new Date(message.time).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})}</time>{/if}</span><div class="message-bubble">{@html rendered(message.data,message.role)}{#if message.role==='char'}{#each [...new Set(Array.from(String(message.data).matchAll(/\[([a-f0-9-]{36})\]/gi),match=>match[1]))] as id}<button class="text-button" onclick={()=>openChunk(id)}>查看引用片段</button>{/each}{/if}</div>{#if companion.data.preferences.memoryEnabled}<button class="remember-link" onclick={()=>remember(message.role==='char'?visibleReply(message.data):message.data,message.chatId)}>保存为记忆</button>{/if}</div></article>
 {/snippet}
 <div class="xy-chat-layout companion-layout" class:list-open={listOpen} class:room-arrival={arrived} data-chat-view={view}>
  {#if listOpen}<aside class="conversation-list xy-panel"><div class="panel-title"><h2>我的对话</h2><button class="icon-btn" aria-label="新建对话" onclick={newConversation} disabled={chatState.busy}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><label class="sr-only" for="chat-character">陪伴角色</label><select id="chat-character" value={$selectedCharID} onchange={(e)=>selectCharacter(Number(e.currentTarget.value))} disabled={chatState.busy}>{#each DBState.db.characters as character,index}<option value={index}>{character.name||'未命名角色'}{character.type==='group'?' · 群聊':''}</option>{/each}</select>

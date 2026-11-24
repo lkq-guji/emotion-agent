@@ -1,3 +1,6 @@
+import {validateToolInput} from './tool-registry.mjs';
+import {upgrade} from './migration.mjs';
+import {createKnowledge} from './knowledge.mjs';
 import {DatabaseSync} from 'node:sqlite';
 import {mkdirSync} from 'node:fs';
 import {dirname,resolve} from 'node:path';
@@ -18,7 +21,12 @@ function at(value,now){
 }
 export function validateAction(tool,input,now=Date.now()){
   if(!input||typeof input!=='object'||Array.isArray(input))throw new AgentError('操作参数应为对象。');
+  try{validateToolInput(tool,tool==='remember_preference'?{category:'interest',...input}:input);}catch(error){throw new AgentError(error.message);}
   const x=input;
+  if(tool==='manage_focus'||tool==='manage_reminder'){
+    const allowed={create:['title','at','goalId'],start:['title','minutes','goalId'],reschedule:['id','at'],complete:['id'],cancel:['id']}[x.operation]||[];
+    if(Object.keys(x).some(k=>k!=='operation'&&!allowed.includes(k)))throw new AgentError('当前操作包含无关参数。');
+  }
   if(tool==='remember_preference'){
     const category=x.category||'interest';if(!['daily','interest','goal','important'].includes(category))throw new AgentError('记忆分类不正确。');
     return {text:text(x.text,'记忆内容',2000),category};
@@ -45,9 +53,10 @@ export function validateAction(tool,input,now=Date.now()){
 }
 const digest=value=>createHash('sha256').update(value).digest('hex');
 const parse=row=>row?{...row,args:row.args?JSON.parse(row.args):undefined,details:row.details?JSON.parse(row.details):undefined}:null;
-export function createAgentStore(filename,now=Date.now){
+export function createAgentStore(filename,now=Date.now,encode=null){
   if(filename!==':memory:')mkdirSync(dirname(resolve(filename)),{recursive:true});
   const db=new DatabaseSync(filename);db.exec('PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;');
+  try{upgrade(db,filename);}catch(error){db.close();throw error;}
   if(filename!==':memory:')db.exec('PRAGMA journal_mode=WAL;');
   db.exec([
     'CREATE TABLE IF NOT EXISTS spaces(id TEXT PRIMARY KEY, memory_enabled INTEGER NOT NULL DEFAULT 0, profile_enabled INTEGER NOT NULL DEFAULT 0, policy_version INTEGER NOT NULL DEFAULT 0, imported INTEGER NOT NULL DEFAULT 0)',
@@ -72,8 +81,10 @@ export function createAgentStore(filename,now=Date.now){
     });
     return {...policy(id),changed};
   }
+  let nextTraceCleanup=0;
   function tick(){
     const time=now();
+    if(time>=nextTraceCleanup){db.prepare('DELETE FROM trace_events WHERE at<?').run(time-7*86400000);nextTraceCleanup=time+3600000;}
     db.prepare('UPDATE items SET status=\'due\',updated_at=? WHERE kind IN (\'reminder\',\'focus\') AND status IN (\'scheduled\',\'running\') AND due_at<=?').run(time,time);
     db.prepare('UPDATE actions SET status=\'expired\',args=\'{}\',result=\'确认已过期，请重新安排\' WHERE status=\'pending\' AND expires_at<=?').run(time);
   }
@@ -82,6 +93,7 @@ export function createAgentStore(filename,now=Date.now){
     // shortcut: first version returns 200 recent items; add pagination when personal task history grows.
     return {items:db.prepare('SELECT * FROM items WHERE space=? ORDER BY CASE WHEN status=\'due\' THEN 0 WHEN status IN (\'active\',\'scheduled\',\'running\') THEN 1 ELSE 2 END,created_at DESC,id LIMIT 200').all(id).map(parse),
       actions:db.prepare('SELECT actions.*,runs.character_id,runs.conversation_id,runs.turn_id AS message_id FROM actions LEFT JOIN runs ON actions.run_id=runs.id WHERE actions.space=? ORDER BY CASE WHEN actions.status=\'pending\' THEN 0 ELSE 1 END,actions.created_at DESC,actions.id LIMIT 80').all(id).map(parse),
+      resumable:db.prepare("SELECT id,turn_id,conversation_id,character_id,status FROM runs WHERE space=? AND status IN ('interrupted','failed','completed') ORDER BY updated_at DESC LIMIT 50").all(id),
       imported:!!space(id).imported,serverTime:now()};
   }
   function importGoals(id,goals){
@@ -91,12 +103,16 @@ export function createAgentStore(filename,now=Date.now){
     transaction(()=>{for(const g of valid)db.prepare('INSERT OR IGNORE INTO items(id,space,kind,title,status,details,created_at,updated_at) VALUES(?,?,\'goal\',?,?,?, ?,?)').run(digest(id+':legacy:'+g.id),id,g.title,g.status||(g.completedAt?'completed':'active'),JSON.stringify({steps:[],legacyId:g.id,...(g.completedAt?{completedAt:g.completedAt}:{})}),g.at,g.completedAt||g.at);db.prepare('UPDATE spaces SET imported=1 WHERE id=?').run(id);});
     return snapshot(id);
   }
-  function run(id,turnId,source){
+  function run(id,turnId,source,question){
     space(id);let row=db.prepare('SELECT * FROM runs WHERE space=? AND turn_id=?').get(id,turnId);
+    const fingerprint=typeof question==='string'?digest(id+':'+question):null;
+    const receipt=row&&db.prepare('SELECT request_hash FROM run_requests WHERE run_id=?').get(row.id);
+    if(receipt&&fingerprint!==receipt.request_hash)throw new AgentError('消息编号已用于不同内容。',409);
     if(row?.status==='running')throw new AgentError('这条消息正在处理中，请等待或停止。',409);
     if(row&&(row.character_id!==source.characterId||row.conversation_id!==source.conversationId))throw new AgentError('消息来源不一致。',409);
     if(!row){const time=now();db.prepare('INSERT INTO runs(id,space,turn_id,character_id,conversation_id,status,created_at,updated_at) VALUES(?,?,?,?,?,\'running\',?,?)').run(randomUUID(),id,turnId,source.characterId,source.conversationId,time,time);row=db.prepare('SELECT * FROM runs WHERE space=? AND turn_id=?').get(id,turnId);}
     else if(row.status!=='completed')db.prepare('UPDATE runs SET status=\'running\',updated_at=? WHERE id=?').run(now(),row.id);
+    if(fingerprint&&!receipt)db.prepare('INSERT INTO run_requests VALUES(?,?)').run(row.id,fingerprint);
     return row;
   }
   function finishRun(id,status,answer='',tokens=0){db.prepare('UPDATE runs SET status=?,answer=?,tokens=?,updated_at=? WHERE id=?').run(status,answer,tokens,now(),id);}
@@ -126,7 +142,13 @@ export function createAgentStore(filename,now=Date.now){
     return addItem(scope,'focus',args.title,'running',{minutes:args.minutes,startedAt:now()},now()+args.minutes*60000,goalId||args.goalId,runId);
   }
   function confirm(scope,id,{overrides,localMemorySaved}={}){
-    tick();const old=getAction(id,scope);if(old.status==='executed')return {action:old,snapshot:snapshot(scope)};
+    tick();const old=getAction(id,scope);
+    const fingerprint=digest(JSON.stringify(Object.entries(overrides||{}).sort(([a],[b])=>a.localeCompare(b))));
+    if(old.status==='executed'){
+      const receipt=db.prepare('SELECT payload_hash FROM confirmation_receipts WHERE action_id=?').get(id);
+      if(receipt&&receipt.payload_hash!==fingerprint)throw new AgentError('确认内容与原回执不一致。',409);
+      return {action:old,snapshot:snapshot(scope)};
+    }
     if(old.status!=='pending')throw new AgentError('这项操作已经结束，请重新安排。',409);
     if(overrides&&Object.keys(overrides).some(k=>!['remindAt','at'].includes(k)))throw new AgentError('只能在确认时调整提醒时间。');
     const args=validateAction(old.tool,{...old.args,...overrides},now());
@@ -149,6 +171,12 @@ export function createAgentStore(filename,now=Date.now){
         if(args.operation==='create')addItem(scope,'reminder',args.title,'scheduled',{},Date.parse(args.at),args.goalId,old.run_id);
         else {const r=item(scope,args.id,'reminder');db.prepare('UPDATE items SET status=?,due_at=COALESCE(?,due_at),updated_at=? WHERE id=?').run({reschedule:'scheduled',complete:'done',cancel:'cancelled'}[args.operation],args.at?Date.parse(args.at):null,now(),r.id);}
       }
+      if(old.tool==='remember_preference'){
+        const source=db.prepare('SELECT character_id,conversation_id FROM runs WHERE id=?').get(old.run_id);
+        grant(scope,{id,text:args.text,source:{characterId:source?.character_id,conversationId:source?.conversation_id}},true);
+      }
+      db.prepare('INSERT INTO confirmation_receipts VALUES(?,?)').run(id,fingerprint);
+      if(old.run_id)record(old.run_id,old.tool,'confirmed');
       db.prepare('UPDATE actions SET status=\'executed\',args=\'{}\',result=? WHERE id=?').run(old.tool==='remember_preference'?'已保存到本机记忆':'已执行，任务状态已保存',id);
     });
     return {action:getAction(id,scope),snapshot:snapshot(scope)};
@@ -156,17 +184,38 @@ export function createAgentStore(filename,now=Date.now){
   function reject(scope,id){const a=getAction(id,scope);if(a.status==='executed')throw new AgentError('操作已执行，可以在任务列表修改或取消。',409);if(a.status==='pending')db.prepare('UPDATE actions SET status=\'rejected\',args=\'{}\',result=\'你已取消这项安排\' WHERE id=?').run(id);return snapshot(scope);}
   function manual(scope,commandId,tool,args){
     if(tool==='remember_preference')throw new AgentError('记忆应在浏览器逐条确认。');
+    const fingerprint=digest(JSON.stringify([tool,Object.entries(args||{}).sort(([a],[b])=>a.localeCompare(b))]));
     const existing=db.prepare('SELECT * FROM actions WHERE id=? AND space=?').get(digest(scope+':manual:'+commandId),scope);
-    if(existing){if(existing.tool!==tool)throw new AgentError('这个操作编号已用于其他安排。',409);return confirm(scope,existing.id);}
+    if(existing){const receipt=db.prepare('SELECT payload_hash FROM command_receipts WHERE action_id=?').get(existing.id);if(!receipt||receipt.payload_hash!==fingerprint||existing.tool!==tool)throw new AgentError('这个操作编号已用于其他安排。',409);return confirm(scope,existing.id);}
     // A manual form click is the user's explicit action; model-created proposals never call this route.
-    const a=propose(scope,null,tool,args,commandId);return confirm(scope,a.id);
+    const a=transaction(()=>{const proposed=propose(scope,null,tool,args,commandId);db.prepare('INSERT INTO command_receipts VALUES(?,?)').run(proposed.id,fingerprint);return proposed;});return confirm(scope,a.id);
   }
   function removeItem(scope,id){
     const row=db.prepare('SELECT * FROM items WHERE space=? AND id=?').get(scope,id);if(!row)return snapshot(scope);
     db.prepare('DELETE FROM items WHERE space=? AND id=?').run(scope,id);return snapshot(scope);
   }
-  function removeConversation(scope,source){db.prepare('DELETE FROM runs WHERE space=? AND character_id=? AND conversation_id=?').run(scope,source.characterId,source.conversationId);return snapshot(scope);}
-  function forgetMemory(scope,id){db.prepare('DELETE FROM actions WHERE space=? AND id=? AND tool=\'remember_preference\'').run(scope,id);}
+  function removeConversation(scope,source){db.prepare('DELETE FROM memory_grants WHERE space=? AND character_id=? AND conversation_id=?').run(scope,source.characterId,source.conversationId);db.prepare('DELETE FROM runs WHERE space=? AND character_id=? AND conversation_id=?').run(scope,source.characterId,source.conversationId);return snapshot(scope);}
+  function forgetMemory(scope,id){db.prepare('DELETE FROM memory_grants WHERE space=? AND id=?').run(scope,id);db.prepare('DELETE FROM actions WHERE space=? AND id=? AND tool=\'remember_preference\'').run(scope,id);}
   function clear(scope){db.prepare('DELETE FROM spaces WHERE id=?').run(scope);}
-  return {space,policy,setPolicy,tick,snapshot,importGoals,run,finishRun,propose,confirm,reject,manual,removeItem,removeConversation,forgetMemory,clear,getAction,close:()=>db.close()};
+  function grant(scope,m,fromConfirmation=false){
+    if(!fromConfirmation&&db.prepare("SELECT 1 FROM actions WHERE space=? AND id=? AND status!='executed'").get(scope,m?.id||''))throw new AgentError('请先处理原记忆确认卡',409);
+    if(!policy(scope).memoryEnabled)throw new AgentError('请先开启长期记忆',403);
+    const id=identifier(m.id),body=text(m.text,'记忆',2000),char=m.source?.characterId||'',chat=m.source?.conversationId||'';
+    if(char)identifier(char);if(chat)identifier(chat);
+    db.prepare('INSERT OR REPLACE INTO memory_grants(space,id,digest,character_id,conversation_id) VALUES(?,?,?,?,?)').run(scope,id,digest(scope+':'+body),char,chat);
+  }
+  function authorized(scope,character,memories){
+    const get=db.prepare('SELECT * FROM memory_grants WHERE space=? AND id=?');
+    return memories.filter(m=>{const g=get.get(scope,m.id);return g&&(!g.character_id||g.character_id===character)&&g.digest===digest(scope+':'+m.text);}).map(({id,text,at})=>({id,text,at,consented:true}));
+  }
+  function record(runId,kind,status,duration=null,tokens=null){
+    db.prepare('INSERT INTO trace_events(run_id,kind,status,duration_ms,tokens,at) SELECT id,?,?,?,?,? FROM runs WHERE id=?').run(kind,status,duration,tokens,now(),runId);
+  }
+  function trace(scope,id){
+    const run=db.prepare('SELECT id,status,turn_id,conversation_id,character_id FROM runs WHERE id=? AND space=?').get(id,scope);
+    if(!run)throw new AgentError('运行记录不存在',404);
+    return {run,events:db.prepare('SELECT seq,kind,status,duration_ms,tokens,at FROM trace_events WHERE run_id=? ORDER BY seq').all(id)};
+  }
+  const runActions=(scope,id)=>db.prepare("SELECT id,status FROM actions WHERE space=? AND run_id=?").all(scope,id);
+  return {runActions,grant,authorized,knowledge:createKnowledge(db,transaction,encode),record,trace,space,policy,setPolicy,tick,snapshot,importGoals,run,finishRun,propose,confirm,reject,manual,removeItem,removeConversation,forgetMemory,clear,getAction,close:()=>db.close()};
 }

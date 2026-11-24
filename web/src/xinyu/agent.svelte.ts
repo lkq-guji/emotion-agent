@@ -13,8 +13,9 @@ export interface AgentAction {
  id:string;run_id:string|null;tool:string;args:{title?:string;text?:string;category?:Memory['category'];steps?:string[];focusMinutes?:number;remindAt?:string;at?:string;minutes?:number;operation?:string;id?:string;status?:string;memoryId?:string};
  status:string;result:string;created_at:number;character_id?:string;conversation_id?:string;message_id?:string;
 }
-interface Snapshot {items:AgentItem[];actions:AgentAction[];imported:boolean;serverTime:number}
-export const agentState=$state({available:false,loaded:false,ready:false,busy:false,phase:'',error:'',updating:'',items:[] as AgentItem[],actions:[] as AgentAction[],events:[] as {name?:string;summary:string;phase?:string}[],memoryIds:[] as string[],tokens:0,runId:'',source:{characterId:'',conversationId:''},serverTime:0});
+interface Recovery {status:string;id:string;turn_id:string;conversation_id:string;character_id:string}
+interface Snapshot {resumable?:Recovery[];items:AgentItem[];actions:AgentAction[];imported:boolean;serverTime:number}
+export const agentState=$state({available:false,loaded:false,ready:false,busy:false,phase:'',error:'',updating:'',resumable:[] as Recovery[],items:[] as AgentItem[],actions:[] as AgentAction[],events:[] as {name?:string;summary:string;phase?:string}[],memoryIds:[] as string[],tokens:0,runId:'',turnId:'',source:{characterId:'',conversationId:''},serverTime:0});
 let connecting:Promise<void>|undefined,policyQueue:Promise<void>=Promise.resolve(),sentPolicy='',runController:AbortController;
 const usedKey='xinyu.agent.used';
 const isUsed=()=>agentState.available||localStorage.getItem(usedKey)==='1';
@@ -22,7 +23,13 @@ const message=(error:unknown)=>String(error).replace(/^Error: /,'');
 function applySnapshot(value:Snapshot){
  if(!value||!Array.isArray(value.items)||!Array.isArray(value.actions))throw new Error('后台任务状态无法读取。');
  if(value.serverTime<agentState.serverTime)return;
- agentState.items=value.items;agentState.actions=value.actions;agentState.serverTime=value.serverTime;agentState.loaded=true;agentState.ready=true;agentState.error='';
+ agentState.resumable=value.resumable||[];agentState.items=value.items;agentState.actions=value.actions;agentState.serverTime=value.serverTime;agentState.loaded=true;agentState.ready=true;agentState.error='';
+ if(!companion.locked&&companion.data.memories.some(m=>m.awaitingReceipt)){
+  const finished=new Map(value.actions.filter(a=>a.tool==='remember_preference'&&a.status!=='pending').map(a=>[a.id,a.status]));
+  if(companion.data.memories.some(m=>m.awaitingReceipt&&finished.has(m.id)))updateData(data=>{
+   for(const m of data.memories)if(m.awaitingReceipt&&finished.has(m.id)){m.reviewed=finished.get(m.id)==='executed';delete m.awaitingReceipt;}
+  });
+ }
  const legacy=new Map(value.items.filter(i=>i.kind==='goal'&&i.details.legacyId).map(i=>[i.details.legacyId,i]));
  if(!companion.locked&&!companion.error&&companion.data.goals.some(g=>{const i=legacy.get(g.id);return i&&(g.text!==i.title||g.status!==i.status||g.completedAt!==(i.status==='completed'?(i.details.completedAt||i.updated_at):undefined));}))updateData(data=>{
   for(const goal of data.goals){const item=legacy.get(goal.id);if(item){goal.text=item.title;goal.status=item.status as typeof goal.status;goal.completedAt=item.status==='completed'?(item.details.completedAt||item.updated_at):undefined;}}
@@ -42,19 +49,25 @@ async function persistConfirmedMemory(action:AgentAction){
   });
   try{if(!exists)updateData(data=>{
    addMemory(data,action.args.text||'',action.args.category||'interest',true,action.character_id&&action.conversation_id?{characterId:action.character_id,conversationId:action.conversation_id,messageId:action.message_id}:undefined);
-   data.memories[0].id=action.id;
+   data.memories[0].id=action.id;data.memories[0].awaitingReceipt=true;
   });}catch(error){cancel();throw error;}
  });
  await saved;
 }
-async function response(path:string,init:RequestInit={}){
+export async function agentResponse(path:string,init:RequestInit={}){
  const perform=()=>fetch('/xinyu-api/agent'+path,{credentials:'same-origin',...init,headers:{...(init.body?{'Content-Type':'application/json'}:{}),...init.headers}});
  let res=await perform();
  if(res.status===401){const health=await fetch('/xinyu-api/health',{credentials:'same-origin',signal:init.signal});if(health.ok)res=await perform();}
  if(!res.ok){let error='本机后台暂时无法连接。';try{const body=await res.json();error=body.error?.message||body.error||error;}catch{/* keep the connection error */}throw new Error(error);}
  return res;
 }
-async function json(path:string,method='GET',body?:unknown){return (await response(path,{method,...(body===undefined?{}:{body:JSON.stringify(body)})})).json();}
+export async function agentJson(path:string,method='GET',body?:unknown){return (await agentResponse(path,{method,...(body===undefined?{}:{body:JSON.stringify(body)})})).json();}
+export async function reviewMemory(memory:Memory){
+ if(!companion.data.preferences.memoryEnabled||companion.locked)throw new Error('请先解锁并开启长期记忆');
+ const candidate=$state.snapshot(memory);
+ await connectAgent();await syncAgentPrivacy();await agentJson('/memory-grants','POST',candidate);
+ updateData(data=>{const item=data.memories.find(m=>m.id===candidate.id&&m.text===candidate.text);if(item)item.reviewed=true;});
+}
 export function setAgentAvailable(available:boolean){
  agentState.available=available;if(!available){agentState.ready=false;return;}
  void connectAgent().catch(error=>{agentState.ready=false;agentState.error=message(error);});
@@ -66,15 +79,15 @@ export async function syncAgentPrivacy(){
  policyQueue=policyQueue.catch(()=>{}).then(async()=>{
   const memoryEnabled=companion.data.preferences.memoryEnabled,profileEnabled=companion.data.preferences.profileEnabled,key=String(memoryEnabled)+':'+String(profileEnabled);
   if(sentPolicy===key)return;
-  await json('/privacy','POST',{memoryEnabled,profileEnabled});sentPolicy=key;
+  await agentJson('/privacy','POST',{memoryEnabled,profileEnabled});sentPolicy=key;
  });
  return policyQueue;
 }
 export function connectAgent(){
  if(connecting)return connecting;
  connecting=(async()=>{
-  let value:Snapshot=await json('/state');
-  if(!value.imported)value=await json('/import-goals','POST',{goals:companion.data.goals.map(g=>({id:g.id,text:g.text,at:g.at,completedAt:g.completedAt,status:g.status}))});
+  let value:Snapshot=await agentJson('/state');
+  if(!value.imported)value=await agentJson('/import-goals','POST',{goals:companion.data.goals.map(g=>({id:g.id,text:g.text,at:g.at,completedAt:g.completedAt,status:g.status}))});
   await syncAgentPrivacy();applySnapshot(value);localStorage.setItem(usedKey,'1');
  })().finally(()=>connecting=undefined);
  return connecting;
@@ -90,18 +103,22 @@ export function startAgentPolling(){
  window.addEventListener('focus',focus);window.addEventListener('xinyu:before-lock',stop);
  return()=>{clearInterval(timer);window.removeEventListener('focus',focus);window.removeEventListener('xinyu:before-lock',stop);stop();};
 }
-export async function runAgentTurn(messages:{role:'user'|'assistant';content:string}[],source:Source,signal:AbortSignal){
+export async function runAgentTurn(messages:{role:'user'|'assistant';content:string}[],source:Source,signal:AbortSignal,retry=false){
  await connectAgent();await syncAgentPrivacy();
+ const checkpoint=agentState.resumable.find(r=>r.turn_id===source.messageId&&r.character_id===source.characterId&&r.conversation_id===source.conversationId);
+ const resume=retry&&checkpoint?checkpoint.id:retry&&agentState.source.characterId===source.characterId&&agentState.source.conversationId===source.conversationId&&agentState.turnId===source.messageId?agentState.runId:'';
+ agentState.runId='';agentState.turnId=source.messageId||'';
  agentState.source={characterId:source.characterId,conversationId:source.conversationId};
  runController=new AbortController();const combined=AbortSignal.any([signal,runController.signal]);
  agentState.busy=true;agentState.phase='小屿正在认真听…';agentState.events=[];agentState.memoryIds=[];let answer='',done=false;
- const allowed=companion.data.preferences.memoryEnabled?companion.data.memories.filter(m=>m.consented&&(!m.source?.characterId||m.source.characterId===source.characterId)):[];
+ const allowed=companion.data.preferences.memoryEnabled?companion.data.memories.filter(m=>m.reviewed&&m.consented&&(!m.source?.characterId||m.source.characterId===source.characterId)):[];
  const preferred=relevantMemories(allowed,messages.at(-1)?.content||'',50,50000);
  // shortcut: at most 500 local candidates per turn; prioritize relevant older records before recent ones.
  const pool=[...new Map([...preferred,...allowed].map(m=>[m.id,m])).values()].slice(0,500);
  const facts=companion.data.preferences.profileEnabled?activeFacts(companion.data,source.characterId).slice(0,20).map(f=>({label:f.label,value:f.value})):[];
  const event=(value:any)=>{
   if(combined.aborted)return;
+  if(value.traceId)agentState.runId=value.traceId;
   if(value.type==='status')agentState.phase=String(value.label||'正在整理…');
   else if(value.type==='memory'){agentState.memoryIds=[...new Set([...agentState.memoryIds,...(value.ids||[])])];agentState.events.push({summary:String(value.summary),phase:'read'});}
   else if(value.type==='tool'){agentState.events.push({name:value.name,summary:String(value.summary),phase:value.phase});if(value.snapshot)applySnapshot(value.snapshot);}
@@ -110,7 +127,7 @@ export async function runAgentTurn(messages:{role:'user'|'assistant';content:str
   else if(value.type==='error')throw new Error(String(value.message||'这次处理未完成。'));
  };
  try{
-  const res=await response('/runs',{method:'POST',signal:combined,body:JSON.stringify({turnId:source.messageId,source,messages,timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone,context:{memoryEnabled:companion.data.preferences.memoryEnabled,profileEnabled:companion.data.preferences.profileEnabled,memories:pool,facts}})});
+  const res=await agentResponse(resume?'/runs/'+resume+'/resume':'/runs',{method:'POST',signal:combined,body:JSON.stringify({turnId:source.messageId,source,messages,timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone,context:{memoryEnabled:companion.data.preferences.memoryEnabled,profileEnabled:companion.data.preferences.profileEnabled,memories:pool,facts}})});
   const reader=res.body?.getReader();if(!reader)throw new Error('后台没有返回可读取的回复。');
   const decoder=new TextDecoder();let buffer='';
   try{while(true){const next=await reader.read();buffer+=decoder.decode(next.value||new Uint8Array(),{stream:!next.done});if(buffer.length>1024*1024)throw new Error('后台回复过长，已停止读取。');let index;while((index=buffer.indexOf('\n'))>=0){const line=buffer.slice(0,index);buffer=buffer.slice(index+1);if(line.trim())event(JSON.parse(line));}if(next.done)break;}if(buffer.trim())event(JSON.parse(buffer));}
@@ -132,28 +149,29 @@ export async function confirmAgentAction(action:AgentAction,overrides?:{at?:stri
    await persistConfirmedMemory(action);
    localMemorySaved=true;
   }
-  const result=await json('/actions/'+encodeURIComponent(action.id)+'/confirm','POST',{overrides,localMemorySaved});applySnapshot(result.snapshot);
+  const result=await agentJson('/actions/'+encodeURIComponent(action.id)+'/confirm','POST',{overrides,localMemorySaved});applySnapshot(result.snapshot);
+  if(localMemorySaved)updateData(data=>{const memory=data.memories.find(m=>m.id===action.id);if(memory){memory.reviewed=true;delete memory.awaitingReceipt;}});
  }finally{agentState.updating='';}
 }
 export async function rejectAgentAction(id:string){
  if(companion.locked)throw new Error('请先解锁应用。');
- agentState.updating=id;try{applySnapshot(await json('/actions/'+encodeURIComponent(id)+'/reject','POST',{}));}finally{agentState.updating='';}
+ agentState.updating=id;try{applySnapshot(await agentJson('/actions/'+encodeURIComponent(id)+'/reject','POST',{}));}finally{agentState.updating='';}
 }
 const pendingCommands=new Map<string,string>();
 export async function agentManual(tool:string,args:Record<string,unknown>){
  if(companion.locked)throw new Error('请先解锁应用。');
  if(agentState.updating)throw new Error('请等待当前操作完成。');
  const key=tool+':'+JSON.stringify(args),commandId=pendingCommands.get(key)||crypto.randomUUID();pendingCommands.set(key,commandId);agentState.updating=commandId;
- try{const value=await json('/manual','POST',{commandId,tool,args});applySnapshot(value.snapshot);pendingCommands.delete(key);return value;}
+ try{const value=await agentJson('/manual','POST',{commandId,tool,args});applySnapshot(value.snapshot);pendingCommands.delete(key);return value;}
  finally{agentState.updating='';}
 }
-export async function deleteAgentItem(id:string){if(companion.locked)throw new Error('请先解锁应用。');agentState.updating=id;try{applySnapshot(await json('/items/'+encodeURIComponent(id),'DELETE'));}finally{agentState.updating='';}}
+export async function deleteAgentItem(id:string){if(companion.locked)throw new Error('请先解锁应用。');agentState.updating=id;try{applySnapshot(await agentJson('/items/'+encodeURIComponent(id),'DELETE'));}finally{agentState.updating='';}}
 export function invalidateAgentContext(){runController?.abort();}
-export async function forgetAgentMemory(id:string){if(isUsed()){runController?.abort();await json('/memories/'+encodeURIComponent(id),'DELETE');}}
-export async function forgetAgentConversation(source:Source){if(isUsed())applySnapshot(await json('/forget-conversation','POST',source));}
+export async function forgetAgentMemory(id:string){if(isUsed()){runController?.abort();await agentJson('/memories/'+encodeURIComponent(id),'DELETE');}}
+export async function forgetAgentConversation(source:Source){if(isUsed())applySnapshot(await agentJson('/forget-conversation','POST',source));}
 export async function clearAgentData(){
  if(!isUsed())return;runController?.abort();agentState.updating='clear';
- try{await connecting?.catch(()=>{});await policyQueue.catch(()=>{});await json('/data','DELETE');agentState.items=[];agentState.actions=[];agentState.loaded=false;agentState.serverTime=0;sentPolicy='';localStorage.removeItem(usedKey);pendingCommands.clear();}
+ try{await connecting?.catch(()=>{});await policyQueue.catch(()=>{});await agentJson('/data','DELETE');agentState.items=[];agentState.actions=[];agentState.loaded=false;agentState.serverTime=0;sentPolicy='';localStorage.removeItem(usedKey);pendingCommands.clear();}
  finally{agentState.updating='';}
 }
 export function localDateInput(value:string|number){

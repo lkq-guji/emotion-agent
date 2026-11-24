@@ -9,7 +9,7 @@ test.beforeAll(async()=>{fixture=await startAgentFixture();mkdirSync(path.dirnam
 test.afterAll(async()=>{await fixture?.close();if(privateFile.startsWith(path.resolve('.runtime')+path.sep))try{unlinkSync(privateFile);}catch{}});
 async function go(page:Page,where:string){await page.evaluate(p=>location.hash=p,where);}
 async function state(page:Page){const response=await page.request.get(origin+'/xinyu-api/agent/state');expect(response.status()).toBe(200);return response.json();}
-async function ready(page:Page){await page.addInitScript(()=>localStorage.setItem('tos4','true'));await page.goto('/');await expect(page.locator('.island-stage')).toHaveAttribute('data-ready','true',{timeout:90000});await go(page,'/growth');await expect(page.getByLabel('小约定的内容')).toBeVisible();}
+async function ready(page:Page){await page.addInitScript(()=>localStorage.setItem('tos4','true'));await page.goto('/#/growth',{waitUntil:'domcontentloaded'});await expect(page.getByLabel('小约定的内容')).toBeVisible();}
 async function freshConversation(page:Page){await go(page,'/chat');await page.getByRole('button',{name:'对话与功能',exact:true}).click();await page.getByRole('button',{name:'新建对话',exact:true}).click();await page.getByRole('button',{name:'对话与功能',exact:true}).click();}
 async function send(page:Page,text:string){await page.getByLabel('想对小屿说的话').fill(text);await page.getByRole('button',{name:'发送',exact:true}).click();}
 const errors=new WeakMap<Page,string[]>();
@@ -42,9 +42,9 @@ test('authorized preference is confirmed, survives reload, guides a new plan and
 });
 test('reminders can be rescheduled, notify in another page and are actually cancelled',async({page})=>{
  await page.getByLabel('安排类型').selectOption('reminder');await page.getByLabel('小约定的内容').fill('看看窗外');
- const future=await page.evaluate(()=>{const d=new Date(Date.now()+600000);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,19);});
+ const future=await page.evaluate(()=>{const d=new Date(Date.now()+600000);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,19).replace(/:00$/,'');});
  await page.getByLabel('什么时候提醒').fill(future);await page.getByRole('button',{name:'设置提醒',exact:true}).click();await expect(page.locator('.task-row')).toContainText('等待提醒');
- await page.getByRole('button',{name:'调整时间',exact:true}).click();const soon=await page.evaluate(()=>{const d=new Date(Date.now()+5000);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,19);});
+ await page.getByRole('button',{name:'调整时间',exact:true}).click();const soon=await page.evaluate(()=>{const d=new Date(Date.now()+5000);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,19).replace(/:00$/,'');});
  await page.getByLabel('新的提醒时间').fill(soon);await page.getByRole('button',{name:'保存时间',exact:true}).click();await expect(page.getByLabel('新的提醒时间')).toHaveCount(0);await go(page,'/chat');
  await expect(page.getByRole('complementary',{name:'到期的小约定'})).toContainText('看看窗外',{timeout:20000});
  await send(page,'[工程取消]请取消当前提醒。');const cancel=page.getByRole('article',{name:'待确认：提醒安排',exact:true});await expect(cancel).toContainText('取消这项约定');
@@ -89,4 +89,22 @@ test('task forms and confirmation support keyboard and reduced motion; locking h
  await go(page,'/settings');await page.getByLabel('设置应用密码（6–12 位数字）').fill('123456');await page.getByLabel('再次输入',{exact:true}).fill('123456');await page.getByRole('button',{name:'保存应用密码',exact:true}).click();await page.getByRole('button',{name:'立即锁定',exact:true}).click();await expect(page.getByRole('heading',{name:'你的小岛，安心停靠',exact:true})).toBeVisible();
  await page.waitForTimeout(5000);await expect(page.getByRole('complementary',{name:'到期的小约定'})).toHaveCount(0);await expect(page.getByText('锁定时不应显示的约定',{exact:true})).toHaveCount(0);
  await page.getByLabel('应用密码',{exact:true}).fill('123456');await page.getByRole('button',{name:'解锁心屿',exact:true}).click();await expect(page.getByRole('complementary',{name:'到期的小约定'})).toContainText('锁定时不应显示的约定',{timeout:15000});
+});
+test('local library shares by explicit grant, opens a cited source and deletes it',async({page})=>{
+ await go(page,'/memories');
+ await page.getByLabel('选择本地资料').setInputFiles({name:'观测手册.md',mimeType:'text/markdown',buffer:Buffer.from('# 值班\n灯塔交接需要填写航向。')});
+ await page.getByRole('button',{name:'建立本地索引'}).click();
+ await expect(page.getByText('资料已可检索。')).toBeVisible();
+ await page.getByLabel('搜索资料').fill('灯塔');await page.getByRole('button',{name:'搜索',exact:true}).click();
+ await expect(page.locator('.library summary')).toContainText('观测手册');
+ await page.getByRole('button',{name:'允许分享'}).click();
+ await expect(page.getByRole('button',{name:'停止分享'})).toBeVisible();
+ await go(page,'/chat');await send(page,'[工程资料]灯塔交接要填写什么？');
+ await page.getByRole('button',{name:'查看引用片段'}).click();
+ await expect(page.locator('pre')).toContainText('灯塔交接需要填写航向');
+ await go(page,'/memories');page.once('dialog',d=>d.accept());
+ await page.locator('.library').getByRole('button',{name:'删除',exact:true}).click();
+ await expect(page.getByRole('button',{name:'停止分享'})).toHaveCount(0);
+ await go(page,'/chat');await page.getByRole('button',{name:'查看引用片段'}).click();
+ await expect(page.locator('pre')).toContainText('来源已删除或更新');
 });

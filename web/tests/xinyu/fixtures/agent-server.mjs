@@ -8,6 +8,11 @@ export async function startAgentFixture(){
  const gateway=createGateway({XINYU_AGENT_DB:':memory:',XINYU_API_KEY:'engineering-provider-only',XINYU_MODEL:'engineering-tool-fixture'},async(url,options)=>{
   const body=JSON.parse(options.body);calls.push(structuredClone(body));
   const text=body.messages.filter(m=>m.role==='user').at(-1)?.content||'',tools=body.messages.filter(m=>m.role==='tool');
+  if(text.includes('[工程资料]')){
+   if(!tools.length)return model({tool_calls:[call('search_knowledge',{query:'灯塔'})]});
+   const hit=JSON.parse(tools.at(-1).content).hits[0];
+   return model({content:hit?'交接时填写航向。['+hit.id+']':'没有找到资料。'});
+  }
   if(text.includes('[工程失败]'))return new Response('{}',{status:502});
   if(text.includes('[工程等待]'))await new Promise((resolve,reject)=>{const timer=setTimeout(resolve,15000);options.signal.addEventListener('abort',()=>{aborted++;clearTimeout(timer);reject(new DOMException('Stopped','AbortError'));},{once:true});});
   if(text.includes('[工程偏好]'))return tools.length?model({content:'这条学习偏好已经整理为候选，点击卡片确认后才会保存。'}):model({tool_calls:[call('remember_preference',{text:'我学习英语时喜欢每次专注25分钟。',category:'interest'})]});
@@ -29,7 +34,7 @@ export async function startAgentFixture(){
   }
   return model({content:'[工程回复] 我在这里。'});
  });
- const vite=await createServer({configFile:'vite.config.ts',logLevel:'error',server:{host:'127.0.0.1',port:5192,strictPort:true},plugins:[{name:'engineering-agent-fixture',enforce:'pre',configureServer(server){server.middlewares.use('/xinyu-api',(req,res)=>gateway(req,res,()=>{res.statusCode=404;res.end();}));}}]});
+ const vite=await createServer({configFile:'vite.config.ts',cacheDir:'node_modules/.vite-agent-fixture',optimizeDeps:{entries:['index.html']},logLevel:'error',server:{host:'127.0.0.1',port:5192,strictPort:true},plugins:[{name:'engineering-agent-fixture',enforce:'pre',configureServer(server){server.middlewares.use('/xinyu-api',(req,res)=>gateway(req,res,()=>{res.statusCode=404;res.end();}));}}]});
  await vite.listen();
  return {calls,get aborted(){return aborted;},close:async()=>{await vite.close();await gateway.locals.closeAgent();if(previous===undefined)delete process.env.XINYU_AGENT_DB;else process.env.XINYU_AGENT_DB=previous;}};
 }

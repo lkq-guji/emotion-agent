@@ -1,5 +1,7 @@
+import {localEmbedding} from './embedding.mjs';
 import express from 'express';
 import { randomBytes } from 'node:crypto';
+import {setTimeout as sleep} from 'node:timers/promises';
 import { Readable } from 'node:stream';
 import { rateLimit } from 'express-rate-limit';
 import {createAgentStore,AgentError} from './agent-store.mjs';
@@ -12,14 +14,23 @@ export function createGateway(env = process.env, fetchImpl = fetch) {
   const model = env.XINYU_MODEL || env.DEEPSEEK_MODEL || 'deepseek-flash';
   const base = (env.XINYU_BASE_URL || env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com').replace(/\/$/,'');
   const endpoint = base.endsWith('/chat/completions') ? base : base+'/chat/completions';
-  const store=createAgentStore(env.XINYU_AGENT_DB||'.runtime/xinyu-agent.sqlite3');
+  const store=createAgentStore(env.XINYU_AGENT_DB||'.runtime/xinyu-agent.sqlite3',Date.now,localEmbedding(env.XINYU_EMBEDDING_DIR));
   const agent=createAgentRouter({store,configured:!!key,requestModel:async(messages,tools,signal)=>{
     let url;try{url=new URL(endpoint);}catch{throw new AgentError('服务端模型地址配置有误。',503);}
     if(url.protocol!=='https:'&&!(url.protocol==='http:'&&['127.0.0.1','localhost','[::1]'].includes(url.hostname)))throw new AgentError('远程模型地址需要 HTTPS。',503);
     const body={model,messages,tools,max_tokens:1200,stream:false};
     if(url.hostname==='api.deepseek.com')body.thinking={type:'disabled'};
     const modelSignal=AbortSignal.any([signal,AbortSignal.timeout(Math.round(Math.max(1,Math.min(Number(env.DEEPSEEK_TIMEOUT_SECONDS)||120,300))*1000))]);
-    const response=await fetchImpl(endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(body),signal:modelSignal});
+    let response;
+    for(let attempt=0;attempt<3;attempt++){
+      response=await fetchImpl(endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(body),signal:modelSignal});
+      if(attempt===2||![429,502,503,504].includes(response.status))break;
+      const hint=response.headers.get('Retry-After');
+      const wait=hint?(Number.isFinite(Number(hint))?Number(hint)*1000:Date.parse(hint)-Date.now()):0;
+      if(wait>5000)break;
+      await response.body?.cancel();
+      await sleep(Math.max(wait||0,200*2**attempt)+Math.random()*120,undefined,{signal:modelSignal});
+    }
     if(!response.ok)throw new AgentError('模型服务返回 HTTP '+response.status+'，请检查连接后重试。',502);
     try{return await response.json();}catch{throw new AgentError('模型没有返回有效的 JSON 回复。',502);}
   }});
