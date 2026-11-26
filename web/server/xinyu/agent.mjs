@@ -1,3 +1,4 @@
+import {Annotation, END, START, StateGraph} from '@langchain/langgraph';
 import express from 'express';
 import {randomBytes,createHash} from 'node:crypto';
 import {AgentError} from './agent-store.mjs';
@@ -19,6 +20,8 @@ export function validateTurn(x){
   try{new Intl.DateTimeFormat('zh-CN',{timeZone:x.timeZone}).format();}catch{throw new AgentError('时区无法识别。');}
   return x;
 }
+const turnState = Annotation.Root({ hasAnswer: Annotation() });
+
 export async function runAgent({store,space,run,input,requestModel,signal,emit,now=Date.now}){
   if(run.status==='completed'){emit({type:'answer',text:run.answer});emit({type:'done',runId:run.id,tokens:run.tokens,snapshot:store.snapshot(space)});return;}
   const policy=store.policy(space),check=()=>{if(signal.aborted)throw signal.reason||new DOMException('Stopped','AbortError');if(store.policy(space).version!==policy.version)throw new AgentError('授权已变化，请重新发送这条消息。',409);};
@@ -42,11 +45,16 @@ export async function runAgent({store,space,run,input,requestModel,signal,emit,n
     '已有待确认操作（JSON数据）：'+JSON.stringify(store.snapshot(space).actions.filter(a=>a.status==='pending'&&a.character_id===input.source.characterId&&a.conversation_id===input.source.conversationId).map(a=>({id:a.id,tool:a.tool})).slice(0,12))
   ].join('\n');
   const citationIds=new Set();
-  let tokens=0,toolCount=0;const messages=[{role:'system',content:instructions},...input.messages.map(({role,content})=>({role,content}))];
+  let tokens=0,toolCount=0,modelCount=0;
+  // Keep authorized content in the request closure, outside graph state and tracing.
+  const messages=[{role:'system',content:instructions},...input.messages.map(({role,content})=>({role,content}))];
+  let calls=[],answer;
   if(recent.length)emit({type:'memory',ids:recent.map(m=>m.id),summary:'参考了 '+recent.length+' 条已确认记忆'});
-  try{
-    for(let step=0;step<5;step++){
-      check();emit({type:'status',label:step?'正在结合执行结果继续整理…':'小屿正在认真听…'});
+
+  const graph=new StateGraph(turnState)
+    .addNode('model',async()=>{
+      if(++modelCount>5)throw new AgentError('这次安排步骤较多，已停止继续调用；已有卡片可以确认或取消。');
+      check();emit({type:'status',label:modelCount>1?'正在结合执行结果继续整理…':'小屿正在认真听…'});
       const started=now();store.record(run.id,'model','started');
       let response;
       try{response=await requestModel(messages,agentTools,signal);}
@@ -58,16 +66,19 @@ export async function runAgent({store,space,run,input,requestModel,signal,emit,n
       if(!message||typeof message!=='object')throw new AgentError('模型没有返回可读取的回复。',502);
       if(!message.tool_calls?.length){
         if(typeof message.content!=='string'||!message.content.trim())throw new AgentError('模型没有返回回复，请重试。',502);
-        const answer=message.content.slice(0,24000).replace(/\[([a-f0-9-]{36})\]/gi,(label,id)=>citationIds.has(id)?label:'[来源未核验]');store.finishRun(run.id,'completed',answer,tokens);
-        emit({type:'answer',text:answer});emit({type:'done',runId:run.id,tokens,snapshot:store.snapshot(space)});return;
+        answer=message.content.slice(0,24000).replace(/\[([a-f0-9-]{36})\]/gi,(label,id)=>citationIds.has(id)?label:'[来源未核验]');
+        return {hasAnswer:true};
       }
       if(!Array.isArray(message.tool_calls)||message.tool_calls.length>8)throw new AgentError('模型提出的操作过多，请分成几次安排。',502);
-      const calls=message.tool_calls.map(c=>{
+      calls=message.tool_calls.map(c=>{
         if(!plainId(c.id)||typeof c.function?.name!=='string'||typeof c.function.arguments!=='string'||c.function.arguments.length>8000)throw new AgentError('模型的工具请求格式不正确。',502);
         return {id:c.id,type:'function',function:{name:c.function.name,arguments:c.function.arguments}};
       });
       if(new Set(calls.map(c=>c.id)).size!==calls.length)throw new AgentError('模型返回的操作编号重复，请重试。',502);
       messages.push({role:'assistant',content:typeof message.content==='string'?message.content:null,tool_calls:calls});
+      return {hasAnswer:false};
+    })
+    .addNode('tools',async()=>{
       for(const call of calls){
         check();if(++toolCount>10)throw new AgentError('本次工具次数已达上限，已有安排可在下方确认。');
         const toolStarted=now(),name=call.function.name;emit({type:'status',label:labels[name]||'检查操作…'});let result;
@@ -90,20 +101,47 @@ export async function runAgent({store,space,run,input,requestModel,signal,emit,n
           }else{
             if(name==='remember_preference'&&!(policy.memoryEnabled&&input.context.memoryEnabled))throw new AgentError('长期记忆未开启，不能提出保存。');
             const action=store.propose(space,run.id,name,args);
+            if(action.status==='pending')await store.approvals.prepare(space,action.id);
+            check();
             result={ok:true,status:action.status==='executed'?'executed':'awaiting_user_confirmation',actionId:action.id,args:action.args,instruction:'确认前尚未执行，不得声称已创建。'};
             emit({type:'tool',name,actionId:action.id,summary:action.status==='executed'?'这项操作已经执行':'已整理好，等待你确认',phase:action.status==='executed'?'executed':'pending',snapshot:store.snapshot(space)});
           }
-        }catch(error){result={ok:false,error:error instanceof SyntaxError?'工具参数不是合法JSON':cleanError(error)};emit({type:'tool',name,summary:result.error,phase:'error'});}
+        }catch(error){check();result={ok:false,error:error instanceof SyntaxError?'工具参数不是合法JSON':cleanError(error)};emit({type:'tool',name,summary:result.error,phase:'error'});}
         store.record(run.id,agentTools.some(t=>t.function.name===name)?name:'unknown_tool',result.ok?'completed':'invalid',now()-toolStarted);
         messages.push({role:'tool',tool_call_id:call.id,content:JSON.stringify(result)});
       }
-    }
-    throw new AgentError('这次安排步骤较多，已停止继续调用；已有卡片可以确认或取消。');
-  }catch(error){store.finishRun(run.id,signal.aborted?'interrupted':'failed','',tokens);throw error;}
+      return {};
+    })
+    .addEdge(START,'model')
+    .addConditionalEdges('model',({hasAnswer})=>hasAnswer?END:'tools',[END,'tools'])
+    .addEdge('tools','model')
+    .compile();
+
+  try{
+    // Let the nodes observe cancellation so graph shutdown waits for their work to settle.
+    await graph.invoke({hasAnswer:false});
+    check();
+    store.finishRun(run.id,'completed',answer,tokens);
+    emit({type:'answer',text:answer});
+    emit({type:'done',runId:run.id,tokens,snapshot:store.snapshot(space)});
+  }catch(error){
+    store.finishRun(run.id,signal.aborted?'interrupted':'failed','',tokens);
+    throw error;
+  }
 }
 export function createAgentRouter({store,configured,requestModel,now=Date.now}){
-  const router=express.Router(),active=new Map();let closing;
-  const timer=setInterval(()=>{try{store.tick();}catch{console.error('心屿任务调度暂时失败，请检查本机数据库权限。');}},1000);timer.unref();
+  const router=express.Router(),active=new Map();
+  let closing,gc,nextGc=0;
+  const timer=setInterval(()=>{
+    try{
+      store.tick();
+      if(!gc&&now()>=nextGc){
+        nextGc=now()+60000;
+        gc=store.approvals.reap().catch(()=>console.error('心屿确认检查点暂时无法清理。')).finally(()=>{gc=undefined;});
+      }
+    }catch{console.error('心屿任务调度暂时失败，请检查本机数据库权限。');}
+  },1000);
+  timer.unref();
   let indexing;
   function abortScope(scope){if(indexing?.space===scope)indexing.controller.abort();for(const x of active.values())if(x.space===scope)x.controller.abort();}
   router.use((req,res,next)=>{
@@ -131,15 +169,15 @@ export function createAgentRouter({store,configured,requestModel,now=Date.now}){
   router.get('/chunks/:id',safe((req,res)=>res.json(store.knowledge.chunk(res.locals.space,req.params.id))));
   router.post('/knowledge/search',safe(async(req,res)=>res.json(await store.knowledge.retrieve(res.locals.space,req.body?.query))));
   router.get('/state',safe((req,res)=>res.json(store.snapshot(res.locals.space))));
-  router.post('/privacy',safe((req,res)=>{const result=store.setPolicy(res.locals.space,req.body);if(result.changed)abortScope(res.locals.space);res.json(result);}));
+  router.post('/privacy',safe(async(req,res)=>{const result=store.setPolicy(res.locals.space,req.body);if(result.changed){abortScope(res.locals.space);await store.approvals.reap();}res.json(result);}));
   router.post('/import-goals',safe((req,res)=>res.json(store.importGoals(res.locals.space,req.body?.goals))));
-  router.post('/actions/:id/confirm',safe((req,res)=>res.json(store.confirm(res.locals.space,req.params.id,req.body))));
-  router.post('/actions/:id/reject',safe((req,res)=>res.json(store.reject(res.locals.space,req.params.id))));
+  router.post('/actions/:id/confirm',safe(async(req,res)=>res.json(await store.approvals.decide(res.locals.space,req.params.id,true,req.body))));
+  router.post('/actions/:id/reject',safe(async(req,res)=>res.json(await store.approvals.decide(res.locals.space,req.params.id,false))));
   router.post('/manual',safe((req,res)=>{if(!plainId(req.body?.commandId))throw new AgentError('缺少操作编号。');res.json(store.manual(res.locals.space,req.body.commandId,req.body.tool,req.body.args));}));
   router.delete('/items/:id',safe((req,res)=>res.json(store.removeItem(res.locals.space,req.params.id))));
-  router.delete('/memories/:id',safe((req,res)=>{abortScope(res.locals.space);store.forgetMemory(res.locals.space,req.params.id);res.json({ok:true});}));
-  router.post('/forget-conversation',safe((req,res)=>{if(!plainId(req.body?.characterId)||!plainId(req.body?.conversationId))throw new AgentError('对话来源不正确。');abortScope(res.locals.space);res.json(store.removeConversation(res.locals.space,req.body));}));
-  router.delete('/data',safe((req,res)=>{abortScope(res.locals.space);store.clear(res.locals.space);res.clearCookie('xinyu_agent_space',{path:'/xinyu-api'});res.json({ok:true});}));
+  router.delete('/memories/:id',safe(async(req,res)=>{abortScope(res.locals.space);store.forgetMemory(res.locals.space,req.params.id);await store.approvals.reap();res.json({ok:true});}));
+  router.post('/forget-conversation',safe(async(req,res)=>{if(!plainId(req.body?.characterId)||!plainId(req.body?.conversationId))throw new AgentError('对话来源不正确。');abortScope(res.locals.space);const snapshot=store.removeConversation(res.locals.space,req.body);await store.approvals.reap();res.json(snapshot);}));
+  router.delete('/data',safe(async(req,res)=>{abortScope(res.locals.space);store.clear(res.locals.space);await store.approvals.reap();res.clearCookie('xinyu_agent_space',{path:'/xinyu-api'});res.json({ok:true});}));
   router.post(['/runs','/runs/:id/resume'],safe(async(req,res)=>{
     if(!configured)throw new AgentError('服务端未配置模型密钥，请先在“我的”查看模型连接。',503);
     const input=validateTurn(req.body),space=res.locals.space;
@@ -165,5 +203,5 @@ export function createAgentRouter({store,configured,requestModel,now=Date.now}){
     finally{res.off('close',stop);active.delete(run.id);done();if(!res.destroyed)res.end();}
   }));
   router.use((error,req,res,next)=>{if(res.headersSent)return next(error);res.status(error instanceof AgentError?error.status:error.type==='entity.too.large'?413:500).json({error:{message:cleanError(error)}});});
-  return {router,close:()=>closing||(closing=(async()=>{clearInterval(timer);for(const x of active.values())x.controller.abort();await Promise.allSettled([...active.values()].map(x=>x.settled));store.close();})())};
+  return {router,close:()=>closing||(closing=(async()=>{clearInterval(timer);for(const x of active.values())x.controller.abort();await Promise.allSettled([...active.values()].map(x=>x.settled));await gc;await store.approvals.settled();store.close();})())};
 }

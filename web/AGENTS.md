@@ -1,6 +1,6 @@
 # 心屿桌面应用接手规则
 
-本目录是当前可运行的个人陪伴 Agent。比赛开发线已退出主线；先读 README、../docs/PRODUCT_PLAN.md、docs/ARCHITECTURE.md、docs/TEAM_HANDOFF.md 和 ../docs/STATUS.md。
+本目录是心屿智伴个人陪伴 Agent。先读 README、../docs/PRODUCT_PLAN.md、docs/ARCHITECTURE.md、docs/TEAM_HANDOFF.md 和 ../docs/STATUS.md。
 
 - 只验收桌面端。保持 Svelte 5 / TypeScript 和既有 CSS `--xy-*`，不再增加一个 React 前端。
 - 用户记录、模型密钥、`.env.local`、浏览器 profile、node_modules、dist、trace、截图和运行日志不得提交。只有 `.env.example` 可入库，密钥字段为空。

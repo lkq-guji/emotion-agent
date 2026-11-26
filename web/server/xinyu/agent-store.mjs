@@ -217,5 +217,12 @@ export function createAgentStore(filename,now=Date.now,encode=null){
     return {run,events:db.prepare('SELECT seq,kind,status,duration_ms,tokens,at FROM trace_events WHERE run_id=? ORDER BY seq').all(id)};
   }
   const runActions=(scope,id)=>db.prepare("SELECT id,status FROM actions WHERE space=? AND run_id=?").all(scope,id);
-  return {runActions,grant,authorized,knowledge:createKnowledge(db,transaction,encode),record,trace,space,policy,setPolicy,tick,snapshot,importGoals,run,finishRun,propose,confirm,reject,manual,removeItem,removeConversation,forgetMemory,clear,getAction,close:()=>db.close()};
+  const isPending=id=>!!db.prepare("SELECT 1 FROM actions WHERE id=? AND status='pending'").get(id);
+  let approvals;
+  return {
+    get approvals(){return approvals??=createApprovalWorkflow(filename,{getAction,isPending,tick,confirm,reject});},
+    runActions,grant,authorized,knowledge:createKnowledge(db,transaction,encode),record,trace,space,policy,setPolicy,tick,snapshot,importGoals,run,finishRun,propose,confirm,reject,manual,removeItem,removeConversation,forgetMemory,clear,getAction,
+    close:()=>{approvals?.close();db.close();},
+  };
 }
+import {createApprovalWorkflow} from './approval-graph.mjs';

@@ -1,6 +1,6 @@
 # 开发约定
 
-当前产品是个人陪伴 Agent。以 web/ 的 Svelte 版本为主线，比赛材料在 archive/competition/，历史约束不再作为当前产品要求。
+心屿智伴的 Svelte 前端和本机 Agent 服务都位于 web/。
 
 从 develop 建功能分支，完成自测后提交 PR。改动范围围绕可验收的用户流程；优先复用已有组件、数据结构和 Node 服务。
 

@@ -7,10 +7,11 @@
   → src/xinyu/bridge.svelte.ts
   → src/xinyu/agent.svelte.ts
   → /xinyu-api/agent/runs
-  → server/xinyu/agent.mjs（受限工具循环）
+  → server/xinyu/agent.mjs（LangGraph 对话图）
   → 服务端配置的 DeepSeek / OpenAI 兼容模型
   → 读取记忆 / 查询进展 / 生成待确认动作
-  → 用户确认
+  → approval-graph.mjs（SQLite 检查点，等待用户决策）
+  → 用户确认或拒绝后恢复对应卡片
   → agent-store.mjs（SQLite 事务）
   → 后台调度与界面回执
 ~~~
@@ -27,7 +28,8 @@
 | 原聊天与 Agent 分流 | src/xinyu/bridge.svelte.ts、pages/Chat.svelte |
 | Agent 客户端、轮询与确认 | src/xinyu/agent.svelte.ts |
 | 动作卡、任务管理、到期提示 | components/AgentActions.svelte、AgentWorkspace.svelte、AgentNotice.svelte |
-| 工具白名单、模型循环、HTTP | server/xinyu/agent.mjs、gateway.mjs |
+| 工具白名单、对话图、HTTP | server/xinyu/agent.mjs、gateway.mjs |
+| 卡片暂停、恢复与检查点清理 | server/xinyu/approval-graph.mjs |
 | 参数、事务、状态与调度 | server/xinyu/agent-store.mjs |
 | 有预算的记忆检索 | src/xinyu/memoryRetrieval.mjs |
 | 情绪、画像、授权数据 | domain.ts、companionship.ts、EmotionJourney.svelte、ProfileArchive.svelte |
@@ -47,7 +49,9 @@
 
 ## 执行约定
 
-工具为 search_memory、remember_preference、create_goal、update_goal、manage_focus、manage_reminder、get_progress。模型不能直接执行任意脚本、访问任意 URL 或绕过确认。
+对话图调度 search_memory、search_knowledge、get_progress、remember_preference、create_goal、update_goal、manage_focus、manage_reminder。前三项只读；其余工具生成待确认卡。模型不能直接执行任意脚本、访问任意 URL 或绕过确认。
+
+每张卡以动作 ID 作为独立的 LangGraph 线程，审批图使用同一 SQLite 文件中的检查点。检查点只记录流程标识和控制状态。聊天、检索结果和卡片原文在现有业务路径中处理。旧版本待确认卡首次处理时补建检查点。删除来源或清空空间后会清理关联检查点；结束和过期流程也会回收。
 
 写入通过 SQLite 事务执行，重复确认复用结果。复合目标包含计时和提醒时共同成功或回滚。后台每秒标记到期；打开页面后轮询显示，重启补查错过事项。不会自动发送外部消息或主动消耗模型额度。
 

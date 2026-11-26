@@ -4,6 +4,4 @@
 
 像素图像、音频、React Bits 交互参考与移植来源，见 [web/docs/THIRD_PARTY.md](web/docs/THIRD_PARTY.md) 及 web/docs/xinyu/ 的来源记录。产品页面可使用心屿品牌，开源来源仍须如实保留。
 
-本机任务使用 Node 内置 SQLite，无新增数据库 NPM 依赖。运行文件和用户数据不属于仓库素材。
-
-archive/competition/ 保存本项目早期的比赛接口骨架、测试与说明，不参与当前产品运行。历史文件的许可和作者声明保留，不代表正式模型能力或成绩。
+本机任务通过 Node 内置 SQLite 保存，LangGraph.js 使用官方 SQLite checkpointer 持久化待确认流程。依赖许可见各包随附文件。

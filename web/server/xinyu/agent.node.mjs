@@ -243,7 +243,9 @@ test('restart resumes durable proposal over HTTP, then racing confirmations crea
  const space=createHash('sha256').update(cookie).digest('hex'),x=input();let server,gateway,modelCalls=0;
  try{
   const s=createAgentStore(path),run=s.run(space,x.turnId,x.source,x.messages.at(-1).content);
-  const proposal=s.propose(space,run.id,'manage_reminder',{operation:'create',title:'喝水',at:new Date(Date.now()+600000).toISOString()});s.close();
+  const proposal=s.propose(space,run.id,'manage_reminder',{operation:'create',title:'喝水',at:new Date(Date.now()+600000).toISOString()});
+  await s.approvals.prepare(space,proposal.id);
+  s.close();
   gateway=createGateway({XINYU_AGENT_DB:path,XINYU_API_KEY:'fixture'},async()=>{modelCalls++;throw Error('unexpected model request');});
   const app=express();app.use('/xinyu-api',gateway);server=app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));
   const origin='http://127.0.0.1:'+server.address().port,session=(await fetch(origin+'/xinyu-api/health')).headers.getSetCookie()[0].split(';')[0];
@@ -269,4 +271,82 @@ test('semantic search only reads shared, active and in-space vectors after await
   onQuery=()=>k.share('one',d.id,false);assert.deepEqual(await k.retrieve('one','同义词',true),[]);
   onQuery=undefined;k.remove('one',d.id);assert.deepEqual(await k.retrieve('one','同义词'),[]);
  }finally{s.close();}
+});
+
+test('LangGraph persists independent approval interrupts and can confirm after reopening the database',async()=>{
+ const {DatabaseSync}=await import('node:sqlite');
+ const dir=mkdtempSync(join(tmpdir(),'xinyu-graph-')),path=join(dir,'agent.db');
+ const s1=createAgentStore(path);
+ let s=s1;
+ try{
+  const x=input(),run=s.run('one',x.turnId,x.source);
+  const at=new Date(Date.now()+600000).toISOString();
+  let calls=0;
+  await runAgent({store:s,space:'one',run,input:x,signal:new AbortController().signal,emit:()=>{},requestModel:async()=>{
+   if(calls++)return model({content:'等待两项确认'});
+   return model({tool_calls:[call('manage_reminder',{operation:'create',title:'私人提醒原文',at}),call('create_goal',{title:'私人目标原文'})]});
+  }});
+  const actions=s.snapshot('one').actions;
+  const reminder=actions.find(a=>a.tool==='manage_reminder'),goal=actions.find(a=>a.tool==='create_goal');
+  assert.equal(s.snapshot('one').items.length,0);
+  const db=new DatabaseSync(path,{readOnly:true});
+  try{
+   assert.equal(db.prepare('SELECT COUNT(DISTINCT thread_id) AS count FROM checkpoints').get().count,2);
+   assert.equal(db.prepare('SELECT COUNT(DISTINCT thread_id) AS count FROM writes WHERE channel=?').get('__interrupt__').count,2);
+   for(const row of db.prepare('SELECT checkpoint FROM checkpoints').all()){
+    assert.doesNotMatch(Buffer.from(row.checkpoint).toString(),/私人提醒原文|私人目标原文/);
+   }
+  }finally{db.close();}
+
+  s.close();
+  s=null;
+  s=createAgentStore(path);
+  await assert.rejects(s.approvals.decide('other',reminder.id,true),e=>e.status===404);
+  await assert.rejects(s.approvals.decide('one',reminder.id,true,{overrides:{at:'invalid'}}));
+  assert.equal(s.getAction(reminder.id,'one').status,'pending');
+  const responses=await Promise.all([
+   s.approvals.decide('one',reminder.id,true),
+   s.approvals.decide('one',reminder.id,true),
+  ]);
+  assert.ok(responses.every(r=>r.action.status==='executed'));
+  await s.approvals.decide('one',goal.id,false);
+  assert.equal(s.getAction(goal.id,'one').status,'rejected');
+  assert.deepEqual(s.snapshot('one').items.map(item=>item.kind),['reminder']);
+  const legacy=s.propose('one',run.id,'create_goal',{title:'旧版待确认卡'});
+  assert.equal((await s.approvals.decide('one',legacy.id,true)).action.status,'executed');
+ }finally{s?.close();assert(resolve(dir).startsWith(resolve(tmpdir())+sep+'xinyu-graph-'));rmSync(dir,{recursive:true,force:true});}
+});
+
+test('LangGraph cleans checkpoints for revoked, expired, committed and deleted actions',async()=>{
+ const {DatabaseSync}=await import('node:sqlite');
+ const dir=mkdtempSync(join(tmpdir(),'xinyu-graph-clean-')),path=join(dir,'agent.db');
+ let time=Date.now();
+ const s=createAgentStore(path,()=>time);
+ try{
+  s.setPolicy('one',{memoryEnabled:true,profileEnabled:false});
+  const run=s.run('one','graph-clean',source);
+  const memory=s.propose('one',run.id,'remember_preference',{text:'只用于本机',category:'interest'});
+  await s.approvals.prepare('one',memory.id);
+  s.setPolicy('one',{memoryEnabled:false,profileEnabled:false});
+  await assert.rejects(s.approvals.decide('one',memory.id,true,{localMemorySaved:true}),e=>e.status===409);
+
+  const expired=s.propose('one',run.id,'create_goal',{title:'即将过期'});
+  await s.approvals.prepare('one',expired.id);
+  time+=86400001;
+  await assert.rejects(s.approvals.decide('one',expired.id,true),e=>e.status===409);
+  const committed=s.propose('one',run.id,'create_goal',{title:'提交后中断'});
+  await s.approvals.prepare('one',committed.id);
+  s.confirm('one',committed.id);
+  await s.approvals.decide('one',committed.id,true);
+  assert.equal(s.snapshot('one').items.length,1);
+  const deleted=s.propose('one',run.id,'create_goal',{title:'删除来源'});
+  await s.approvals.prepare('one',deleted.id);
+  s.removeConversation('one',source);
+  await s.approvals.reap();
+  await assert.rejects(s.approvals.decide('one',deleted.id,true),e=>e.status===404);
+  const db=new DatabaseSync(path,{readOnly:true});
+  try{
+   for(const table of ['checkpoints','writes'])assert.equal(db.prepare('SELECT COUNT(*) AS count FROM '+table).get().count,0);
+  }finally{db.close();}
+ }finally{s.close();assert(resolve(dir).startsWith(resolve(tmpdir())+sep+'xinyu-graph-clean-'));rmSync(dir,{recursive:true,force:true});}
 });
