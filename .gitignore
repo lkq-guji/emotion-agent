@@ -28,6 +28,9 @@ outputs/
 *.pth
 *.bin
 *.gguf
+*.sqlite*
+*.db
+*.db-*
 *.zip
 *.tar
 *.tar.gz

@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.34.1",
   "type": "module",
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": ">=24.14.0"
   },
   "scripts": {
     "dev": "vite",
@@ -16,13 +16,16 @@
     "buildsite": "vite build --outDir dist",
     "start": "node server/xinyu/start.mjs",
     "test:gateway": "node --test server/xinyu/gateway.node.mjs",
+    "eval:agent": "node scripts/evaluate-agent.mjs",
+    "eval:knowledge": "node scripts/evaluate-knowledge.mjs",
+    "test:agent": "node --test server/xinyu/agent.node.mjs",
     "test:e2e": "playwright test",
     "test:upstream": "vitest run src/ts",
     "doctor": "node scripts/doctor.mjs",
     "verify:assets": "node scripts/verify-assets.mjs",
     "verify:repo": "node scripts/check-repo.mjs",
     "test:startup": "node --test tests/startup.node.mjs",
-    "test:smoke": "playwright test tests/xinyu/window-flow.pw.ts tests/xinyu/scene-library.pw.ts"
+    "test:smoke": "playwright test tests/xinyu/window-flow.pw.ts tests/xinyu/scene-library.pw.ts tests/xinyu/agent-workflow.pw.ts"
   },
   "dependencies": {
     "@adobe/css-tools": "4.4.4",
@@ -32,6 +35,9 @@
     "@dqbd/tiktoken": "^1.0.22",
     "@huggingface/jinja": "^0.2.2",
     "@huggingface/transformers": "^3.8.1",
+    "@langchain/core": "1.5.1",
+    "@langchain/langgraph": "1.7.5",
+    "@langchain/langgraph-checkpoint-sqlite": "1.1.1",
     "@lucide/svelte": "^0.562.0",
     "@mlc-ai/web-llm": "^0.2.80",
     "@mlc-ai/web-tokenizers": "^0.1.6",
@@ -93,7 +99,8 @@
     "wasmoon": "^1.16.0",
     "wavefile": "^11.0.0",
     "web-streams-polyfill": "^3.3.3",
-    "ws": "^8.18.3"
+    "ws": "^8.18.3",
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",
@@ -120,6 +127,7 @@
     "internal-ip": "^7.0.0",
     "postcss": "^8.5.6",
     "source-map": "^0.7.6",
+    "sqlite-vec": "0.1.9",
     "svelte": "^5.56.8",
     "svelte-check": "^4.3.5",
     "tailwindcss": "^4.2.2",
@@ -130,8 +138,10 @@
     "vitest": "^4.1.0"
   },
   "pnpm": {
-    "neverBuiltDependencies": [
-      "sharp"
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild",
+      "onnxruntime-node"
     ]
   }
 }

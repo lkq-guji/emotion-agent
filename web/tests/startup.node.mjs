@@ -6,7 +6,7 @@ import net from 'node:net';
 
 test('clean checkout starts without private environment and reports missing credentials honestly',async()=>{
  const socket=net.createServer();socket.listen(0,'127.0.0.1');await once(socket,'listening');const port=socket.address().port;await new Promise(resolve=>socket.close(resolve));
- const env={...process.env,PORT:String(port),DEEPSEEK_API_KEY:'',XINYU_API_KEY:'',XINYU_ENV_FILE:'.env.not-present-for-startup-test'},child=spawn(process.execPath,['server/xinyu/start.mjs'],{env,stdio:['ignore','pipe','pipe']});
+ const env={...process.env,PORT:String(port),DEEPSEEK_API_KEY:'',XINYU_API_KEY:'',XINYU_AGENT_DB:':memory:',XINYU_ENV_FILE:'.env.not-present-for-startup-test'},child=spawn(process.execPath,['server/xinyu/start.mjs'],{env,stdio:['ignore','pipe','pipe']});
  let output='';child.stdout.on('data',d=>output+=d);child.stderr.on('data',d=>output+=d);
  const origin=`http://127.0.0.1:${port}`;try{
   let response;for(let i=0;i<100;i++){try{response=await fetch(origin+'/xinyu-api/health');break;}catch{if(child.exitCode!==null)throw Error('Server exited: '+output);await new Promise(r=>setTimeout(r,100));}}assert(response,'Server did not start');

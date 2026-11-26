@@ -1,52 +1,55 @@
-# 心屿智伴 · emotion-agent
+# 心屿智伴
 
-中文治愈系像素 AI 陪伴项目。**当前桌面应用在 `web/`**，包含小岛首页、进屋对话、情绪日记、授权记忆、画像、成长、衣橱、动态窗景和个人设置。
+心屿智伴是一个用中文对话的本地桌面陪伴 Agent。小屿可以根据你授权的记忆和资料，帮你安排目标、专注计时和提醒。涉及写入时，先让你在确认卡上检查，再执行。
 
-交接版没有共享密钥、个人聊天或浏览器数据。每位组员自行配置 DeepSeek；不填写密钥也能启动界面和使用本地记录，聊天会提示未配置或调用失败，不以假回复代替。
+## 可以做什么
 
-## 组员先运行当前页面
+- **整理眼前的安排**。用自然语言提出目标、专注或提醒，在成长页查看实际进度。提醒由本机后台调度，重启后会补查到期事项。
+- **使用自己授权的资料**。在记忆页导入 PDF、TXT 或 Markdown。资料默认供本地检索，逐份开启分享后，小屿可在对话里引用，并定位到对应段落。
+- **从上次确认继续**。每张待确认卡都有独立的 SQLite 检查点，重启后可以继续确认或拒绝。重复确认复用已有结果。
+- **记录日常**。在像素小岛和房间里对话、记录情绪、管理记忆与画像。场景、衣橱和声音可在界面调整。
 
-准备 Node.js 24 LTS 和 pnpm 10.34.1：
+## 本地运行
+
+需要 Node.js 24.14.0 和 pnpm 10.34.1。在仓库根目录执行：
 
 ```sh
-npm install --global pnpm@10.34.1
-git clone --branch develop https://github.com/lkq-guji/emotion-agent.git
-cd emotion-agent/web
+cd web
 pnpm install --frozen-lockfile
 pnpm run doctor
 pnpm dev
 ```
 
-访问 **http://127.0.0.1:5178**。DeepSeek 配置、生产启动和测试说明见 **[web/README.md](web/README.md)**。已有仓库的成员保存修改后更新 develop，再进入 web/。
+打开 [http://127.0.0.1:5178](http://127.0.0.1:5178)。无需模型密钥即可体验本地任务和资料管理。
 
-## 当前两条开发线
+使用 AI 对话时，把 `web/.env.example` 复制为 `web/.env.local`，填入自己的 `DEEPSEEK_API_KEY` 后重启。模型标识通过 `DEEPSEEK_MODEL` 设置。密钥只保存在本机服务端配置。[完整配置与生产启动](web/README.md)
 
-| 目录 | 当前状态 | 下一步 |
-| --- | --- | --- |
-| web/ | Svelte 5 + TypeScript，一个前端；已接真实 Chat API 请求链路，凭据自配 | 接正式模型服务，补质量/性能验收；不是比赛推理入口 |
-| emotion_agent/、training/、data_tools/、evaluation/、official/ | 保留三人协作骨架；Python engine 仍是明确标记的 MOCK | 实现正式模型、数据转换、训练评测和官方入口 |
+## LangGraph.js 架构
 
-网页当前调用成员配置的外部模型，**尚未调用根目录 Python engine**。网页可用不代表已完成模型训练、正式评分或平台提交。
-
-## 接手资料
-
-- [当前状态与缺口](docs/STATUS.md)
-- [网页架构](web/docs/ARCHITECTURE.md) 与 [下一步分工/验收](web/docs/TEAM_HANDOFF.md)
-- [三人协作约定](TEAM.md)：feat/... → develop → main
-- [比赛需求与约束](docs/PROJECT_REQUIREMENTS.md) 和 [共享接口](docs/INTERFACE.md)
-- [AI 接手入口](docs/AI_START_HERE.md)
-- [开源与素材来源](THIRD_PARTY.md)
-
-main 保留已验收版本，develop 作为日常集成入口。同步保留原仓库历史和队友目录。没有上传原始比赛数据、模型权重、虚拟环境、node_modules、构建产物、私密配置、截图或运行缓存。
-
-## Python 接口骨架检查
-
-在仓库根目录，用 Python 3.10+ 运行：
-
-```sh
-python -X utf8 -m unittest discover -s tests -v
-python -X utf8 -m emotion_agent mock --input examples/smoke_input.jsonl --output .runtime/mock_predictions.jsonl
-python -X utf8 -m emotion_agent validate --input examples/smoke_input.jsonl --predictions .runtime/mock_predictions.jsonl
+```text
+Svelte 界面 → 本机 Node.js 网关 → LangGraph 对话图 → DeepSeek
+                                      ├─ 读取已授权的记忆、资料和进度
+                                      └─ 写入提议 → 审批图暂停 → 用户确认 → SQLite 事务
 ```
 
-这些命令只检查共享接口与 MOCK 联调，不评估真实模型质量。官方入口仍以比赛方 start.sh / run_inference.py 及最新规则为准。
+对话图调度 8 个工具。查询工具直接返回结果；写入工具产生确认卡。审批图通过 `interrupt()` 等待用户决定，确认时从 SQLite 检查点恢复。SQLite 事务和确认回执负责防止重复执行。聊天正文和检索片段只参与本轮对话，审批检查点只保存流程所需的控制状态。[架构与代码入口](web/docs/ARCHITECTURE.md)
+
+## 开发与验收
+
+在 `web` 目录运行：
+
+```sh
+pnpm check
+pnpm test
+pnpm test:gateway
+pnpm test:agent
+pnpm eval:agent
+pnpm build
+pnpm test:startup
+```
+
+自动化测试使用工程模型替身。手动验收时，让小屿提出提醒，在确认前关闭后台，然后使用同一数据库重启。回到原对话确认，在成长页检查只生成一条提醒。
+
+- [备份、迁移和评测命令](docs/agent-upgrade/08_开发交接与迁移.md)
+- [工程评测与真实模型抽测记录](docs/agent-upgrade/09_匿名工程评测.md)
+- [许可证和第三方素材来源](THIRD_PARTY.md)

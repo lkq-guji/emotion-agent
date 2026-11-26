@@ -17,6 +17,8 @@
  import './journey.css';
  import './glassScenery.css';
  import './sceneLibrary.css';
+ import {startAgentPolling} from './agent.svelte';
+ import AgentNotice from './components/AgentNotice.svelte';
  const route=()=>location.hash.replace(/^#\/?/,'').split('?')[0]||'home';
  let searchParam=$state(new URLSearchParams(location.hash.split('?')[1]||'').get('search')||'');
  let page=$state(route()),main:HTMLElement,initialization=$state(true);
@@ -27,6 +29,7 @@
  let effectiveTheme=$derived(displayTheme(appearanceMode(companion.data.preferences.appearanceMode,companion.data.preferences.theme),interfaceState.brightnessPreview??companion.data.preferences.brightness,interfaceState.now));
  let brightness=$derived(brightnessValue(interfaceState.brightnessPreview??companion.data.preferences.brightness));
  onMount(()=>{
+  const stopAgent=startAgentPolling();
   void prepareCompanion().catch(e=>notify(String(e))).finally(()=>initialization=false);
   const changed=()=>{page=route();searchParam=new URLSearchParams(location.hash.split('?')[1]||'').get('search')||'';main?.scrollTo({top:0});};
   window.addEventListener('hashchange',changed);
@@ -40,7 +43,7 @@
   const leave=()=>{sample(false);flush();},resume=()=>{focused=document.hasFocus();sample();};
   window.addEventListener('focus',focus);window.addEventListener('blur',blur);document.addEventListener('visibilitychange',visibility);window.addEventListener('pagehide',leave);window.addEventListener('pageshow',resume);window.addEventListener('xinyu:before-lock',leave);
   const timer=setInterval(()=>{sample();if(performance.now()-lastSave>=15000)flush();},1000);
-  return()=>{clearInterval(timer);sample(false);flush();interfaceState.activePreview={};window.removeEventListener('hashchange',changed);window.removeEventListener('focus',focus);window.removeEventListener('blur',blur);document.removeEventListener('visibilitychange',visibility);window.removeEventListener('pagehide',leave);window.removeEventListener('pageshow',resume);window.removeEventListener('xinyu:before-lock',leave);};
+  return()=>{stopAgent();clearInterval(timer);sample(false);flush();interfaceState.activePreview={};window.removeEventListener('hashchange',changed);window.removeEventListener('focus',focus);window.removeEventListener('blur',blur);document.removeEventListener('visibilitychange',visibility);window.removeEventListener('pagehide',leave);window.removeEventListener('pageshow',resume);window.removeEventListener('xinyu:before-lock',leave);};
  });
 </script>
 <div class="xinyu-app" use:polishSurfaces={companion.data.preferences.reduceMotion} data-theme={effectiveTheme} data-period={periodAt(appearanceMode(companion.data.preferences.appearanceMode,companion.data.preferences.theme),brightness,interfaceState.now)} class:reduce-motion={companion.data.preferences.reduceMotion} class:dock-auto={companion.data.preferences.dockAutoHide!==false} style:--xy-brightness={brightness/100}>
@@ -64,6 +67,7 @@
   </main>
   {#if page!=='home'}<footer class="xy-status"><span><i></i>{companion.saveStatus}</span><span>{getModelInfo(DBState.db.aiModel)?.name||'请配置模型'}</span></footer>{/if}
  </div>
+ <AgentNotice/>
  <Dock {page} reduced={companion.data.preferences.reduceMotion} autoHide={companion.data.preferences.dockAutoHide!==false}/>
  {#if interfaceState.roomTransitionAt}{#key interfaceState.roomTransitionAt}<LightTunnel startedAt={interfaceState.roomTransitionAt} reduced={companion.data.preferences.reduceMotion} oncomplete={()=>interfaceState.roomTransitionAt=0}/>{/key}{/if}
  {#if companion.notice}<div class="xy-toast" role="status">{companion.notice}</div>{/if}

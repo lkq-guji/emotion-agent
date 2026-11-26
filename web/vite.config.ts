@@ -8,7 +8,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig(({command, mode}) => {
   return {
     plugins: [
-      { name:'xinyu-local-gateway', configureServer(server) { server.middlewares.use('/xinyu-api',createGateway({...loadEnv(mode,process.cwd(),''),...process.env})); } },
+      { name:'xinyu-local-gateway', configureServer(server) { const gateway=createGateway({...loadEnv(mode,process.cwd(),''),...process.env});server.middlewares.use('/xinyu-api',gateway);server.httpServer?.once('close',()=>void gateway.locals.closeAgent()); } },
       svelte({
         preprocess: vitePreprocess(),
         onwarn: (warning, handler) => {
@@ -36,6 +36,7 @@ export default defineConfig(({command, mode}) => {
       strictPort: true,
       // Browser traces contain HTML snapshots; writing QA output must not reload an active chat.
       watch: { ignored: ['**/.runtime/**', '**/.impeccable/**', '**/test-results/**', '**/playwright-report/**'] },
+      fs: { deny: ['.env','.env.*','*.{crt,pem}','**/.git/**','**/.runtime/**','**/*.sqlite*','**/*.db'] },
       // hmr: false,
     },
     // to make use of `TAURI_ENV_DEBUG` and other env variables

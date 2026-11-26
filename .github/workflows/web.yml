@@ -47,6 +47,9 @@ jobs:
       - run: pnpm check
       - run: pnpm test
       - run: pnpm test:gateway
+      - run: pnpm test:agent
+      - run: pnpm eval:agent
+      - run: pnpm eval:knowledge
       - run: pnpm build
       - run: pnpm test:startup
       - if: runner.os == 'Linux'
